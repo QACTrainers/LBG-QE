@@ -9,10 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins="*", allowedHeaders = "*")
 @RequestMapping("/user")
 public class UserController {
-
     private UserService userService;
 
     @Autowired
@@ -21,8 +20,13 @@ public class UserController {
     }
 
     // refresh
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody UserInfo userInfo) {
         return new ResponseEntity<User>(this.userService.login(userInfo.getUsername(),userInfo.getPassword()), HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return new ResponseEntity<String>("hello", HttpStatus.OK);
     }
 }
