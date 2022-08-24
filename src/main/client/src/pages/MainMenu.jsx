@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Popup from "../components/Popup";
 import Error from "../components/Error";
@@ -27,13 +27,13 @@ const MainMenu = () => {
   };
 
   const checkUsername = () => {
-    let input = document.querySelector("#username-input");
+    let input = document.querySelector("#username-input").value;
     setUsernameError(
-      input.value.length > 20 ? (
+      input.length > 20 ? (
         <Error message="Username is too long" />
-      ) : input.value.length == 0 ? (
+      ) : input.length === 0 ? (
         <Error message="Enter a username" />
-      ) : !new RegExp(/^[a-zA-Z0-9]+$/).test(input.value) ? (
+      ) : !new RegExp(/^[a-zA-Z0-9]+$/).test(input) ? (
         <Error message="Invalid characters in username" />
       ) : (
         <></>
@@ -42,11 +42,11 @@ const MainMenu = () => {
   };
 
   const checkPassword = () => {
-    let input = document.querySelector("#password-input");
+    let input = document.querySelector("#password-input").value;
     setPasswordError(
       !new RegExp(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/
-      ).test(input.value) ? (
+      ).test(input) ? (
         <Error message="Password must be between 8 and 20 characters, at least one uppercase letter, one lowercase letter, one number and one special character" />
       ) : (
         <></>

@@ -4,3 +4,19 @@
     flex-direction: column;
     align-items: center;
 }
+
+input, select :not(#edit-button) {
+    margin:5px;
+    width:150px;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+th, td {
+    margin: 100px;
+    border: 1px solid black;
+    padding: 5px;
+}
