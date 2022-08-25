@@ -1,0 +1,35 @@
+span {
+  font-weight: bold;
+  margin: 0;
+}
+button {
+  margin-top: 5px;
+}
+
+.input-container {
+  margin-top: 10px;
+  width: 200px;
+  text-align: left;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: lightgray;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
+  margin: 0;
+  width: 190px;
+}
+
+.first-radio {
+    margin-left: 0;
+}
+
+h2 {
+    text-align: center;
+}
+
+.maintenance-container {
+    text-align: center;
+}
