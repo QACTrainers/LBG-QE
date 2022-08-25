@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RequestMapping("/user")
 public class UserController {
-
     private UserService userService;
 
     @Autowired
@@ -21,8 +20,13 @@ public class UserController {
     }
 
     // refresh
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody UserInfo userInfo) {
         return new ResponseEntity<User>(this.userService.login(userInfo.getUsername(),userInfo.getPassword()), HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return new ResponseEntity<String>("hello", HttpStatus.OK);
     }
 }
