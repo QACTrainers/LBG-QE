@@ -2,14 +2,11 @@ package com.qa.banking.services;
 
 import com.qa.banking.dtos.CustomerDto;
 import com.qa.banking.dtos.CustomerFiltersDto;
-import com.qa.banking.entities.Customer;
-import com.qa.banking.entities.User;
+import com.qa.banking.dtos.UpdateCustomerDto;
 import com.qa.banking.repos.CustomerRepository;
-import com.qa.banking.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,5 +44,23 @@ public class CustomerService {
                 x.getAddress1(),
                 x.getAddress2()
         )).collect(Collectors.toList());
+    }
+
+    public void updateCustomer(UpdateCustomerDto customer) {
+        this.repo.update(
+                customer.getId(),
+                customer.getTitle(),
+                customer.getSurname(),
+                customer.getFirstName(),
+                customer.getDateOfBirth(),
+                customer.getGender(),
+                customer.getCustomerType(),
+                customer.getAddress1(),
+                customer.getAddress2(),
+                customer.getCityTown(),
+                customer.getPostcode(),
+                customer.getPhoneNo(),
+                customer.getEmail()
+        );
     }
 }
