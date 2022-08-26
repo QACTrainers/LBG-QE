@@ -5,6 +5,7 @@ import CustomerSearch from "./pages/CustomerSearch"
 import CustomerMaintenance from "./pages/CustomerMaintenance";
 import AccountMaintenance from "./pages/AccountMaintenance";
 import Transactions from "./pages/Transactions";
+import CustomerCreation from "./pages/CustomerCreation";
 
 const Main = () => {
   return (
@@ -12,7 +13,8 @@ const Main = () => {
       <Routes>
         <Route exact path="/" element={<MainMenu />} />
         <Route exact path="/customer-search" element={<CustomerSearch />} />
-        <Route exact path="/customer-maintenance" element={<CustomerMaintenance />} />
+        <Route exact path="/customer-maintenance/:id" element={<CustomerMaintenance />} />
+        <Route exact path="/create-customer" element={<CustomerCreation />} />
         <Route exact path="/account-maintenance" element={<AccountMaintenance />} />
         <Route exact path="/transactions" element={<Transactions />} />
       </Routes>
