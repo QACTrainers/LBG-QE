@@ -4,23 +4,11 @@ import Popup from "../components/Popup";
 import Error from "../components/Error";
 import "./css/main-menu.css";
 import "./css/shared.css";
-const axios = require("axios").default;
 
 const MainMenu = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [usernameError, setUsernameError] = useState(<></>);
   const [passwordError, setPasswordError] = useState(<></>);
-
-  axios
-    .get(`http://localhost:9002/user/test`)
-    .then((res) => console.log(res.data));
-
-  axios
-    .post(`http://localhost:9002/user/login`, {
-      username: "admin!",
-      password: "IAmAnAdmin!",
-    })
-    .then((res) => console.table(res.data));
 
   const toggleLoginPopup = () => {
     setLoginOpen(!loginOpen);
@@ -44,9 +32,7 @@ const MainMenu = () => {
   const checkPassword = () => {
     let input = document.querySelector("#password-input").value;
     setPasswordError(
-      !new RegExp(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/
-      ).test(input) ? (
+      !new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/).test(input) ? (
         <Error message="Password must be between 8 and 20 characters, at least one uppercase letter, one lowercase letter, one number and one special character" />
       ) : (
         <></>
@@ -62,19 +48,9 @@ const MainMenu = () => {
           content={
             <>
               <h2 id="popup-title">Login</h2>
-              <input
-                type="text"
-                id="username-input"
-                placeholder="Username..."
-                onBlur={checkUsername}
-              />
+              <input type="text" id="username-input" placeholder="Username..." onBlur={checkUsername} />
               {usernameError}
-              <input
-                type="password"
-                id="password-input"
-                placeholder="Password..."
-                onBlur={checkPassword}
-              />
+              <input type="password" id="password-input" placeholder="Password..." onBlur={checkPassword} />
               {passwordError}
               <input type="submit" id="login-button" />
             </>
@@ -87,7 +63,9 @@ const MainMenu = () => {
         <Link to="/customer-search">
           <button>Customer Search</button>
         </Link>
-        <button>Create New Customer</button>
+        <Link to="/create-customer">
+          <button>Create New Customer</button>
+        </Link>
         <button>Open New Account</button>
         <button>New Transaction</button>
         <button>Transfer</button>

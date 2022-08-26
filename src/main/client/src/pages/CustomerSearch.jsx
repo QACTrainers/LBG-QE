@@ -1,11 +1,54 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./css/shared.css";
 import "./css/customer-search.css";
+const axios = require("axios");
 
 const CustomerMaintenance = () => {
   const [inputBox, setInputBox] = useState(<></>);
+  const [tableBody, setTableBody] = useState(<tr></tr>);
+
+  useEffect(() => {
+    axios.get("http://localhost:9002/customer/findAll").then((res) => populateTable(res.data));
+  }, []);
+
+  const storeCustomerData = (customer) => {
+    sessionStorage.setItem(`customer-${customer.id}`, JSON.stringify(customer));
+  };
+
+  const populateTable = (data) => {
+    sessionStorage.clear();
+    setTableBody(
+      data.map((customer) => (
+        <tr key={customer.id}>
+          <td>{customer.id ? customer.id : "❌"}</td>
+          <td>{customer.title ? customer.title : "❌"}</td>
+          <td>{customer.surname ? customer.surname : "❌"}</td>
+          <td>{customer.firstName ? customer.firstName : "❌"}</td>
+          <td>{customer.dateOfBirth ? customer.dateOfBirth : "❌"}</td>
+          <td>{customer.gender ? customer.gender : "❌"}</td>
+          <td>{customer.customerType ? customer.customerType : "❌"}</td>
+          <td>{customer.address1 ? customer.address1 : "❌"}</td>
+          <td>{customer.address2 ? customer.address2 : "❌"}</td>
+          <td>{customer.cityTown ? customer.cityTown : "❌"}</td>
+          <td>{customer.postcode ? customer.postcode : "❌"}</td>
+          <td>{customer.phoneNo ? customer.phoneNo : "❌"}</td>
+          <td>{customer.email ? customer.email : "❌"}</td>
+          <td>
+            <Link to={`/customer-maintenance/${customer.id}`}>
+              <button value="edit" id="edit-button">
+                Edit user
+              </button>
+            </Link>
+          </td>
+        </tr>
+      ))
+    );
+    for (let customer of data) {
+      storeCustomerData(customer);
+    }
+  };
 
   const getTextBox = (input) => {
     switch (input) {
@@ -27,20 +70,16 @@ const CustomerMaintenance = () => {
   const handleSubmitChange = () => {
     let input = document.querySelector("#search-by").value;
     let inputData = getTextBox(input);
-    setInputBox(
-      <input
-        type="text"
-        id={inputData[0] + "-input"}
-        placeholder={inputData[1]}
-      />
-    );
+    setInputBox(<input type="text" id={inputData[0] + "-input"} placeholder={inputData[1]} />);
   };
-  
+
   return (
     <div className="main-container">
       <h2>Customer Search</h2>
-      <select id="search-by" onChange={handleSubmitChange}>
-        <option disabled>Search by...</option>
+      <select defaultValue="default" id="search-by" onChange={handleSubmitChange}>
+        <option value="default" disabled>
+          Search by...
+        </option>
         <option value="aid">Account Number</option>
         <option value="cid">Customer Number</option>
         <option value="sname">Surname</option>
@@ -67,30 +106,7 @@ const CustomerMaintenance = () => {
               <th>Email</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Mr</td>
-              <td>Ayling</td>
-              <td>Thomas</td>
-              <td>06/06/01</td>
-              <td>M</td>
-              <td>Premium</td>
-              <td>308 Negra Arroyo Lane</td>
-              <td>N/A</td>
-              <td>Luton</td>
-              <td>SW19 8JN</td>
-              <td>077070070770</td>
-              <td>random-email@gmail.com</td>
-              <td>
-                <Link to="/customer-maintenance" params={{ customerId: 1 }}>
-                  <button value="edit" id="edit-button">
-                    Edit user
-                  </button>
-                </Link>
-              </td>
-            </tr>
-          </tbody>
+          <tbody>{tableBody}</tbody>
         </table>
       </div>
     </div>
