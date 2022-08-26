@@ -19,6 +19,10 @@ const CustomerInputs = ({ createNew, customerData }) => {
     console.log("Delete customer");
   };
 
+  const createCustomer = () => {
+    console.log("Create customer");
+  };
+
   const validateDoB = () => {
     const getAge = (dateString) => {
       var ageInMilliseconds = new Date() - new Date(dateString);
@@ -217,15 +221,22 @@ const CustomerInputs = ({ createNew, customerData }) => {
           </div>
         </div>
       )}
-
       <div className="button-container">
-        <button id="submit-button" onClick={submitChanges}>
-          Submit changes
-        </button>{" "}
-        <br />
-        <button id="delete-button" onClick={deleteCustomer}>
-          Delete customer
-        </button>
+        {createNew ? (
+          <button id="create-button" onClick={createCustomer}>
+            Create new customer
+          </button>
+        ) : (
+          <>
+            <button id="submit-button" onClick={submitChanges}>
+              Submit changes
+            </button>
+            <br />
+            <button id="delete-button" onClick={deleteCustomer}>
+              Delete customer
+            </button>
+          </>
+        )}
       </div>
       {DoBError}
       {PcodeError}

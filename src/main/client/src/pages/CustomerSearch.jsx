@@ -8,9 +8,11 @@ const axios = require("axios");
 const CustomerMaintenance = () => {
   const [inputBox, setInputBox] = useState(<></>);
   const [tableBody, setTableBody] = useState(<tr></tr>);
+  const [accountsData, setAccountsData] = useState({})
 
   useEffect(() => {
     axios.get("http://localhost:9002/customer/findAll").then((res) => populateTable(res.data));
+    axios.get("http://localhost:9002/accounts/findAll").then((res) => setAccountsData(res.data));
   }, []);
 
   const storeCustomerData = (customer) => {
@@ -19,6 +21,10 @@ const CustomerMaintenance = () => {
 
   const populateTable = (data) => {
     sessionStorage.clear();
+    for (let customer of data) {
+      storeCustomerData(customer);
+
+    }
     setTableBody(
       data.map((customer) => (
         <tr key={customer.id}>
@@ -38,16 +44,13 @@ const CustomerMaintenance = () => {
           <td>
             <Link to={`/customer-maintenance/${customer.id}`}>
               <button value="edit" id="edit-button">
-                Edit user
+                Edit customer
               </button>
             </Link>
           </td>
         </tr>
       ))
     );
-    for (let customer of data) {
-      storeCustomerData(customer);
-    }
   };
 
   const getTextBox = (input) => {
