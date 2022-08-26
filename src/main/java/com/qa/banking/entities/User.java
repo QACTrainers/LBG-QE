@@ -25,8 +25,8 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private Boolean isAdmin;
+    private boolean isAdmin;
 
-    private int loginAttempts;
+    private Integer loginAttempts;
 
 }
