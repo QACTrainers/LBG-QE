@@ -23,7 +23,7 @@ public class User {
 
     private String username;
     private String password;
-    private Boolean isAdmin;
-    private int loginAttempts;
+    private boolean isAdmin;
+    private Integer loginAttempts;
 
 }

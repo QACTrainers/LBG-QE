@@ -11,8 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LoginInfoDto {
 
+    private long id;
     private String username;
     private int loginAttempts;
-    private Boolean isAdmin;
+    private boolean isAdmin;
 
 }
