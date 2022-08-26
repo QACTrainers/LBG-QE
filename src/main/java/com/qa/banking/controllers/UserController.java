@@ -1,5 +1,6 @@
 package com.qa.banking.controllers;
 
+import com.qa.banking.dtos.LoginInfoDto;
 import com.qa.banking.dtos.UserInfo;
 import com.qa.banking.entities.User;
 import com.qa.banking.services.UserService;
@@ -21,8 +22,8 @@ public class UserController {
 
     // refresh
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody UserInfo userInfo) {
-        return new ResponseEntity<User>(this.userService.login(userInfo.getUsername(),userInfo.getPassword()), HttpStatus.OK);
+    public ResponseEntity<LoginInfoDto> login(@RequestBody UserInfo userInfo) {
+        return new ResponseEntity<LoginInfoDto>(this.userService.login(userInfo.getUsername(),userInfo.getPassword()), HttpStatus.OK);
     }
 
     @GetMapping("/test")
