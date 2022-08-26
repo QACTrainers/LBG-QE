@@ -56,7 +56,7 @@ const MainMenu = () => {
 
   return (
     <div className="main-container main-menu-container">
-      <h1>QA Bank</h1>
+      <h2>Main Menu</h2>
       {loginOpen && (
         <Popup
           content={
@@ -84,7 +84,7 @@ const MainMenu = () => {
       )}
       <div id="button-container">
         <button onClick={toggleLoginPopup}>Log In</button>
-        <Link to="/customer-maintenance">
+        <Link to="/customer-search">
           <button>Customer Search</button>
         </Link>
         <button>Create New Customer</button>
