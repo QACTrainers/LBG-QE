@@ -1,9 +1,6 @@
 package com.qa.banking.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,17 +9,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode
 public class CustomerAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
+    @ManyToOne(targetEntity = Account.class)
     private Account account;
 }

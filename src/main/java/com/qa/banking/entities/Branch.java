@@ -22,6 +22,9 @@ public class Branch {
     @OneToMany(targetEntity = Transaction.class,cascade = CascadeType.ALL,mappedBy = "id",fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
+    @Column(unique = true,nullable = false,length = 50)
     private String name;
+
+    @Column(nullable = false,length = 50)
     private String location;
 }
