@@ -40,70 +40,11 @@ public class CustomerService {
                     }
                     return true;
                 })
-                .map(x->new CustomerDto(
-                    x.getTitle(),
-                    x.getSurname(),
-                    x.getFirstName(),
-                    x.getDateOfBirth(),
-                    x.getGender(),
-                    x.getCustomerType(),
-                    x.getAddress1(),
-                    x.getAddress2(),
-                    x.getCustomerAccounts().stream().map(y->new AccountDto(
-                        y.getAccount().getId(),
-                            y.getAccount().getBranch().getName(),
-                            y.getAccount().getType(),
-                            y.getAccount().getNumber(),
-                            y.getAccount().getMinDeposit(),
-                            y.getAccount().getBalance(),
-                            y.getAccount().getCustomerAccounts().stream().
-                                    filter(z->{
-                                        if (z.getCustomer().getId() == x.getId()) {
-                                            return false;
-                                        } else {
-                                            return true;
-                                        }}).
-                                    map(z->new AccountSharedWithCustomersDto(
-                                    z.getCustomer().getId(),
-                                    z.getCustomer().getSurname(),
-                                    z.getCustomer().getFirstName()
-                            )).collect(Collectors.toList())
-                    )).collect(Collectors.toList())
-                )).collect(Collectors.toList());
+                .map(x->mapCustomerToDto(x)).collect(Collectors.toList());
     }
 
     public List<CustomerDto> findAll(){
-        return this.repo.findAll().stream().map(x->new CustomerDto(
-            x.getTitle(),
-            x.getSurname(),
-            x.getFirstName(),
-            x.getDateOfBirth(),
-            x.getGender(),
-            x.getCustomerType(),
-            x.getAddress1(),
-            x.getAddress2(),
-            x.getCustomerAccounts().stream().map(y->new AccountDto(
-                y.getAccount().getId(),
-                    y.getAccount().getBranch().getName(),
-                    y.getAccount().getType(),
-                    y.getAccount().getNumber(),
-                    y.getAccount().getMinDeposit(),
-                    y.getAccount().getBalance(),
-                    y.getAccount().getCustomerAccounts().stream().
-                            filter(z->{
-                                if (z.getCustomer().getId() == x.getId()) {
-                                    return false;
-                                } else {
-                                    return true;
-                                }}).
-                            map(z->new AccountSharedWithCustomersDto(
-                            z.getCustomer().getId(),
-                            z.getCustomer().getSurname(),
-                            z.getCustomer().getFirstName()
-                    )).collect(Collectors.toList())
-            )).collect(Collectors.toList())
-        )).collect(Collectors.toList());
-
+        return this.repo.findAll().stream().map(x->mapCustomerToDto(x)).collect(Collectors.toList());
     }
 
     public CustomerDto createCustomer(CreateCustomerDto customer) {
@@ -129,5 +70,38 @@ public class CustomerService {
 
     public void deleteCustomer(Long id) {
         this.repo.deleteById(id);
+    }
+
+    private CustomerDto mapCustomerToDto(Customer customer){
+        return new CustomerDto(
+                customer.getTitle(),
+                customer.getSurname(),
+                customer.getFirstName(),
+                customer.getDateOfBirth(),
+                customer.getGender(),
+                customer.getCustomerType(),
+                customer.getAddress1(),
+                customer.getAddress2(),
+                customer.getCustomerAccounts().stream().map(y->new AccountDto(
+                        y.getAccount().getId(),
+                        y.getAccount().getBranch().getName(),
+                        y.getAccount().getType(),
+                        y.getAccount().getNumber(),
+                        y.getAccount().getMinDeposit(),
+                        y.getAccount().getBalance(),
+                        y.getAccount().getCustomerAccounts().stream().
+                                filter(z->{
+                                    if (z.getCustomer().getId() == customer.getId()) {
+                                        return false;
+                                    } else {
+                                        return true;
+                                    }}).
+                                map(z->new AccountSharedWithCustomersDto(
+                                        z.getCustomer().getId(),
+                                        z.getCustomer().getSurname(),
+                                        z.getCustomer().getFirstName()
+                                )).collect(Collectors.toList())
+                )).collect(Collectors.toList())
+        );
     }
 }
