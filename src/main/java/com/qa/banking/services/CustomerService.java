@@ -32,17 +32,52 @@ public class CustomerService {
     }
 
     public List<CustomerDto> findCustomers(CustomerFiltersDto customerFiltersDto){
-//        return this.repo.findAll().stream().map(x->new CustomerDto(
-//                x.getTitle(),
-//                x.getSurname(),
-//                x.getFirstName(),
-//                x.getDateOfBirth(),
-//                x.getGender(),
-//                x.getCustomerType(),
-//                x.getAddress1(),
-//                x.getAddress2()
-//        )).collect(Collectors.toList());
-        return null;
+        return this.repo.findAll().stream()
+                .filter(x-> {
+                    if (!customerFiltersDto.getAccount_nr().isEmpty() &&
+                            !x.getCustomerAccounts().stream().anyMatch(y->y.getAccount().getId()==Long.valueOf(customerFiltersDto.getAccount_nr()))) {
+                        return false;
+                    }else if ((!customerFiltersDto.getCustomer_nr().isEmpty() && Long.valueOf(customerFiltersDto.getCustomer_nr()) != x.getId())) {
+                        return false;
+                    }else if(!customerFiltersDto.getSurname().isEmpty() && !customerFiltersDto.getSurname().toLowerCase().equals(x.getSurname().toLowerCase())){
+                        return false;
+                    }else if(!customerFiltersDto.getEmail().isEmpty() && !customerFiltersDto.getEmail().toLowerCase().equals(x.getEmail().toLowerCase())){
+                        return false;
+                    }else if(!customerFiltersDto.getPostcode().isEmpty() && !customerFiltersDto.getPostcode().toLowerCase().equals(x.getPostcode().toLowerCase())){
+                        return false;
+                    }
+                    return true;
+                })
+                .map(x->new CustomerDto(
+                    x.getTitle(),
+                    x.getSurname(),
+                    x.getFirstName(),
+                    x.getDateOfBirth(),
+                    x.getGender(),
+                    x.getCustomerType(),
+                    x.getAddress1(),
+                    x.getAddress2(),
+                    x.getCustomerAccounts().stream().map(y->new AccountDto(
+                        y.getAccount().getId(),
+                            y.getAccount().getBranch().getName(),
+                            y.getAccount().getType(),
+                            y.getAccount().getNumber(),
+                            y.getAccount().getMinDeposit(),
+                            y.getAccount().getBalance(),
+                            y.getAccount().getCustomerAccounts().stream().
+                                    filter(z->{
+                                        if (z.getCustomer().getId() == x.getId()) {
+                                            return false;
+                                        } else {
+                                            return true;
+                                        }}).
+                                    map(z->new AccountSharedWithCustomersDto(
+                                    z.getCustomer().getId(),
+                                    z.getCustomer().getSurname(),
+                                    z.getCustomer().getFirstName()
+                            )).collect(Collectors.toList())
+                    )).collect(Collectors.toList())
+                )).collect(Collectors.toList());
     }
 
     public List<CustomerDto> findAll(){
