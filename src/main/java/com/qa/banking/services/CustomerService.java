@@ -5,6 +5,7 @@ import com.qa.banking.dtos.AccountSharedWithCustomersDto;
 import com.qa.banking.dtos.CustomerDto;
 import com.qa.banking.dtos.CustomerFiltersDto;
 import com.qa.banking.entities.*;
+import com.qa.banking.dtos.UpdateCustomerDto;
 import com.qa.banking.repos.CustomerRepository;
 import com.qa.banking.repos.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -76,5 +77,23 @@ public class CustomerService {
             )).collect(Collectors.toList())
         )).collect(Collectors.toList());
 
+    }
+
+    public void updateCustomer(UpdateCustomerDto customer) {
+        this.repo.update(
+                customer.getId(),
+                customer.getTitle(),
+                customer.getSurname(),
+                customer.getFirstName(),
+                customer.getDateOfBirth(),
+                customer.getGender(),
+                customer.getCustomerType(),
+                customer.getAddress1(),
+                customer.getAddress2(),
+                customer.getCityTown(),
+                customer.getPostcode(),
+                customer.getPhoneNo(),
+                customer.getEmail()
+        );
     }
 }
