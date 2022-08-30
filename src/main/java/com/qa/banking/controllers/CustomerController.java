@@ -1,10 +1,7 @@
 package com.qa.banking.controllers;
 
-import com.qa.banking.dtos.CustomerDto;
-import com.qa.banking.dtos.CustomerFiltersDto;
-import com.qa.banking.dtos.UpdateCustomerDto;
+import com.qa.banking.dtos.*;
 import com.qa.banking.entities.Customer;
-import com.qa.banking.dtos.UserInfo;
 import com.qa.banking.entities.User;
 import com.qa.banking.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +37,16 @@ public class CustomerController {
     @PutMapping("/update")
     public void update(@RequestBody UpdateCustomerDto customer) {
         this.customerService.updateCustomer(customer);
+    }
+
+    @PutMapping("/delete/{id}")
+    public void delete(@PathVariable Long id) {
+        this.customerService.deleteCustomer(id);
+    }
+
+    @PostMapping("/create")
+    public CustomerDto create(@RequestBody CreateCustomerDto createCustomerDto){
+        return this.customerService.createCustomer(createCustomerDto);
     }
 
 }
