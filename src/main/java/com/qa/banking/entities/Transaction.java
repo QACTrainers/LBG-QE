@@ -22,15 +22,22 @@ public class Transaction {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_account_id")
+    @JoinColumn(name = "customer_account_id", nullable = false)
     private CustomerAccount customerAccount;
 
     @ManyToOne
-    @JoinColumn(name = "branch_id")
+    @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
 
+    @Column(nullable = false, length = 7)
     private BigDecimal amount;
+
+    @Column(nullable = false)
     private LocalDateTime dateTime;
+
+    @Column(nullable = false)
     private Long verificationNo;
+
+    @Column(length = 25)
     private String chequeNo;
 }

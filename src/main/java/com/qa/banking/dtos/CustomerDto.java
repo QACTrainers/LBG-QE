@@ -1,16 +1,16 @@
 package com.qa.banking.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.qa.banking.entities.Account;
+import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class CustomerDto {
 
     private String title;
@@ -21,5 +21,6 @@ public class CustomerDto {
     private String customerType;
     private String address1;
     private String address2;
+    private List<AccountDto> accounts;
 
 }
