@@ -4,6 +4,8 @@ import com.qa.banking.dtos.CustomerDto;
 import com.qa.banking.dtos.CustomerFiltersDto;
 import com.qa.banking.dtos.UpdateCustomerDto;
 import com.qa.banking.entities.Customer;
+import com.qa.banking.dtos.UserInfo;
+import com.qa.banking.entities.User;
 import com.qa.banking.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

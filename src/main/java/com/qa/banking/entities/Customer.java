@@ -1,9 +1,6 @@
 package com.qa.banking.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -14,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode
 public class Customer {
 
     @Id
@@ -61,6 +59,6 @@ public class Customer {
     @Column(length = 20)
     private String motherMaidenName;
 
-    @OneToMany(targetEntity = CustomerAccount.class,cascade = CascadeType.ALL,mappedBy = "id",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer")
     private List<CustomerAccount> customerAccounts;
 }
