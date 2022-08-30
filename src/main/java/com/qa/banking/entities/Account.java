@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Setter
 @Getter
@@ -22,6 +23,9 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
+
+    @OneToMany(mappedBy = "account")
+    private List<CustomerAccount> customerAccounts;
 
     @Column(nullable=false, length=20)
     private String type;
