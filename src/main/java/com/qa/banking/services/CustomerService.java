@@ -1,20 +1,12 @@
 package com.qa.banking.services;
 
-import com.qa.banking.dtos.AccountDto;
-import com.qa.banking.dtos.AccountSharedWithCustomersDto;
-import com.qa.banking.dtos.CustomerDto;
-import com.qa.banking.dtos.CustomerFiltersDto;
+import com.qa.banking.dtos.*;
 import com.qa.banking.entities.*;
-import com.qa.banking.dtos.UpdateCustomerDto;
 import com.qa.banking.repos.CustomerRepository;
-import com.qa.banking.repos.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,6 +106,9 @@ public class CustomerService {
 
     }
 
+    public CustomerDto createCustomer(CreateCustomerDto customer) {
+        return this.mapper.map(this.repo.saveAndFlush(this.mapper.map(customer,Customer.class)),CustomerDto.class);
+    }
     public void updateCustomer(UpdateCustomerDto customer) {
         this.repo.update(
                 customer.getId(),
@@ -130,5 +125,9 @@ public class CustomerService {
                 customer.getPhoneNo(),
                 customer.getEmail()
         );
+    }
+
+    public void deleteCustomer(Long id) {
+        this.repo.deleteById(id);
     }
 }
