@@ -56,7 +56,7 @@ public class CustomerService {
             x.getAddress2(),
             x.getCustomerAccounts().stream().map(y->new AccountDto(
                 y.getAccount().getId(),
-                    y.getAccount().getBranch(),
+                    y.getAccount().getBranch().getName(),
                     y.getAccount().getType(),
                     y.getAccount().getNumber(),
                     y.getAccount().getMinDeposit(),
