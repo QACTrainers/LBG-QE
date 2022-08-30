@@ -16,7 +16,7 @@ import java.util.List;
 public class AccountDto {
 
     private Long id;
-    private Branch branch;
+    private String branch;
     private String type;
     private String number;
     private BigDecimal minDeposit;

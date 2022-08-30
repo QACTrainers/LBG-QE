@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Transactional
     @Query(value = "update user set login_attempts = login_attempts + 1 where username = ?1", nativeQuery = true)
-    void incrementLoginAttempts(String username);
+    int incrementLoginAttempts(String username);
 
     @Modifying
     @Transactional
