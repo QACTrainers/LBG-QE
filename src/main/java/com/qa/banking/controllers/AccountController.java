@@ -33,7 +33,7 @@ public class AccountController {
         this.accountService.updateAccount(account);
     }
 
-    @PutMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         this.accountService.deleteAccount(id);
     }
