@@ -104,6 +104,7 @@ public class CustomerService {
 
     private CustomerDto mapCustomerToDto(Customer customer){
         return new CustomerDto(
+                customer.getId(),
                 customer.getTitle(),
                 customer.getSurname(),
                 customer.getFirstName(),
