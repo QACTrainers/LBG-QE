@@ -46,6 +46,7 @@ public class CustomerService {
 
     public List<CustomerDto> findAll(){
         return this.repo.findAll().stream().map(x->new CustomerDto(
+                x.getId(),
             x.getTitle(),
             x.getSurname(),
             x.getFirstName(),

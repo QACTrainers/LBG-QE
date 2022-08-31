@@ -1,9 +1,14 @@
-span {
+span :not(.id-span) {
   font-weight: bold;
   margin: 0;
 }
+
 button {
   margin-top: 5px;
+}
+
+td {
+  text-align: center;
 }
 
 .input-container {

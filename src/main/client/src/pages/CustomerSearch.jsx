@@ -8,22 +8,25 @@ const axios = require("axios");
 const CustomerMaintenance = () => {
   const [inputBox, setInputBox] = useState(<></>);
   const [tableBody, setTableBody] = useState(<tr></tr>);
-  const [accountsData, setAccountsData] = useState({})
 
   useEffect(() => {
     axios.get("http://localhost:9002/customer/findAll").then((res) => populateTable(res.data));
-    axios.get("http://localhost:9002/accounts/findAll").then((res) => setAccountsData(res.data));
   }, []);
 
   const storeCustomerData = (customer) => {
     sessionStorage.setItem(`customer-${customer.id}`, JSON.stringify(customer));
+  };
+  const storeAccountData = (account, customerId) => {
+    sessionStorage.setItem(`account-${account.id}`, JSON.stringify({ accountData: account, customerId: customerId }));
   };
 
   const populateTable = (data) => {
     sessionStorage.clear();
     for (let customer of data) {
       storeCustomerData(customer);
-
+      for (let account of customer.accounts) {
+        storeAccountData(account, customer.id);
+      }
     }
     setTableBody(
       data.map((customer) => (
@@ -42,6 +45,23 @@ const CustomerMaintenance = () => {
           <td>{customer.phoneNo ? customer.phoneNo : "❌"}</td>
           <td>{customer.email ? customer.email : "❌"}</td>
           <td>
+            {customer.accounts.length > 0 ? (
+              <>
+                {customer.accounts.map((account) => (
+                  <div>
+                    <Link to={`/account-maintenance/${account.id}`}>
+                      <button value="edit" id="edit-account-button" key={customer.id + "-" + account.id}>
+                        {`Edit account ${account.id}`}
+                      </button>
+                    </Link>
+                  </div>
+                ))}
+              </>
+            ) : (
+              "❌"
+            )}
+          </td>
+          <td>
             <Link to={`/customer-maintenance/${customer.id}`}>
               <button value="edit" id="edit-button">
                 Edit customer
@@ -56,9 +76,9 @@ const CustomerMaintenance = () => {
   const getTextBox = (input) => {
     switch (input) {
       case "aid":
-        return ["account-id-input", "Enter account number..."];
+        return ["account", "Enter account number..."];
       case "cid":
-        return ["customer-id", "Enter customer number..."];
+        return ["customer", "Enter customer number..."];
       case "sname":
         return ["surname", "Enter customer surname..."];
       case "email":
@@ -70,10 +90,19 @@ const CustomerMaintenance = () => {
     }
   };
 
+  const submitSearch = () => {
+    const inputBox = document.querySelector(".search-input")
+    const inputValue = inputBox.value;
+    const searchParams = inputBox.getAttribute("id").split("-")[0]
+    console.log(inputValue)
+    console.log(searchParams)
+    // axios.get("http://localhost:9002/customer/search")
+  }
+
   const handleSubmitChange = () => {
     let input = document.querySelector("#search-by").value;
     let inputData = getTextBox(input);
-    setInputBox(<input type="text" id={inputData[0] + "-input"} placeholder={inputData[1]} />);
+    setInputBox(<input type="text" className="search-input" id={inputData[0] + "-input"} placeholder={inputData[1]} />);
   };
 
   return (
@@ -90,6 +119,7 @@ const CustomerMaintenance = () => {
         <option value="pcode">Postcode</option>
       </select>
       {inputBox}
+      <button onClick = {submitSearch}>Search</button>
       <div id="">
         <table>
           <thead>
@@ -107,6 +137,7 @@ const CustomerMaintenance = () => {
               <th>Postcode</th>
               <th>Phone no</th>
               <th>Email</th>
+              <th>Accounts</th>
             </tr>
           </thead>
           <tbody>{tableBody}</tbody>

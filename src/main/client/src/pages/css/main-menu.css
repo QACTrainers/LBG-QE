@@ -8,6 +8,16 @@
   align-items: center;
 }
 
+.invalid-button {
+  color: #555;
+  background-color: lightgray;
+  border-color: darkgray;
+}
+
+.invalid-button:hover {
+  background-color: lightgray;
+}
+
 #button-container > button,
 #button-container > a > button {
   width: 150px;

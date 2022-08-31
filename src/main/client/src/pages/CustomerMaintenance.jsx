@@ -6,11 +6,10 @@ import "./css/input-pages.css";
 
 const CustomerMaintenance = () => {
   const { id } = useParams();
-  let customerData = JSON.parse(sessionStorage.getItem(`customer-${id}`));
   return (
     <div className="content-container">
       <h2>Update Customer</h2>
-      {<CustomerInputs createNew={false} customerData={customerData} />}
+      {<CustomerInputs createNew={false} customerId={id} />}
     </div>
   );
 };

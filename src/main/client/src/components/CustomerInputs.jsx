@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Error from "./Error";
 
-const CustomerInputs = ({ createNew, customerData }) => {
+const CustomerInputs = ({ createNew, customerId }) => {
   const [DoBError, setDoBError] = useState(<></>);
   const [PcodeError, setPcodeError] = useState(<></>);
   const [PhoneError, setPhoneError] = useState(<></>);
   const [EmailError, setEmailError] = useState(<></>);
+  
+  const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
 
   useEffect(() => {
     !createNew && popoulateInputValues();
@@ -26,7 +28,7 @@ const CustomerInputs = ({ createNew, customerData }) => {
   const validateDoB = () => {
     const getAge = (dateString) => {
       var ageInMilliseconds = new Date() - new Date(dateString);
-      return Math.floor(ageInMilliseconds / 1000 / 60 / 60 / 24 / 365); // convert to years
+      return Math.floor(ageInMilliseconds / 1000 / 60 / 60 / 24 / 365);
     };
 
     const input = document.querySelector("#dob-input").value;

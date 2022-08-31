@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import homeIcon from "./img/home-icon.png";
 import backIcon from "./img/back-icon.png";
@@ -6,6 +6,15 @@ import "./css/header.css";
 
 const Header = () => {
   const navigate = useNavigate();
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    setLoggedIn(localStorage.getItem("loggedIn"));
+    loggedIn === "true" && setUsername(localStorage.getItem("username"));
+  }, [loggedIn]);
+
   return (
     <div id="header-container">
       <div id="nav-button-container">
@@ -17,7 +26,9 @@ const Header = () => {
         </button>
       </div>
       <h1>QA Bank</h1>
-      <div id="spacer" />
+      <div id="logged-in-container">
+        <h3>{loggedIn === "true" ? `Logged in as ${username}` : `Not logged in`}</h3>
+      </div>
     </div>
   );
 };
