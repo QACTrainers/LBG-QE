@@ -44,7 +44,37 @@ public class CustomerService {
     }
 
     public List<CustomerDto> findAll(){
-        return this.repo.findAll().stream().map(x->mapCustomerToDto(x)).collect(Collectors.toList());
+        return this.repo.findAll().stream().map(x->new CustomerDto(
+                x.getId(),
+            x.getTitle(),
+            x.getSurname(),
+            x.getFirstName(),
+            x.getDateOfBirth(),
+            x.getGender(),
+            x.getCustomerType(),
+            x.getAddress1(),
+            x.getAddress2(),
+            x.getCustomerAccounts().stream().map(y->new AccountDto(
+                y.getAccount().getId(),
+                    y.getAccount().getBranch().getName(),
+                    y.getAccount().getType(),
+                    y.getAccount().getNumber(),
+                    y.getAccount().getMinDeposit(),
+                    y.getAccount().getBalance(),
+                    y.getAccount().getCustomerAccounts().stream().
+                            filter(z->{
+                                if (z.getCustomer().getId() == x.getId()) {
+                                    return false;
+                                } else {
+                                    return true;
+                                }}).
+                            map(z->new AccountSharedWithCustomersDto(
+                            z.getCustomer().getId(),
+                            z.getCustomer().getSurname(),
+                            z.getCustomer().getFirstName()
+                    )).collect(Collectors.toList())
+            )).collect(Collectors.toList())
+        )).collect(Collectors.toList());
     }
 
     public CustomerDto createCustomer(CreateCustomerDto customer) {

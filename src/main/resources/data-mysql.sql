@@ -1,5 +1,5 @@
 insert into user(is_admin, login_attempts, password, username)
-values(1,0,"IAmAnAdmin!","admin!");
+values(1,0,"Abcdefg1!","administrator");
 
 insert into customer(id,title,surname,first_name,date_of_birth,gender,customer_type,address1,address2,city_town,postcode,phone_no,email)
 values(1,'Mr','Cross','Christopher','1983-3-1','M','Consumer','Apartment 203','17 High Street','London','E98 1SN',07846536257,'crossc@qabank.com'),
@@ -29,16 +29,16 @@ values(1,'London','London'),
 (8,'Reading','Reading');
 
 insert into account(id,balance,min_deposit,number,type,branch_id)
-values(1,3775.20,0,'999877695302','Gold Saver Plus',1),
-(2,688.45,0,'997790034351','Classic Saver',3),
-(3,953.78,0,'999773482698','Classic Saver',6),
-(4,2100.00,0,'999716423895','Platinum Credit',4),
-(5,1090.50,0,'999207547189','Classic Saver',1),
-(6,10862.15,0,'999773241157','Premium Saver',1),
-(7,6663.90,0,'999150623215','Gold Saver Plus',6),
-(8,520.22,0,'999143537128','Premium Saver',6),
-(9,18545.85,0,'999248489229','Classic Saver',5),
-(10,45220.92,0,'999864261665','Platinum Credit',1);
+values(1,3775.20,0,'999877695302','999 - Gold Saver Plus',1),
+(2,688.45,0,'997790034351','997 - Classic Saver',3),
+(3,953.78,0,'999773482698','997 - Classic Saver',6),
+(4,2100.00,0,'999716423895','998 - Platinum Credit',4),
+(5,1090.50,0,'999207547189','997 - Classic Saver',1),
+(6,10862.15,0,'999773241157','996 - Premium Saver',1),
+(7,6663.90,0,'999150623215','999 - Gold Saver Plus',6),
+(8,520.22,0,'999143537128','996 - Premium Saver',6),
+(9,18545.85,0,'999248489229','997 - Classic Saver',5),
+(10,45220.92,0,'999864261665','998 - Platinum Credit',1);
 
 insert into customer_account(account_id,customer_id)
 values(1,1),

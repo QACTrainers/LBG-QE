@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 public class CustomerDto {
 
+    private Long id;
     private String title;
     private String surname;
     private String firstName;

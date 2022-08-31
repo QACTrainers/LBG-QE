@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Error from "./Error";
 
-const CustomerInputs = () => {
+const CustomerInputs = ({ createNew, customerId }) => {
   const [DoBError, setDoBError] = useState(<></>);
   const [PcodeError, setPcodeError] = useState(<></>);
   const [PhoneError, setPhoneError] = useState(<></>);
   const [EmailError, setEmailError] = useState(<></>);
+  
+  const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
+
+  useEffect(() => {
+    !createNew && popoulateInputValues();
+  }, []);
+
+  useEffect(() => {
+    !createNew && popoulateInputValues();
+  }, []);
 
   const submitChanges = () => {
     console.log("Submit changes");
@@ -15,19 +25,21 @@ const CustomerInputs = () => {
     console.log("Delete customer");
   };
 
-  const validateDate = () => {
+  const createCustomer = () => {
+    console.log("Create customer");
+  };
+  
+  const validateDoB = () => {
     const getAge = (dateString) => {
       var ageInMilliseconds = new Date() - new Date(dateString);
-      return Math.floor(ageInMilliseconds / 1000 / 60 / 60 / 24 / 365); // convert to years
+      return Math.floor(ageInMilliseconds / 1000 / 60 / 60 / 24 / 365);
     };
 
     const input = document.querySelector("#dob-input").value;
 
     setDoBError(
-      !new RegExp(
-        /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/
-      ).test(input) ? (
-        <Error message="Invalid Date of Birth format" />
+      !new RegExp(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).test(input) ? (
+        <Error message="Invalid Date of Birth format (YYYY/MM/DD)" />
       ) : getAge(input) < 18 ? (
         <Error message="Customer is too young" />
       ) : getAge(input) > 65 ? (
@@ -68,7 +80,7 @@ const CustomerInputs = () => {
     let input = document.querySelector("#phone-input").value;
     setPhoneError(
       !new RegExp(
-        /^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/
+        /^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?(\d{4}|\d{3}))?$/
       ).test(input) ? (
         <Error message="Invalid phone number" />
       ) : (
@@ -77,23 +89,60 @@ const CustomerInputs = () => {
     );
   };
 
+  const popoulateInputValues = () => {
+    let titleSelect = document.querySelector("#title-select");
+    let snameInput = document.querySelector("#sname-input");
+    let fnameInput = document.querySelector("#fname-input");
+    let dobInput = document.querySelector("#dob-input");
+    let mRadio = document.querySelector("#m-radio");
+    let fRadio = document.querySelector("#f-radio");
+    let oRadio = document.querySelector("#o-radio");
+    let consRadio = document.querySelector("#cons-radio");
+    let corpRadio = document.querySelector("#corp-radio");
+    let address1Input = document.querySelector("#address-1-input");
+    let address2Input = document.querySelector("#address-2-input");
+    let cityInput = document.querySelector("#city-input");
+    let pcodeInput = document.querySelector("#pcode-input");
+    let phoneInput = document.querySelector("#phone-input");
+    let emailInput = document.querySelector("#email-input");
+
+    titleSelect.value = customerData.title ? customerData.title.toLowerCase() : "N/A";
+    snameInput.value = customerData.surname ? customerData.surname : "N/A";
+    fnameInput.value = customerData.firstName ? customerData.firstName : "N/A";
+    dobInput.value = customerData.dateOfBirth ? customerData.dateOfBirth : "N/A";
+    customerData.gender === "M" && (mRadio.checked = true);
+    customerData.gender === "F" && (fRadio.checked = true);
+    customerData.gender === "X" && (oRadio.checked = true);
+    customerData.customerType === "Consumer" && (consRadio.checked = true);
+    customerData.customerType === "Corporate" && (corpRadio.checked = true);
+    address1Input.value = customerData.address1 ? customerData.address1 : "N/A";
+    address2Input.value = customerData.address2 ? customerData.address2 : "N/A";
+    cityInput.value = customerData.cityTown ? customerData.cityTown : "N/A";
+    pcodeInput.value = customerData.postcode ? customerData.postcode : "N/A";
+    phoneInput.value = customerData.phoneNo ? customerData.phoneNo : "N/A";
+    emailInput.value = customerData.email ? customerData.email : "N/A";
+  };
+
   return (
     <div className="main-container">
-      <div className="input-container">
-        <span>ID:</span>
-        <br />
-        <label>1</label>
-      </div>
+      {!createNew && (
+        <div className="input-container">
+          <span>ID:</span>
+          <br />
+          <label>{customerData.id}</label>
+        </div>
+      )}
       <div className="input-container">
         <span>Title:</span>
         <br />
-        <select id="title-select">
+        <select defaultValue={"default"} id="title-select">
+          <option value="default" disabled />
           <option value="mr">Mr</option>
           <option value="mrs">Mrs</option>
           <option value="ms">Ms</option>
           <option value="dr">Dr</option>
           <option value="lady">Lady</option>
-          <option value="Prof">Prof</option>
+          <option value="prof">Prof</option>
           <option value="sir">Sir</option>
         </select>
       </div>
@@ -110,17 +159,17 @@ const CustomerInputs = () => {
       <div className="input-container">
         <span>DoB:</span>
         <br />
-        <input type="text" onBlur={validateDate} id="dob-input" />
+        <input type="text" onBlur={validateDoB} id="dob-input" />
       </div>
       <div className="input-container">
         <span>Sex:</span>
         <br />
         <div>
-          <input type="radio" name="gender" value="m" className="first-radio" />
+          <input type="radio" name="gender" value="m" id="m-radio" className="first-radio" />
           <label htmlFor="m">Male</label>
-          <input type="radio" name="gender" value="f" />
+          <input type="radio" name="gender" value="f" id="f-radio" />
           <label htmlFor="f">Female</label>
-          <input type="radio" name="gender" value="o" />
+          <input type="radio" name="gender" value="o" id="o-radio" />
           <label htmlFor="o">Other</label>
         </div>
       </div>
@@ -128,14 +177,9 @@ const CustomerInputs = () => {
         <span>Type:</span>
         <br />
         <div>
-          <input
-            type="radio"
-            name="c-type"
-            value="cons"
-            className="first-radio"
-          />
+          <input type="radio" name="c-type" value="cons" id="cons-radio" className="first-radio" />
           <label htmlFor="c-type">Consumer</label>
-          <input type="radio" name="c-type" value="corp" />
+          <input type="radio" name="c-type" value="corp" id="corp-radio" />
           <label htmlFor="c-type">Corporate</label>
         </div>
       </div>
@@ -152,7 +196,7 @@ const CustomerInputs = () => {
       <div className="input-container">
         <span>City:</span>
         <br />
-        <input type="text" id="address-2-input" />
+        <input type="text" id="city-input" />
       </div>
       <div className="input-container">
         <span>Postcode:</span>
@@ -169,14 +213,36 @@ const CustomerInputs = () => {
         <br />
         <input type="email" id="email-input" onBlur={validateEmail} />
       </div>
+      {createNew && (
+        <div>
+          <div className="input-container">
+            <span>Mother's Maiden Name:</span>
+            <br />
+            <input type="text" id="mmn-input" />
+          </div>
+          <div className="input-container">
+            <span>Place of Birth:</span>
+            <br />
+            <input type="text" id="pob-input" />
+          </div>
+        </div>
+      )}
       <div className="button-container">
-        <button id="submit-button" onClick={submitChanges}>
-          Submit changes
-        </button>{" "}
-        <br />
-        <button id="delete-button" onClick={deleteCustomer}>
-          Delete customer
-        </button>
+        {createNew ? (
+          <button id="create-button" onClick={createCustomer}>
+            Create new customer
+          </button>
+        ) : (
+          <>
+            <button id="submit-button" onClick={submitChanges}>
+              Submit changes
+            </button>
+            <br />
+            <button id="delete-button" onClick={deleteCustomer}>
+              Delete customer
+            </button>
+          </>
+        )}
       </div>
       {DoBError}
       {PcodeError}

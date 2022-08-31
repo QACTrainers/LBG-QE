@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
+import { useParams } from "react-router-dom";
 import CustomerInputs from "../components/CustomerInputs";
 import "./css/shared.css";
-import "./css/customer-maintenance.css";
+import "./css/input-pages.css";
 
 const CustomerMaintenance = () => {
+  const { id } = useParams();
   return (
-    <div className="maintenance-container">
+    <div className="content-container">
       <h2>Update Customer</h2>
-      <CustomerInputs />
+      {<CustomerInputs createNew={false} customerId={id} />}
     </div>
   );
 };
