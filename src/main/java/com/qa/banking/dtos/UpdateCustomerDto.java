@@ -1,8 +1,13 @@
 package com.qa.banking.dtos;
 
-import com.qa.banking.entities.Account;
-import lombok.*;
 
+import com.qa.banking.entities.CustomerAccount;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
@@ -10,8 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class CustomerDto {
+public class UpdateCustomerDto {
 
     private Long id;
     private String title;
@@ -22,6 +26,9 @@ public class CustomerDto {
     private String customerType;
     private String address1;
     private String address2;
-    private List<AccountDto> accounts;
+    private String cityTown;
+    private String postcode;
+    private String phoneNo;
+    private String email;
 
 }

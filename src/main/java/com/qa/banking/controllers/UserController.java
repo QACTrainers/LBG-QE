@@ -1,7 +1,9 @@
 package com.qa.banking.controllers;
 
+import com.qa.banking.dtos.LoginInfoDto;
 import com.qa.banking.dtos.UserInfo;
-import com.qa.banking.entities.User;
+import com.qa.banking.exceptions.IncorrectPasswordException;
+import com.qa.banking.exceptions.LockedAccountException;
 import com.qa.banking.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +23,17 @@ public class UserController {
 
     // refresh
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody UserInfo userInfo) {
-        return new ResponseEntity<User>(this.userService.login(userInfo.getUsername(),userInfo.getPassword()), HttpStatus.OK);
+    public ResponseEntity<LoginInfoDto> login(@RequestBody UserInfo userInfo) {
+        try{
+            return new ResponseEntity<>(this.userService.login(userInfo.getUsername(),userInfo.getPassword()), HttpStatus.OK);
+        }catch(IncorrectPasswordException incorrectPasswordException) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }catch(LockedAccountException lockedAccountException){
+            return new ResponseEntity<>(HttpStatus.LOCKED);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return new ResponseEntity<String>("hello", HttpStatus.OK);

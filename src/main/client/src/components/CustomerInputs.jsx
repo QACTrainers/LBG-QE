@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Error from "./Error";
 
-const CustomerInputs = ({ createNew, customerData }) => {
+const CustomerInputs = ({ createNew, customerId }) => {
   const [DoBError, setDoBError] = useState(<></>);
   const [PcodeError, setPcodeError] = useState(<></>);
   const [PhoneError, setPhoneError] = useState(<></>);
   const [EmailError, setEmailError] = useState(<></>);
+  const [CreatedAccount, setCreatedAccount] = useState(<></>);
+  
+  const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
+
+  useEffect(() => {
+    !createNew && popoulateInputValues();
+  }, []);
 
   useEffect(() => {
     !createNew && popoulateInputValues();
@@ -19,10 +26,14 @@ const CustomerInputs = ({ createNew, customerData }) => {
     console.log("Delete customer");
   };
 
+  const createCustomer = () => {
+    console.log("Create customer");
+  };
+  
   const validateDoB = () => {
     const getAge = (dateString) => {
       var ageInMilliseconds = new Date() - new Date(dateString);
-      return Math.floor(ageInMilliseconds / 1000 / 60 / 60 / 24 / 365); // convert to years
+      return Math.floor(ageInMilliseconds / 1000 / 60 / 60 / 24 / 365);
     };
 
     const input = document.querySelector("#dob-input").value;
@@ -217,20 +228,28 @@ const CustomerInputs = ({ createNew, customerData }) => {
           </div>
         </div>
       )}
-
       <div className="button-container">
-        <button id="submit-button" onClick={submitChanges}>
-          Submit changes
-        </button>{" "}
-        <br />
-        <button id="delete-button" onClick={deleteCustomer}>
-          Delete customer
-        </button>
+        {createNew ? (
+          <button id="create-button" onClick={createCustomer}>
+            Create new customer
+          </button>
+        ) : (
+          <>
+            <button id="submit-button" onClick={submitChanges}>
+              Submit changes
+            </button>
+            <br />
+            <button id="delete-button" onClick={deleteCustomer}>
+              Delete customer
+            </button>
+          </>
+        )}
       </div>
       {DoBError}
       {PcodeError}
       {PhoneError}
       {EmailError}
+      {CreatedAccount}
     </div>
   );
 };

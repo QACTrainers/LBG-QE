@@ -1,13 +1,38 @@
 package com.qa.banking;
 
+import com.qa.banking.dtos.CustomerDto;
+import com.qa.banking.entities.Customer;
+import com.qa.banking.entities.CustomerAccount;
+import com.qa.banking.repos.CustomerRepository;
+import com.qa.banking.services.CustomerService;
+import org.assertj.core.api.Assert;
+import org.hibernate.annotations.Where;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.transaction.Transactional;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class BankingApplicationTests {
 
+	private CustomerService customerService;
+	public CustomerRepository repo;
+	@Autowired
+	public BankingApplicationTests(CustomerService customerService,CustomerRepository repo) {
+		this.customerService = customerService;
+		this.repo = repo;
+	}
+
 	@Test
-	void contextLoads() {
+	@Transactional
+	public void findAllFuturesTest(){
+		List<Customer> customers = this.repo.findAll();
+		List<CustomerDto> customerDtos = this.customerService.findAll();
+		assertEquals(2,customerDtos.get(0).getAccounts().size());
 	}
 
 }
