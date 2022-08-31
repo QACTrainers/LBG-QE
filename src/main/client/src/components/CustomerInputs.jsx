@@ -6,6 +6,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const [PcodeError, setPcodeError] = useState(<></>);
   const [PhoneError, setPhoneError] = useState(<></>);
   const [EmailError, setEmailError] = useState(<></>);
+  const [CreatedAccount, setCreatedAccount] = useState(<></>);
   
   const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
 
@@ -248,6 +249,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       {PcodeError}
       {PhoneError}
       {EmailError}
+      {CreatedAccount}
     </div>
   );
 };
