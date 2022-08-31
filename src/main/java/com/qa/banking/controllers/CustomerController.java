@@ -26,7 +26,11 @@ public class CustomerController {
     // refresh
     @PostMapping("/filter")
     public ResponseEntity<List<CustomerDto>> findCustomers(@RequestBody CustomerFiltersDto customerFilters) {
-        return new ResponseEntity<List<CustomerDto>>(this.customerService.findCustomers(customerFilters), HttpStatus.OK);
+        List<CustomerDto> customerDtos = this.customerService.findCustomers(customerFilters);
+        if (customerDtos.size()==0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(customerDtos, HttpStatus.OK);
     }
 
     @GetMapping("/findAll")
