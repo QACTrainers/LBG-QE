@@ -1,5 +1,6 @@
 package com.qa.banking.controllers;
 
+import com.qa.banking.dtos.*;
 import com.qa.banking.entities.Account;
 import com.qa.banking.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,20 @@ public class AccountController {
     public ResponseEntity<List<Account>> findAll() {
         return new ResponseEntity<List<Account>>(this.accountService.findAll(), HttpStatus.OK);
     }
+
+    @PutMapping("/update")
+    public void update(@RequestBody UpdateAccountDto account) {
+        this.accountService.updateAccount(account);
+    }
+
+    @PutMapping("/delete/{id}")
+    public void delete(@PathVariable Long id) {
+        this.accountService.deleteAccount(id);
+    }
+
+    @PostMapping("/create")
+    public AccountDto create(@RequestBody CreateAccountDto createAccountDto){
+        return this.accountService.createAccount(createAccountDto);
+    }
+
 }
