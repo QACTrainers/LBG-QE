@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const InvalidButton = () => {
+const InvalidButton = ({content, err}) => {
   return (
-    <div>InvalidButton</div>
-  )
-}
+    <button className="invalid-button" title={err}>
+      {content}
+    </button>
+  );
+};
 
-export default InvalidButton
+export default InvalidButton;
