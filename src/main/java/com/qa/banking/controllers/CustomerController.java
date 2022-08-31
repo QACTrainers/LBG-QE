@@ -2,8 +2,9 @@ package com.qa.banking.controllers;
 
 import com.qa.banking.dtos.CustomerDto;
 import com.qa.banking.dtos.CustomerFiltersDto;
-import com.qa.banking.dtos.UserInfo;
+import com.qa.banking.dtos.UpdateCustomerDto;
 import com.qa.banking.entities.Customer;
+import com.qa.banking.dtos.UserInfo;
 import com.qa.banking.entities.User;
 import com.qa.banking.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +36,10 @@ public class CustomerController {
     public ResponseEntity<List<CustomerDto>> findAll() {
         return new ResponseEntity<List<CustomerDto>>(this.customerService.findAll(), HttpStatus.OK);
     }
+
+    @PutMapping("/update")
+    public void update(@RequestBody UpdateCustomerDto customer) {
+        this.customerService.updateCustomer(customer);
+    }
+
 }

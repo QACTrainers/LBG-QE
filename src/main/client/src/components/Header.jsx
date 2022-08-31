@@ -14,7 +14,6 @@ const Header = () => {
     setLoggedIn(localStorage.getItem("loggedIn"));
     loggedIn === "true" && setUsername(localStorage.getItem("username"));
   }, [loggedIn]);
-
   return (
     <div id="header-container">
       <div id="nav-button-container">

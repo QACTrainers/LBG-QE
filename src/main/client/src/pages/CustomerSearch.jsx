@@ -103,6 +103,7 @@ const CustomerMaintenance = () => {
     let input = document.querySelector("#search-by").value;
     let inputData = getTextBox(input);
     setInputBox(<input type="text" className="search-input" id={inputData[0] + "-input"} placeholder={inputData[1]} />);
+
   };
 
   return (

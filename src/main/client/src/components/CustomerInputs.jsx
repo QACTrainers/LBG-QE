@@ -13,6 +13,10 @@ const CustomerInputs = ({ createNew, customerId }) => {
     !createNew && popoulateInputValues();
   }, []);
 
+  useEffect(() => {
+    !createNew && popoulateInputValues();
+  }, []);
+
   const submitChanges = () => {
     console.log("Submit changes");
   };
@@ -24,7 +28,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const createCustomer = () => {
     console.log("Create customer");
   };
-
+  
   const validateDoB = () => {
     const getAge = (dateString) => {
       var ageInMilliseconds = new Date() - new Date(dateString);

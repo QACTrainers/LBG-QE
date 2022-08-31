@@ -83,7 +83,6 @@ const MainMenu = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("admin");
     window.location.reload(false);
-  };
 
   return (
     <div className="main-container main-menu-container">
@@ -128,7 +127,6 @@ const MainMenu = () => {
             <InvalidButton content="Open New Account" err="Log in as an admin to access this function" />
           </>
         )}
-
         <button>New Transaction</button>
 
         <button>Transfer</button>
