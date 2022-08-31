@@ -27,7 +27,7 @@ public class Account {
     @OneToMany(mappedBy = "account")
     private List<CustomerAccount> customerAccounts;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable=false, length=25)
     private String type;
 
     @Column(unique=true,nullable = false,length = 25)
