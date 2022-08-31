@@ -28,7 +28,7 @@ const AccountInputs = ({ createNew, accountId }) => {
     let depositInput = document.querySelector("#deposit-select");
     let accountHoldersInput = document.querySelector("#account-holders-input");
 
-    branchSelect.value = accountData.branch ? accountData.branch.location.toLowerCase() : "N/A";
+    branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "N/A";
     typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "N/A";
     accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
   };

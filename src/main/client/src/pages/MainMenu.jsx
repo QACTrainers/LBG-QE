@@ -83,7 +83,7 @@ const MainMenu = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("admin");
     window.location.reload(false);
-  }
+  };
   return (
     <div className="main-container main-menu-container">
       <h2>Main Menu</h2>
@@ -134,5 +134,4 @@ const MainMenu = () => {
     </div>
   );
 };
-
 export default MainMenu;
