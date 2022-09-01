@@ -1,20 +1,23 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 
 const AccountInputs = ({ createNew, accountData, customerId }) => {
   useEffect(() => {
     !createNew && popoulateInputValues();
   }, []);
 
-  console.log(accountData);
-
   const createAccount = () => {
-    console.log("Submit changes");
+    axios.post("http://localhost:9002/account/create");
   };
   const submitChanges = () => {
     console.log("Submit changes");
   };
   const deleteAccount = () => {
-    console.log("Delete Account");
+    window.confirm(`Are you sure you want to delete account ${accountData.id}?`) &&
+      axios
+        .delete(`http://localhost:9002/account/delete/${accountData.id}`)
+        .then((res) => res.status === 200 && (window.location.href = "/customer-search"))
+        .catch((err) => window.alert("Internal server error - could not delete"));
   };
 
   const popoulateInputValues = () => {
@@ -67,11 +70,13 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
           <option value="996">996 - Premium Saver</option>
         </select>
       </div>
-      <div className="input-container">
-        <span>Account Balance:</span>
-        <br />
-        {createNew ? <input type="text" id="balance-input" /> : <label>{accountData.balance}</label>}
-      </div>
+      {!createNew && (
+        <div className="input-container">
+          <span>Account Balance:</span>
+          <br />
+          {createNew ? <input type="text" id="balance-input" /> : <label>{accountData.balance}</label>}
+        </div>
+      )}
       <div className="input-container">
         <span>Deposit Amount:</span>
         <br />

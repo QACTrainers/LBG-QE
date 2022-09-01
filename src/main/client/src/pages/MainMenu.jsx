@@ -103,7 +103,7 @@ const MainMenu = () => {
 
   return (
     <div className="main-container main-menu-container">
-      <h2>Main Menu</h2>
+      {/* <h2>Main Menu</h2> */}
       {loginOpen && (
         <Popup
           content={

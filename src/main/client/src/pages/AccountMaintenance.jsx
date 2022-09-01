@@ -5,7 +5,7 @@ import "./css/input-pages.css";
 import "./css/account-maintenance.css";
 import MaintenenceContent from "../components/MaintenenceContent";
 import TransactionContent from "../components/TransactionContent";
-import TransferContent from "./TransferContent";
+import TransferContent from "../components/TransferContent";
 
 const AccountMaintenance = () => {
   const [activeContent, setActiveContent] = useState("maintenance");
@@ -40,7 +40,7 @@ const AccountMaintenance = () => {
       </div>
       {activeContent === "maintenance" && <MaintenenceContent accountData={accountData} customerId={customerId} />}
       {activeContent === "transaction" && <TransactionContent id={accountData.id} balance={accountData.balance} />}
-      {activeContent === "transfer" && <TransferContent />}
+      {activeContent === "transfer" && <TransferContent id={accountData.id} balance={accountData.balance} />}
     </div>
   );
 };
