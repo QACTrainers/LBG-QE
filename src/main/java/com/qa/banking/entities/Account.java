@@ -24,7 +24,7 @@ public class Account {
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<CustomerAccount> customerAccounts;
 
     @Column(nullable=false, length=25)

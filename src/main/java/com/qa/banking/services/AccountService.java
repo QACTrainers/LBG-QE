@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,9 +41,15 @@ public class AccountService {
         );
     }
 
-    public void deleteAccount(Long id) { this.repo.deleteById(id); }
+    public Void deleteAccount(Long id) { this.repo.deleteById(id);
+    return null;}
 
     public AccountDto createAccount(CreateAccountDto account) {
         return this.mapper.map(this.repo.saveAndFlush(this.mapper.map(account, Account.class)),AccountDto.class);
+    }
+
+    public BigDecimal transact(TransactDto transactDto) {
+        this.repo.transact(transactDto.getAccountId(),transactDto.getTransferAmount());
+        return this.repo.findById(transactDto.getAccountId()).get().getBalance();
     }
 }

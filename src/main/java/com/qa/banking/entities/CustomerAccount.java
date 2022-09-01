@@ -19,6 +19,6 @@ public class CustomerAccount {
     @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
 
-    @ManyToOne(targetEntity = Account.class)
+    @ManyToOne(targetEntity = Account.class, cascade = CascadeType.ALL)
     private Account account;
 }
