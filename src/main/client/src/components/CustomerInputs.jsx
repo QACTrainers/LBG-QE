@@ -21,7 +21,30 @@ const CustomerInputs = ({ createNew, customerId }) => {
   }, []);
 
   const submitChanges = () => {
-    console.log("Submit changes");
+    let customerUpdate = {
+      "id": customerData.id,
+      "title": document.getElementById("title-select").value,
+      "surname": document.getElementById("sname-input").value,
+      "firstName": document.getElementById("fname-input").value,
+      "dateOfBirth": document.getElementById("dob-input").value,
+      "gender": document.getElementById("m-radio").value,
+      "customerType": document.getElementById("cons-radio").value,
+      "address1": document.getElementById("address-1-input").value,
+      "address2": document.getElementById("address-2-input").value,
+      "cityTown":document.getElementById("city-input").value,
+      "postcode":document.getElementById("pcode-input").value,
+      "phoneNo":document.getElementById("phone-input").value,
+      "email":document.getElementById("email-input").value,
+  }
+      axios
+      .put("http://localhost:9002/customer/update", customerUpdate)
+      .then((res) => {
+        console.log(res);
+        setSuccess(<h2>account succesfully updated</h2>)
+        // window.location.reload();
+      })
+      .catch((err) => setError(<Error message= "account creation failed, ensure inputs are correct or contact system administrator"/>));
+      console.log("updated customer");
   };
 
   const deleteCustomer = () => {
@@ -35,6 +58,8 @@ const CustomerInputs = ({ createNew, customerId }) => {
       .catch((err) => setError(<Error message= "cannot delete customer; acounts still exist under customer name."/>));
     console.log("Delete customer");
   };
+
+  
 
   const createCustomer = () => {
     let customer = {
@@ -52,8 +77,6 @@ const CustomerInputs = ({ createNew, customerId }) => {
       "email":document.getElementById("email-input").value,
       "motherMaidenName":document.getElementById("mmn-input").value,
       "placeOfBirth":document.getElementById("pob-input").value
-      
-      
   }
   axios
       .post("http://localhost:9002/customer/create", customer)
