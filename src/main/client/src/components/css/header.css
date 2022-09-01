@@ -6,8 +6,9 @@
   margin-left: 10px;
   border: none;
 }
+
 .nav-button:hover {
-  background-color: rgba(0, 0, 0, 0.35);
+  background-color: rgba(0, 0, 0, 0.5);
   width: 70px;
   height: 70px;
   border-radius: 10px;

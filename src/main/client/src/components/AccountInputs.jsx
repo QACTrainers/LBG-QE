@@ -1,14 +1,57 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Error from "./Error";
 import axios from "axios";
 
 const AccountInputs = ({ createNew, accountData, customerId }) => {
+  const [depositError, setDepositError] = useState(true);
+  const [customerError, setCustomerError] = useState(true);
+  const [extraAccountsError, setExtraAccountsError] = useState(true);
+
   useEffect(() => {
     !createNew && popoulateInputValues();
   }, []);
 
   const createAccount = () => {
-    axios.post("http://localhost:9002/account/create");
+    const customerId = document.querySelector("#customer-input").value;
+    const branchId = document.querySelector("#branch-select").value.split("-")[1];
+    const type = document.querySelector("#type-select").value;
+    const deposit = document.querySelector("#deposit-input").value;
+    const accountHolders = document.querySelector("#account-holders-input").value.split(",");
+    if (accountHolders.length > 0) {
+      for (const extraAccountId of accountHolders) {
+        !extraAccountsError &&
+          axios
+            .post("http://localhost:9002/customer/filter", {
+              account_nr: "",
+              customer_nr: extraAccountId,
+              surname: "",
+              email: "",
+              postcode: "",
+            })
+            .then(setExtraAccountsError(false))
+            .catch(setExtraAccountsError(<Error message={`Customer ${extraAccountId} does not exist`} />));
+      }
+    }
+    axios
+      .post("http://localhost:9002/customer/filter", {
+        account_nr: "",
+        customer_nr: customerId,
+        surname: "",
+        email: "",
+        postcode: "",
+      })
+      .then(() => {
+        setCustomerError(false);
+        console.log("Success");
+      })
+      .catch((err) => setCustomerError(<Error message={`Customer ${customerId} does not exist`} />));
+    if (depositError === false && customerError === false && extraAccountsError === false) {
+      axios
+        .post("http://localhost:9002/account/create", { customerId: customerId, branch: branchId, type: type, balance: deposit, accountHolders: accountHolders })
+        .then((res) => console.log(res));
+    }
   };
+
   const submitChanges = () => {
     console.log("Submit changes");
   };
@@ -17,7 +60,7 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
       axios
         .delete(`http://localhost:9002/account/delete/${accountData.id}`)
         .then((res) => res.status === 200 && (window.location.href = "/customer-search"))
-        .catch((err) => window.alert("Internal server error - could not delete"));
+        .catch(window.alert("Internal server error - could not delete"));
   };
 
   const popoulateInputValues = () => {
@@ -28,6 +71,42 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
     branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "N/A";
     typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "N/A";
     accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
+  };
+
+  const checkDepositInput = () => {
+    const type = document.querySelector("#type-select").value;
+    const amount = document.querySelector("#deposit-input").value;
+    switch (type) {
+      case "997":
+      case "998":
+        setDepositError(amount < 500 ? <Error message="Deposit is under minimum of £500" /> : false);
+        break;
+      case "999":
+        setDepositError(amount < 1000 ? <Error message="Deposit is under minimum of £1000" /> : false);
+        break;
+      case "996":
+        setDepositError(amount < 2000 ? <Error message="Deposit is under minimum of £2000" /> : false);
+        break;
+      default:
+        setDepositError(type === "default" ? <Error message="Select a branch to continue" /> : false);
+        break;
+    }
+    (amount * 1000) % 10 !== 0 && setDepositError(<Error message="Too many decimal points" />);
+  };
+
+  const formatCustomerInput = () => {
+    const input = document.querySelector("#customer-input").value;
+    document.querySelector("#customer-input").value = isNaN(input.value) && input.replace(/\D/g, "");
+  };
+
+  const formatDepositInput = () => {
+    const input = document.querySelector("#deposit-input").value;
+    document.querySelector("#deposit-input").value = isNaN(input.value) && input.replace(/[^0-9.]/g, "");
+  };
+
+  const formatAccountHoldersInput = () => {
+    const input = document.querySelector("#account-holders-input").value;
+    document.querySelector("#account-holders-input").value = isNaN(input.value) && input.replace(/[^0-9,]/g, "");
   };
 
   return (
@@ -42,21 +121,22 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
       <div className="input-container">
         <span>Customer ID:</span>
         <br />
-        {createNew ? <input type="text" id="c-number-input" /> : <label>{customerId}</label>}
+        {createNew ? <input type="text" id="customer-input" onChange={formatCustomerInput} /> : <label>{customerId}</label>}
       </div>
+      {customerError}
       <div className="input-container">
         <span>Branch:</span>
         <br />
         <select defaultValue={"default"} id="branch-select">
           <option value="default" disabled />
-          <option value="london">London</option>
-          <option value="devon">Devon</option>
-          <option value="scotland">Scotland</option>
-          <option value="cornwall">Cornwall</option>
-          <option value="wales">Wales</option>
-          <option value="manchester">Manchester</option>
-          <option value="leeds">Leeds</option>
-          <option value="reading">Reading</option>
+          <option value="london-1">London</option>
+          <option value="devon-2">Devon</option>
+          <option value="scotland-3">Scotland</option>
+          <option value="cornwall-4">Cornwall</option>
+          <option value="wales-5">Wales</option>
+          <option value="manchester-6">Manchester</option>
+          <option value="leeds-7">Leeds</option>
+          <option value="reading-8">Reading</option>
         </select>
       </div>
       <div className="input-container">
@@ -74,19 +154,23 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
         <div className="input-container">
           <span>Account Balance:</span>
           <br />
-          {createNew ? <input type="text" id="balance-input" /> : <label>{accountData.balance}</label>}
+          <label>{accountData.balance}</label>
         </div>
       )}
-      <div className="input-container">
-        <span>Deposit Amount:</span>
-        <br />
-        <input type="text" id="deposit-input" />
-      </div>
+      {createNew && (
+        <div className="input-container">
+          <span>Initial Deposit Amount:</span>
+          <br />
+          <input type="text" id="deposit-input" onChange={formatDepositInput} onBlur={checkDepositInput} />
+        </div>
+      )}
+      {depositError}
       <div className="input-container">
         <span>Extra Account Holders:</span>
         <br />
-        <input type="text" id="account-holders-input" />
+        <input type="text" id="account-holders-input" onChange={formatAccountHoldersInput} />
       </div>
+      {extraAccountsError}
       <div className="button-container">
         {createNew ? (
           <button id="create-button" onClick={createAccount}>
