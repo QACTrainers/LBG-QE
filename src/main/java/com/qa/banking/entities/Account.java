@@ -24,13 +24,13 @@ public class Account {
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<CustomerAccount> customerAccounts;
 
     @Column(nullable=false, length=25)
     private String type;
 
-    @Column(unique=true,nullable = false,length = 25)
+    @Column(unique=true,length = 25)
     private String number;
 
     @Column(length = 9)

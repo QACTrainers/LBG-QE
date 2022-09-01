@@ -4,7 +4,7 @@ import axios from "axios";
 
 const CustomerInputs = ({ createNew, customerId }) => {
   const [DoBError, setDoBError] = useState(<></>);
-  const [PcodeError, setPcodeError] = useState(<></>);
+  const [PostcodeError, setPostcodeError] = useState(<></>);
   const [PhoneError, setPhoneError] = useState(<></>);
   const [EmailError, setEmailError] = useState(<></>);
   const [Success, setSuccess] = useState(<></>);
@@ -109,9 +109,9 @@ const CustomerInputs = ({ createNew, customerId }) => {
     );
   };
 
-  const validatePcode = () => {
-    let input = document.querySelector("#pcode-input").value;
-    setPcodeError(
+  const validatePostcode = () => {
+    let input = document.querySelector("#postcode-input").value;
+    setPostcodeError(
       !new RegExp(
         /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/
       ).test(input) ? (
@@ -136,7 +136,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
   };
 
   const validatePhone = () => {
-    let input = document.querySelector("#phone-input").value;
+    const input = document.querySelector("#phone-input").value;
     setPhoneError(
       !new RegExp(
         /^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?(\d{4}|\d{3}))?$/
@@ -147,6 +147,11 @@ const CustomerInputs = ({ createNew, customerId }) => {
       )
     );
   };
+
+  const checkPhone = () => {
+    const input = document.querySelector("#phone-input").value;
+    document.querySelector("#phone-input").value = isNaN(input.value) && input.replace(/\D/g, "");
+  }
 
   const popoulateInputValues = () => {
     let titleSelect = document.querySelector("#title-select");
@@ -161,7 +166,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
     let address1Input = document.querySelector("#address-1-input");
     let address2Input = document.querySelector("#address-2-input");
     let cityInput = document.querySelector("#city-input");
-    let pcodeInput = document.querySelector("#pcode-input");
+    let postcodeInput = document.querySelector("#postcode-input");
     let phoneInput = document.querySelector("#phone-input");
     let emailInput = document.querySelector("#email-input");
 
@@ -177,7 +182,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
     address1Input.value = customerData.address1 ? customerData.address1 : "N/A";
     address2Input.value = customerData.address2 ? customerData.address2 : "N/A";
     cityInput.value = customerData.cityTown ? customerData.cityTown : "N/A";
-    pcodeInput.value = customerData.postcode ? customerData.postcode : "N/A";
+    postcodeInput.value = customerData.postcode ? customerData.postcode : "N/A";
     phoneInput.value = customerData.phoneNo ? customerData.phoneNo : "N/A";
     emailInput.value = customerData.email ? customerData.email : "N/A";
   };
@@ -260,12 +265,12 @@ const CustomerInputs = ({ createNew, customerId }) => {
       <div className="input-container">
         <span>Postcode:</span>
         <br />
-        <input type="text" id="pcode-input" onBlur={validatePcode} />
+        <input type="text" id="postcode-input" onBlur={validatePostcode} />
       </div>
       <div className="input-container">
         <span>Phone No:</span>
         <br />
-        <input type="tel" id="phone-input" onBlur={validatePhone} />
+        <input type="tel" id="phone-input" onBlur={validatePhone} onChange={checkPhone}/>
       </div>
       <div className="input-container">
         <span>Email:</span>
@@ -304,7 +309,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
         )}
       </div>
       {DoBError}
-      {PcodeError}
+      {PostcodeError}
       {PhoneError}
       {EmailError}
       {Success}

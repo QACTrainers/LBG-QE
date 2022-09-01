@@ -1,8 +1,11 @@
 package com.qa.banking.dtos;
 
+import com.qa.banking.entities.Branch;
+import com.qa.banking.entities.CustomerAccount;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Setter
 @Getter
@@ -11,10 +14,10 @@ import java.math.BigDecimal;
 @ToString
 public class CreateAccountDto {
 
-    private Long branch;
+    private Long branchId;
+    private List<Long> customerIds;
     private String type;
-    private String number;
-    private BigDecimal minDeposit;
     private BigDecimal balance;
+    private String number;
 
 }

@@ -21,4 +21,9 @@ public class CustomerAccount {
 
     @ManyToOne(targetEntity = Account.class)
     private Account account;
+
+    public CustomerAccount(Customer customer, Account account){
+        this.customer=customer;
+        this.account=account;
+    }
 }

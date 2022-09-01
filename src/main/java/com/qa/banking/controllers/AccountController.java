@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -34,13 +35,18 @@ public class AccountController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Long id) {
-        this.accountService.deleteAccount(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return new ResponseEntity(this.accountService.deleteAccount(id),HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public AccountDto create(@RequestBody CreateAccountDto createAccountDto){
         return this.accountService.createAccount(createAccountDto);
+    }
+
+    @PostMapping("/transact")
+    public ResponseEntity<BigDecimal> transact(@RequestBody TransactDto transactDto){
+        return new ResponseEntity<>(this.accountService.transact(transactDto),HttpStatus.OK);
     }
 
 }
