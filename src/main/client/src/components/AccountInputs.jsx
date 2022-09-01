@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Error from "./Error";
 import axios from "axios";
 
 const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   const [depositError, setDepositError] = useState(true);
   const [customerError, setCustomerError] = useState(true);
-  const [extraAccountsError, setExtraAccountsError] = useState(true);
+  const [extraAccountsError, setExtraAccountsError] = useState(false);
   const [typeError, setTypeError] = useState(true);
   const [branchError, setBranchError] = useState(true);
   const [submitError, setSubmitError] = useState(true);
@@ -23,14 +23,28 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   useEffect(() => {
     if (createNew) {
       if (depositError === false && customerError === false && extraAccountsError === false && branchError === false && typeError === false) {
-        const allHolders = new Set([...accountHolders, customerId]);
+        const allHolders = accountHolders[0] === "" ? [...customerId] : Array.from(new Set([...accountHolders, customerId]));
         axios
           .post("http://localhost:9002/account/create", {
-            customerIds: Array.from(allHolders),
+            customerIds: allHolders,
             branch: branch,
             type: type,
             balance: deposit,
-            number: "",
+          })
+          .then((res) => console.log(res))
+          .catch(() => setSubmitError(<Error message="There was an error with your request" />));
+      }
+    }
+    if (!createNew) {
+      if (extraAccountsError === false && branchError === false && typeError === false) {
+        const allHolders = accountHolders[0] === "" ? [...existingCustomerId] : Array.from(new Set([...accountHolders, existingCustomerId]));
+        console.log(accountData.id, branch, allHolders, type)
+        axios
+          .put("http://localhost:9002/account/update", {
+            id: accountData.id,
+            branch: branch,
+            customerIds: allHolders,
+            type: type,
           })
           .then((res) => console.log(res))
           .catch(() => setSubmitError(<Error message="There was an error with your request" />));
@@ -39,6 +53,12 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   }, [customerId, branch, type, deposit, accountHolders]);
 
   const createAccount = () => {
+    checkCustomerInput();
+    checkBranchSelect();
+    checkTypeSelect();
+    checkDepositInput();
+    checkAccountHoldersInput();
+
     setCustomerId(document.querySelector("#customer-input").value);
     setBranch(document.querySelector("#branch-select").value);
     setType(document.querySelector("#type-select").value);
@@ -47,7 +67,13 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   };
 
   const updateAccount = () => {
-    console.log("Submit changes");
+    checkBranchSelect();
+    checkTypeSelect();
+    checkAccountHoldersInput();
+
+    setBranch(document.querySelector("#branch-select").value);
+    setType(document.querySelector("#type-select").value);
+    setAccountHolders(document.querySelector("#account-holders-input").value.split(","));
   };
 
   const deleteAccount = () => {
@@ -88,12 +114,12 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
 
   const checkBranchSelect = () => {
     const input = document.querySelector("#branch-select").value;
-    setBranchError(input !== "default" ? <Error message="Select a branch" /> : false);
+    setBranchError(input === "default" ? <Error message="Select a branch" /> : false);
   };
 
   const checkTypeSelect = () => {
     const input = document.querySelector("#type-select").value;
-    setTypeError(input !== "default" ? <Error message="Select an account type" /> : false);
+    setTypeError(input === "default" ? <Error message="Select an account type" /> : false);
   };
 
   const checkDepositInput = () => {
@@ -117,7 +143,7 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
     (depositInput * 1000) % 10 !== 0 && setDepositError(<Error message="Too many decimal points" />);
   };
 
-  const checkAccountHolders = () => {
+  const checkAccountHoldersInput = () => {
     const input = document.querySelector("#account-holders-input").value.split(",");
     if (input.length > 0) {
       for (const extraCustomerId of input) {
@@ -215,7 +241,7 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
       <div className="input-container">
         <span>Extra Account Holders:</span>
         <br />
-        <input type="text" id="account-holders-input" onChange={formatAccountHoldersInput} onBlur={checkAccountHolders} />
+        <input type="text" id="account-holders-input" onChange={formatAccountHoldersInput} onBlur={checkAccountHoldersInput} />
       </div>
       {extraAccountsError}
       <div className="button-container">

@@ -7,7 +7,7 @@ import "./css/shared.css";
 import "./css/customer-search.css";
 const axios = require("axios");
 
-const CustomerMaintenance = () => {
+const CustomerSearch = () => {
   const [inputBox, setInputBox] = useState(<></>);
   const [table, setTable] = useState(<></>);
   const [searchError, setSearchError] = useState(<></>);
@@ -196,4 +196,4 @@ const CustomerMaintenance = () => {
   );
 };
 
-export default CustomerMaintenance;
+export default CustomerSearch;
