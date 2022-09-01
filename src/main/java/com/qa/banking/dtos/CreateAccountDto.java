@@ -14,7 +14,7 @@ import java.util.List;
 @ToString
 public class CreateAccountDto {
 
-    private Long branchId;
+    private String branch;
     private List<Long> customerIds;
     private String type;
     private BigDecimal balance;
