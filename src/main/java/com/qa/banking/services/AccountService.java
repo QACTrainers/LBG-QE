@@ -58,7 +58,9 @@ public class AccountService {
         newAccount.setType(account.getType());
         newAccount.setBalance(account.getBalance());
         newAccount.setMinDeposit(BigDecimal.valueOf(10));
+        newAccount.setNumber(account.getNumber());
         newAccount = this.repo.save(newAccount);
+
 
         Account finalNewAccount = newAccount;
         List<CustomerAccount> customerAccounts = this.customerAccountsRepository.saveAll(account.getCustomerIds().stream()

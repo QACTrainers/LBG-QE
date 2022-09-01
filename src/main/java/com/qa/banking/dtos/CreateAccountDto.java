@@ -18,5 +18,6 @@ public class CreateAccountDto {
     private List<Long> customerIds;
     private String type;
     private BigDecimal balance;
+    private String number;
 
 }
