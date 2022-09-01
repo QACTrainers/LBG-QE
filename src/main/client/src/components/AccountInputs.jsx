@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
 
-const AccountInputs = ({ createNew, accountId }) => {
-  const account = JSON.parse(sessionStorage.getItem(`account-${accountId}`));
-  let accountData = !createNew && account.accountData;
-  let customerId = !createNew && account.customerId;
-
+const AccountInputs = ({ createNew, accountData, customerId }) => {
   useEffect(() => {
     !createNew && popoulateInputValues();
   }, []);
@@ -24,8 +20,6 @@ const AccountInputs = ({ createNew, accountId }) => {
   const popoulateInputValues = () => {
     let branchSelect = document.querySelector("#branch-select");
     let typeSelect = document.querySelector("#type-select");
-    let balanceInput = document.querySelector("#balance-input");
-    let depositInput = document.querySelector("#deposit-select");
     let accountHoldersInput = document.querySelector("#account-holders-input");
 
     branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "N/A";
@@ -37,28 +31,16 @@ const AccountInputs = ({ createNew, accountId }) => {
     <div className="main-container">
       {!createNew && (
         <div className="input-container">
-          <span>ID:</span>
+          <span>Account ID:</span>
           <br />
           <label>{accountData.id}</label>
         </div>
       )}
       <div className="input-container">
-        <span>Customer Number:</span>
+        <span>Customer ID:</span>
         <br />
         {createNew ? <input type="text" id="c-number-input" /> : <label>{customerId}</label>}
       </div>
-      {/* {!createNew && (
-        <div className="input-container">
-          <span>Customer Surname:</span>
-          <br />
-          <label>{customerId}</label>
-        </div>
-      )}
-      <div className="input-container">
-        <span>Customer First Name:</span>
-        <br />
-        <input type="text" id="firstname-input" />
-      </div> */}
       <div className="input-container">
         <span>Branch:</span>
         <br />

@@ -1,0 +1,29 @@
+.account-radio {
+  display: none;
+}
+.account-radio + .radio-label {
+  display: inline-block;
+  border: 1px solid #999;
+  background-color: #eee;
+  padding: 4px 12px;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  top: 15px;
+}
+
+.account-radio:checked + .radio-label {
+  background-color: #fff;
+  border-bottom: none;
+}
+
+.radio-label {
+  user-select: none;
+}
+
+#maintenance-container,
+#transaction-container,
+#transfer-container {
+  width: 302px;
+  border: 1px solid #999;
+  border-radius: 0 0 10px 10px;
+}

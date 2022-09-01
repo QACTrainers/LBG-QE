@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Error from "../components/Error";
 import RedButton from "../components/RedButton";
@@ -139,21 +139,14 @@ const CustomerMaintenance = () => {
     }
   };
 
-  const getTextBox = (input) => {
-    switch (input) {
-      case "account":
-        return ["account", "Enter account number..."];
-      case "customer":
-        return ["customer", "Enter customer number..."];
-      case "surname":
-        return ["surname", "Enter customer surname..."];
-      case "email":
-        return ["email", "Enter customer email..."];
-      case "postcode":
-        return ["postcode", "Enter customer postcode..."];
-      default:
-        return [];
-    }
+  const checkAccountInput = () => {
+    const input = document.querySelector("#account-input").value;
+    document.querySelector("#account-input").value = isNaN(input.value) && input.replace(/\D/g, "");
+  };
+
+  const checkCustomerInput = () => {
+    const input = document.querySelector("#customer-input").value;
+    document.querySelector("#customer-input").value = isNaN(input.value) && input.replace(/\D/g, "");
   };
 
   const handleSubmitChange = () => {
@@ -179,16 +172,6 @@ const CustomerMaintenance = () => {
         break;
     }
     setSearchButton(<button onClick={submitSearch}>Search</button>);
-  };
-
-  const checkAccountInput = () => {
-    const input = document.querySelector("#account-input").value;
-    document.querySelector("#account-input").value = isNaN(input.value) && input.replace(/\D/g, "");
-  };
-
-  const checkCustomerInput = () => {
-    const input = document.querySelector("#customer-input").value;
-    document.querySelector("#customer-input").value = isNaN(input.value) && input.replace(/\D/g, "");
   };
 
   return (
