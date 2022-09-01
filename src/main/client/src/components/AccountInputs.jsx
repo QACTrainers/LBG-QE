@@ -1,60 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Error from "./Error";
 import axios from "axios";
 
-const AccountInputs = ({ createNew, accountData, customerId }) => {
+const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   const [depositError, setDepositError] = useState(true);
   const [customerError, setCustomerError] = useState(true);
   const [extraAccountsError, setExtraAccountsError] = useState(true);
+  const [typeError, setTypeError] = useState(true);
+  const [branchError, setBranchError] = useState(true);
+  const [submitError, setSubmitError] = useState(true);
+
+  const [customerId, setCustomerId] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [type, setType] = useState("");
+  const [deposit, setDeposit] = useState("");
+  const [accountHolders, setAccountHolders] = useState();
 
   useEffect(() => {
     !createNew && popoulateInputValues();
   }, []);
 
+  useEffect(() => {
+    if (createNew) {
+      console.log(customerId, branchId, type);
+      console.log(depositError, customerError, extraAccountsError, branchError, typeError);
+      console.log("Using second effect");
+
+      if (depositError === false && customerError === false && extraAccountsError === false && branchError === false && typeError === false)
+        axios
+          .post("http://localhost:9002/account/create", { customerId: customerId, branch: branchId, type: type, balance: deposit, accountHolders: accountHolders })
+          .then((res) => console.log(res))
+          .catch(() => setSubmitError(<Error message="There was an error with your request" />));
+    }
+  }, [customerId, branchId, type, deposit, accountHolders]);
+
   const createAccount = () => {
-    const customerId = document.querySelector("#customer-input").value;
-    const branchId = document.querySelector("#branch-select").value.split("-")[1];
-    const type = document.querySelector("#type-select").value;
-    const deposit = document.querySelector("#deposit-input").value;
-    const accountHolders = document.querySelector("#account-holders-input").value.split(",");
-    if (accountHolders.length > 0) {
-      for (const extraAccountId of accountHolders) {
-        !extraAccountsError &&
-          axios
-            .post("http://localhost:9002/customer/filter", {
-              account_nr: "",
-              customer_nr: extraAccountId,
-              surname: "",
-              email: "",
-              postcode: "",
-            })
-            .then(setExtraAccountsError(false))
-            .catch(setExtraAccountsError(<Error message={`Customer ${extraAccountId} does not exist`} />));
-      }
-    }
-    axios
-      .post("http://localhost:9002/customer/filter", {
-        account_nr: "",
-        customer_nr: customerId,
-        surname: "",
-        email: "",
-        postcode: "",
-      })
-      .then(() => {
-        setCustomerError(false);
-        console.log("Success");
-      })
-      .catch((err) => setCustomerError(<Error message={`Customer ${customerId} does not exist`} />));
-    if (depositError === false && customerError === false && extraAccountsError === false) {
-      axios
-        .post("http://localhost:9002/account/create", { customerId: customerId, branch: branchId, type: type, balance: deposit, accountHolders: accountHolders })
-        .then((res) => console.log(res));
-    }
+    setCustomerId(document.querySelector("#customer-input").value);
+    setBranchId(document.querySelector("#branch-select").value.split("-")[1]);
+    setType(document.querySelector("#type-select").value);
+    setDeposit(document.querySelector("#deposit-input").value);
+    setAccountHolders(document.querySelector("#account-holders-input").value.split(","));
   };
 
-  const submitChanges = () => {
+  const updateAccount = () => {
     console.log("Submit changes");
   };
+
   const deleteAccount = () => {
     window.confirm(`Are you sure you want to delete account ${accountData.id}?`) &&
       axios
@@ -73,25 +64,74 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
     accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
   };
 
+  const checkCustomerInput = () => {
+    const input = document.querySelector("#customer-input").value;
+    setCustomerError(input.length === 0 ? <Error message="Enter a customer ID" /> : false);
+    !customerError &&
+      axios
+        .post("http://localhost:9002/customer/filter", {
+          account_nr: "",
+          customer_nr: input,
+          surname: "",
+          email: "",
+          postcode: "",
+        })
+        .then(() => {
+          setCustomerError(false);
+        })
+        .catch(() => setCustomerError(<Error message={`Customer ${input} does not exist`} />));
+  };
+
+  const checkBranchSelect = () => {
+    const input = document.querySelector("#branch-select").value;
+    setBranchError(!input ? <Error message="Select a branch" /> : false);
+  };
+  const checkTypeSelect = () => {
+    const input = document.querySelector("#type-select").value;
+    setTypeError(!input ? <Error message="Select an account type" /> : false);
+  };
+
   const checkDepositInput = () => {
-    const type = document.querySelector("#type-select").value;
-    const amount = document.querySelector("#deposit-input").value;
-    switch (type) {
+    const typeInput = document.querySelector("#type-select").value;
+    const depositInput = document.querySelector("#deposit-input").value;
+    switch (typeInput) {
       case "997":
       case "998":
-        setDepositError(amount < 500 ? <Error message="Deposit is under minimum of £500" /> : false);
+        setDepositError(depositInput < 500 ? <Error message="Deposit is under minimum of £500" /> : false);
         break;
       case "999":
-        setDepositError(amount < 1000 ? <Error message="Deposit is under minimum of £1000" /> : false);
+        setDepositError(depositInput < 1000 ? <Error message="Deposit is under minimum of £1000" /> : false);
         break;
       case "996":
-        setDepositError(amount < 2000 ? <Error message="Deposit is under minimum of £2000" /> : false);
+        setDepositError(depositInput < 2000 ? <Error message="Deposit is under minimum of £2000" /> : false);
         break;
       default:
-        setDepositError(type === "default" ? <Error message="Select a branch to continue" /> : false);
+        setDepositError(typeInput === "default" ? <Error message="Select a branch to continue" /> : false);
         break;
     }
-    (amount * 1000) % 10 !== 0 && setDepositError(<Error message="Too many decimal points" />);
+    (depositInput * 1000) % 10 !== 0 && setDepositError(<Error message="Too many decimal points" />);
+  };
+
+  const checkAccountHolders = () => {
+    const input = document.querySelector("#account-holders-input").value.split(",");
+    if (input.length > 0) {
+      for (const extraAccountId of input) {
+        axios
+          .post("http://localhost:9002/customer/filter", {
+            account_nr: "",
+            customer_nr: extraAccountId,
+            surname: "",
+            email: "",
+            postcode: "",
+          })
+          .then(() => {
+            setExtraAccountsError(false);
+          })
+          .catch(() => {
+            setExtraAccountsError(<Error message={`Customer ${extraAccountId} does not exist`} />);
+          });
+      }
+    }
   };
 
   const formatCustomerInput = () => {
@@ -121,13 +161,13 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
       <div className="input-container">
         <span>Customer ID:</span>
         <br />
-        {createNew ? <input type="text" id="customer-input" onChange={formatCustomerInput} /> : <label>{customerId}</label>}
+        {createNew ? <input type="text" id="customer-input" onChange={formatCustomerInput} onBlur={checkCustomerInput} /> : <label>{existingCustomerId}</label>}
       </div>
       {customerError}
       <div className="input-container">
         <span>Branch:</span>
         <br />
-        <select defaultValue={"default"} id="branch-select">
+        <select defaultValue={"default"} id="branch-select" onBlur={checkBranchSelect}>
           <option value="default" disabled />
           <option value="london-1">London</option>
           <option value="devon-2">Devon</option>
@@ -139,10 +179,11 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
           <option value="reading-8">Reading</option>
         </select>
       </div>
+      {branchError}
       <div className="input-container">
         <span>Account Type:</span>
         <br />
-        <select defaultValue={"default"} id="type-select">
+        <select defaultValue={"default"} id="type-select" onBlur={checkTypeSelect}>
           <option value="default" disabled />
           <option value="997">997 - Classic Saver</option>
           <option value="998">998 - Platinum Credit</option>
@@ -150,6 +191,7 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
           <option value="996">996 - Premium Saver</option>
         </select>
       </div>
+      {typeError}
       {!createNew && (
         <div className="input-container">
           <span>Account Balance:</span>
@@ -168,7 +210,7 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
       <div className="input-container">
         <span>Extra Account Holders:</span>
         <br />
-        <input type="text" id="account-holders-input" onChange={formatAccountHoldersInput} />
+        <input type="text" id="account-holders-input" onChange={formatAccountHoldersInput} onBlur={checkAccountHolders} />
       </div>
       {extraAccountsError}
       <div className="button-container">
@@ -178,7 +220,7 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
           </button>
         ) : (
           <>
-            <button id="submit-button" onClick={submitChanges}>
+            <button id="submit-button" onClick={updateAccount}>
               Submit changes
             </button>
             <br />
@@ -187,6 +229,7 @@ const AccountInputs = ({ createNew, accountData, customerId }) => {
             </button>
           </>
         )}
+        {submitError}
       </div>
     </div>
   );
