@@ -42,7 +42,7 @@ public class AccountService {
 
         Account updatedAccount = this.repo.findById(account.getId()).get();
 
-        updatedAccount.setBranch(branchRepository.findById(account.getBranchId()).get());
+        updatedAccount.setBranch(branchRepository.findByName(account.getBranch()).get());
         updatedAccount.setType(account.getType());
         updatedAccount.setMinDeposit(BigDecimal.valueOf(10));
         updatedAccount.setNumber(account.getNumber());
@@ -63,7 +63,7 @@ public class AccountService {
 
     public AccountDto createAccount(CreateAccountDto account) {
         Account newAccount = new Account();
-        newAccount.setBranch(branchRepository.findById(account.getBranchId()).get());
+        newAccount.setBranch(branchRepository.findByName(account.getBranch()).get());
         newAccount.setType(account.getType());
         newAccount.setBalance(account.getBalance());
         newAccount.setMinDeposit(BigDecimal.valueOf(10));

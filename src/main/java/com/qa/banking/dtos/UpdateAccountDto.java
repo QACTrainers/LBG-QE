@@ -18,7 +18,7 @@ import java.util.List;
 public class UpdateAccountDto {
 
     private Long id;
-    private Long branchId;
+    private String branch;
     private String type;
     private String number;
     private List<Long> customerIds;
