@@ -1,5 +1,6 @@
 package com.qa.banking.repos;
 
+import com.qa.banking.dtos.TransactDto;
 import com.qa.banking.entities.Account;
 import com.qa.banking.entities.Branch;
 import com.qa.banking.entities.Customer;
@@ -32,5 +33,12 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
              String number,
              BigDecimal minDeposit,
              BigDecimal balance);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update account set " +
+            "balance = balance + ?2 " +
+            "where id = ?1", nativeQuery = true)
+    void transact(Long id, BigDecimal transferAmount);
 }
 
