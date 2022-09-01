@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -41,6 +42,11 @@ public class AccountController {
     @PostMapping("/create")
     public AccountDto create(@RequestBody CreateAccountDto createAccountDto){
         return this.accountService.createAccount(createAccountDto);
+    }
+
+    @PostMapping("/transact")
+    public ResponseEntity<BigDecimal> transact(@RequestBody TransactDto transactDto){
+        return new ResponseEntity<>(this.accountService.transact(transactDto),HttpStatus.OK);
     }
 
 }
