@@ -39,15 +39,24 @@ public class AccountService {
     }
 
     public void updateAccount(UpdateAccountDto account) {
-        this.repo.update(
-                account.getId(),
-                account.getBranch(),
-                account.getType(),
-                account.getNumber(),
-                account.getMinDeposit(),
-                account.getBalance()
-        );
+
+        Account updatedAccount = this.repo.findById(account.getId()).get();
+
+        updatedAccount.setBranch(branchRepository.findById(account.getBranchId()).get());
+        updatedAccount.setType(account.getType());
+        updatedAccount.setMinDeposit(BigDecimal.valueOf(10));
+        updatedAccount.setNumber(account.getNumber());
+
+        customerAccountsRepository.deleteAll(updatedAccount.getCustomerAccounts());
+
+        List<CustomerAccount> customerAccounts = this.customerAccountsRepository.saveAll(account.getCustomerIds().stream()
+                .map(x-> new CustomerAccount(
+                        this.customerRepository.findById(x).get(),
+                        updatedAccount
+                )).collect(Collectors.toList()));
     }
+
+    private List<Long> customerIds;
 
     public Void deleteAccount(Long id) { this.repo.deleteById(id);
     return null;}
@@ -84,14 +93,6 @@ public class AccountService {
                 )).collect(Collectors.toList())
         );
     }
-
-//    private Long id;
-//    private String branch;
-//    private String type;
-//    private String number;
-//    private BigDecimal minDeposit;
-//    private BigDecimal balance;
-//    private List<AccountSharedWithCustomersDto> sharedWithCustomers;
 
     public BigDecimal transact(TransactDto transactDto) {
         this.repo.transact(transactDto.getAccountId(),transactDto.getTransferAmount());

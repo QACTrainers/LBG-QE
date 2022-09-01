@@ -18,10 +18,8 @@ import java.util.List;
 public class UpdateAccountDto {
 
     private Long id;
-    private Long branch;
+    private Long branchId;
     private String type;
     private String number;
-    private BigDecimal minDeposit;
-    private BigDecimal balance;
-
+    private List<Long> customerIds;
 }
