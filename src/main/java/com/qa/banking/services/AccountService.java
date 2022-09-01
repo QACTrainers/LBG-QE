@@ -40,7 +40,8 @@ public class AccountService {
         );
     }
 
-    public void deleteAccount(Long id) { this.repo.deleteById(id); }
+    public Void deleteAccount(Long id) { this.repo.deleteById(id);
+    return null;}
 
     public AccountDto createAccount(CreateAccountDto account) {
         return this.mapper.map(this.repo.saveAndFlush(this.mapper.map(account, Account.class)),AccountDto.class);

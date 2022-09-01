@@ -33,9 +33,9 @@ public class AccountController {
         this.accountService.updateAccount(account);
     }
 
-    @PutMapping("/delete/{id}")
-    public void delete(@PathVariable Long id) {
-        this.accountService.deleteAccount(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return new ResponseEntity(this.accountService.deleteAccount(id),HttpStatus.OK);
     }
 
     @PostMapping("/create")
