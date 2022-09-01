@@ -11,7 +11,7 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   const [submitError, setSubmitError] = useState(true);
 
   const [customerId, setCustomerId] = useState("");
-  const [branchId, setBranchId] = useState("");
+  const [branch, setBranch] = useState("");
   const [type, setType] = useState("");
   const [deposit, setDeposit] = useState("");
   const [accountHolders, setAccountHolders] = useState();
@@ -24,24 +24,23 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
     if (createNew) {
       if (depositError === false && customerError === false && extraAccountsError === false && branchError === false && typeError === false) {
         const allHolders = new Set([...accountHolders, customerId]);
-        console.log(allHolders);
         axios
           .post("http://localhost:9002/account/create", {
             customerIds: Array.from(allHolders),
-            branchId: branchId,
+            branch: branch,
             type: type,
             balance: deposit,
-            number: "1",
+            number: "",
           })
           .then((res) => console.log(res))
           .catch(() => setSubmitError(<Error message="There was an error with your request" />));
       }
     }
-  }, [customerId, branchId, type, deposit, accountHolders]);
+  }, [customerId, branch, type, deposit, accountHolders]);
 
   const createAccount = () => {
     setCustomerId(document.querySelector("#customer-input").value);
-    setBranchId(document.querySelector("#branch-select").value.split("-")[1]);
+    setBranch(document.querySelector("#branch-select").value);
     setType(document.querySelector("#type-select").value);
     setDeposit(document.querySelector("#deposit-input").value);
     setAccountHolders(document.querySelector("#account-holders-input").value.split(","));
@@ -89,11 +88,12 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
 
   const checkBranchSelect = () => {
     const input = document.querySelector("#branch-select").value;
-    setBranchError(!input ? <Error message="Select a branch" /> : false);
+    setBranchError(input !== "default" ? <Error message="Select a branch" /> : false);
   };
+
   const checkTypeSelect = () => {
     const input = document.querySelector("#type-select").value;
-    setTypeError(!input ? <Error message="Select an account type" /> : false);
+    setTypeError(input !== "default" ? <Error message="Select an account type" /> : false);
   };
 
   const checkDepositInput = () => {
@@ -111,7 +111,7 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
         setDepositError(depositInput < 2000 ? <Error message="Deposit is under minimum of £2000" /> : false);
         break;
       default:
-        setDepositError(typeInput === "default" ? <Error message="Select a branch to continue" /> : false);
+        setDepositError(typeInput === "default" ? <Error message="Select a branch to continue" /> : true);
         break;
     }
     (depositInput * 1000) % 10 !== 0 && setDepositError(<Error message="Too many decimal points" />);
@@ -120,11 +120,11 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   const checkAccountHolders = () => {
     const input = document.querySelector("#account-holders-input").value.split(",");
     if (input.length > 0) {
-      for (const extraAccountId of input) {
+      for (const extraCustomerId of input) {
         axios
           .post("http://localhost:9002/customer/filter", {
             account_nr: "",
-            customer_nr: extraAccountId,
+            customer_nr: extraCustomerId,
             surname: "",
             email: "",
             postcode: "",
@@ -133,7 +133,7 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
             setExtraAccountsError(false);
           })
           .catch(() => {
-            setExtraAccountsError(<Error message={`Customer ${extraAccountId} does not exist`} />);
+            setExtraAccountsError(<Error message={`Customer ${extraCustomerId} does not exist`} />);
           });
       }
     }
@@ -174,14 +174,14 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
         <br />
         <select defaultValue={"default"} id="branch-select" onBlur={checkBranchSelect}>
           <option value="default" disabled />
-          <option value="london-1">London</option>
-          <option value="devon-2">Devon</option>
-          <option value="scotland-3">Scotland</option>
-          <option value="cornwall-4">Cornwall</option>
-          <option value="wales-5">Wales</option>
-          <option value="manchester-6">Manchester</option>
-          <option value="leeds-7">Leeds</option>
-          <option value="reading-8">Reading</option>
+          <option value="london">London</option>
+          <option value="devon">Devon</option>
+          <option value="scotland">Scotland</option>
+          <option value="cornwall">Cornwall</option>
+          <option value="wales">Wales</option>
+          <option value="manchester">Manchester</option>
+          <option value="leeds">Leeds</option>
+          <option value="reading">Reading</option>
         </select>
       </div>
       {branchError}
