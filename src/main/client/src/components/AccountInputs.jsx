@@ -22,15 +22,20 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
 
   useEffect(() => {
     if (createNew) {
-      console.log(customerId, branchId, type);
-      console.log(depositError, customerError, extraAccountsError, branchError, typeError);
-      console.log("Using second effect");
-
-      if (depositError === false && customerError === false && extraAccountsError === false && branchError === false && typeError === false)
+      if (depositError === false && customerError === false && extraAccountsError === false && branchError === false && typeError === false) {
+        const allHolders = new Set([...accountHolders, customerId]);
+        console.log(allHolders);
         axios
-          .post("http://localhost:9002/account/create", { customerId: customerId, branch: branchId, type: type, balance: deposit, accountHolders: accountHolders })
+          .post("http://localhost:9002/account/create", {
+            customerIds: Array.from(allHolders),
+            branchId: branchId,
+            type: type,
+            balance: deposit,
+            number: "1",
+          })
           .then((res) => console.log(res))
           .catch(() => setSubmitError(<Error message="There was an error with your request" />));
+      }
     }
   }, [customerId, branchId, type, deposit, accountHolders]);
 
