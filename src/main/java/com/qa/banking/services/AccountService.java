@@ -2,8 +2,10 @@ package com.qa.banking.services;
 
 import com.qa.banking.dtos.*;
 import com.qa.banking.entities.Account;
-import com.qa.banking.entities.Customer;
+import com.qa.banking.entities.CustomerAccount;
 import com.qa.banking.repos.AccountRepository;
+import com.qa.banking.repos.BranchRepository;
+import com.qa.banking.repos.CustomerAccountsRepository;
 import com.qa.banking.repos.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,19 @@ import java.util.stream.Collectors;
 public class AccountService {
 
     private ModelMapper mapper;
-
     public AccountRepository repo;
+    public BranchRepository branchRepository;
+    public CustomerRepository customerRepository;
+
+    public CustomerAccountsRepository customerAccountsRepository;
 
     @Autowired
-    public AccountService(AccountRepository repo) {
+    public AccountService(AccountRepository repo, ModelMapper mapper,BranchRepository branchRepository, CustomerAccountsRepository customerAccountsRepository,CustomerRepository customerRepository) {
         this.repo = repo;
         this.mapper = mapper;
+        this.branchRepository = branchRepository;
+        this.customerAccountsRepository = customerAccountsRepository;
+        this.customerRepository = customerRepository;
     }
 
     public List<Account> findAll(){
@@ -45,8 +53,43 @@ public class AccountService {
     return null;}
 
     public AccountDto createAccount(CreateAccountDto account) {
-        return this.mapper.map(this.repo.saveAndFlush(this.mapper.map(account, Account.class)),AccountDto.class);
+        Account newAccount = new Account();
+        newAccount.setBranch(branchRepository.findById(account.getBranchId()).get());
+        newAccount.setType(account.getType());
+        newAccount.setBalance(account.getBalance());
+        newAccount.setMinDeposit(BigDecimal.valueOf(10));
+        newAccount = this.repo.save(newAccount);
+
+        Account finalNewAccount = newAccount;
+        List<CustomerAccount> customerAccounts = this.customerAccountsRepository.saveAll(account.getCustomerIds().stream()
+                .map(x-> new CustomerAccount(
+                    this.customerRepository.findById(x).get(),
+                    finalNewAccount
+                )).collect(Collectors.toList()));
+
+        return new AccountDto(
+                newAccount.getId(),
+                newAccount.getBranch().getName(),
+                newAccount.getType(),
+                newAccount.getNumber(),
+                newAccount.getMinDeposit(),
+                newAccount.getBalance(),
+                customerAccounts.stream().
+                map(z->new AccountSharedWithCustomersDto(
+                        z.getCustomer().getId(),
+                        z.getCustomer().getSurname(),
+                        z.getCustomer().getFirstName()
+                )).collect(Collectors.toList())
+        );
     }
+
+//    private Long id;
+//    private String branch;
+//    private String type;
+//    private String number;
+//    private BigDecimal minDeposit;
+//    private BigDecimal balance;
+//    private List<AccountSharedWithCustomersDto> sharedWithCustomers;
 
     public BigDecimal transact(TransactDto transactDto) {
         this.repo.transact(transactDto.getAccountId(),transactDto.getTransferAmount());
