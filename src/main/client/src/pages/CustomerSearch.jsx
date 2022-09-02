@@ -103,7 +103,10 @@ const CustomerSearch = () => {
   };
 
   const searchAll = () => {
-    axios.get("http://localhost:9002/customer/findAll").then((res) => populateTable(res.data));
+    axios.get("http://localhost:9002/customer/findAll").then((res) => {
+      populateTable(res.data);
+      setSearchError(<></>);
+    });
   };
 
   const submitSearch = () => {

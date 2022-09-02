@@ -1,7 +1,9 @@
+import axios from "axios";
+import { set } from "mongoose";
 import React, { useState } from "react";
 import Error from "./Error";
 
-const TransactionContent = ({ id, balance }) => {
+const TransactionContent = ({ id, balance, setBalance }) => {
   const [transactionType, setTransactionType] = useState("withdraw");
   const [transactionError, setTransactionError] = useState(<></>);
 
@@ -11,14 +13,30 @@ const TransactionContent = ({ id, balance }) => {
 
   const withdrawMoney = () => {
     const amount = document.querySelector("#withdraw-input").value;
-    setTransactionError(amount > balance ? <Error message="Your funds are too low." /> : <></>);
-    // AXIOS CONNECTION HERE
+    setTransactionError(amount > balance ? <Error message="Your funds are too low." /> : (amount * 1000) % 10 !== 0 ? <Error message="Too many decimal points" /> : false);
+    !transactionError &&
+      axios
+        .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseInt(amount) })
+        .then((res) => setBalance(res))
+        .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
   };
 
   const depositMoney = () => {
     const amount = document.querySelector("#deposit-input").value;
-    setTransactionError(parseFloat(amount) + balance > 99999.99 ? <Error message="This transaction takes you over your limit." /> : <></>);
-    // AXIOS CONNECTION HERE
+    setTransactionError(
+      parseFloat(amount) + balance > 99999.99 ? (
+        <Error message="This transaction takes you over your limit." />
+      ) : (amount * 1000) % 10 !== 0 ? (
+        <Error message="Too many decimal points" />
+      ) : (
+        false
+      )
+    );
+    !transactionError &&
+      axios
+        .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: parseInt(amount) })
+        .then((res) => setBalance(res))
+        .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
   };
 
   const checkWithdrawInput = () => {

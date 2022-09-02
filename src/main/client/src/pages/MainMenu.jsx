@@ -144,9 +144,6 @@ const MainMenu = () => {
             <InvalidButton content="Open New Account" err="Log in as an admin to access this function" />
           </>
         )}
-        <button>New Transaction</button>
-
-        <button>Transfer</button>
       </div>
     </div>
   );

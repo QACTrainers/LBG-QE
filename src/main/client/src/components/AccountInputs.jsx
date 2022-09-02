@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Error from "./Error";
+import Popup from "../components/Popup";
 import axios from "axios";
 
 const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
@@ -16,6 +17,11 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
   const [deposit, setDeposit] = useState("");
   const [accountHolders, setAccountHolders] = useState();
 
+  const [accountCreated, setAccountCreated] = useState(false);
+  const [accountUpdated, setAccountUpdated] = useState(false);
+  const [accountDeleted, setAccountDeleted] = useState(false);
+  const [popupContent, setPopupContent] = useState(<></>);
+
   useEffect(() => {
     !createNew && popoulateInputValues();
   }, []);
@@ -31,14 +37,16 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
             type: type,
             balance: deposit,
           })
-          .then((res) => console.log(res))
+          .then(() => {
+            setAccountCreated(true);
+            setPopupContent();
+          })
           .catch(() => setSubmitError(<Error message="There was an error with your request" />));
       }
     }
     if (!createNew) {
       if (extraAccountsError === false && branchError === false && typeError === false) {
         const allHolders = accountHolders[0] === "" ? [...existingCustomerId] : Array.from(new Set([...accountHolders, existingCustomerId]));
-        console.log(accountData.id, branch, allHolders, type)
         axios
           .put("http://localhost:9002/account/update", {
             id: accountData.id,
@@ -46,7 +54,14 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
             customerIds: allHolders,
             type: type,
           })
-          .then((res) => console.log(res))
+          .then(() => {
+            setAccountUpdated(true);
+            setPopupContent(
+              <>
+                <h2>Account successfuly updated. Close this popup to be redirected</h2>
+              </>
+            );
+          })
           .catch(() => setSubmitError(<Error message="There was an error with your request" />));
       }
     }
@@ -80,8 +95,15 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
     window.confirm(`Are you sure you want to delete account ${accountData.id}?`) &&
       axios
         .delete(`http://localhost:9002/account/delete/${accountData.id}`)
-        .then((res) => res.status === 200 && (window.location.href = "/customer-search"))
-        .catch(window.alert("Internal server error - could not delete"));
+        .then(() => {
+          setAccountUpdated(true);
+          setPopupContent(
+            <>
+              <h2>Account successfuly updated. Close this popup to be redirected</h2>
+            </>
+          );
+        })
+        .catch(() => window.alert("Internal server error - could not delete"));
   };
 
   const popoulateInputValues = () => {
@@ -180,8 +202,16 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
     document.querySelector("#account-holders-input").value = isNaN(input.value) && input.replace(/[^0-9,]/g, "");
   };
 
+  const closePopup = () => {
+    setAccountCreated(false);
+    setAccountUpdated(false);
+    setAccountDeleted(false);
+    window.location.href = "/customer-search";
+  };
+
   return (
     <div className="main-container">
+      {accountCreated || accountUpdated || (accountDeleted && <Popup handleClose={closePopup} content={popupContent} />)}
       {!createNew && (
         <div className="input-container">
           <span>Account ID:</span>

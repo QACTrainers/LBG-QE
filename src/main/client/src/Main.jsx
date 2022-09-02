@@ -4,7 +4,6 @@ import MainMenu from "./pages/MainMenu";
 import CustomerSearch from "./pages/CustomerSearch";
 import CustomerMaintenance from "./pages/CustomerMaintenance";
 import AccountMaintenance from "./pages/AccountMaintenance";
-import Transactions from "./pages/Transactions";
 import CustomerCreation from "./pages/CustomerCreation";
 import AccountCreation from "./pages/AccountCreation";
 
@@ -18,7 +17,6 @@ const Main = () => {
         <Route exact path="/create-customer" element={<CustomerCreation />} />
         <Route exact path="/account-maintenance/:id" element={<AccountMaintenance />} />
         <Route exact path="/create-account" element={<AccountCreation />} />
-        <Route exact path="/transactions" element={<Transactions />} />
       </Routes>
     </div>
   );

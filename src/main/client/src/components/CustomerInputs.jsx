@@ -112,21 +112,21 @@ const CustomerInputs = ({ createNew, customerId }) => {
     let phoneInput = document.querySelector("#phone-input");
     let emailInput = document.querySelector("#email-input");
 
-    titleSelect.value = customerData.title ? customerData.title.toLowerCase() : "N/A";
-    snameInput.value = customerData.surname ? customerData.surname : "N/A";
-    fnameInput.value = customerData.firstName ? customerData.firstName : "N/A";
-    dobInput.value = customerData.dateOfBirth ? customerData.dateOfBirth : "N/A";
+    titleSelect.value = customerData.title ? customerData.title.toLowerCase() : "";
+    snameInput.value = customerData.surname ? customerData.surname : "";
+    fnameInput.value = customerData.firstName ? customerData.firstName : "";
+    dobInput.value = customerData.dateOfBirth ? customerData.dateOfBirth : "";
     customerData.gender === "M" && (mRadio.checked = true);
     customerData.gender === "F" && (fRadio.checked = true);
     customerData.gender === "X" && (oRadio.checked = true);
     customerData.customerType === "Consumer" && (consRadio.checked = true);
     customerData.customerType === "Corporate" && (corpRadio.checked = true);
-    address1Input.value = customerData.address1 ? customerData.address1 : "N/A";
-    address2Input.value = customerData.address2 ? customerData.address2 : "N/A";
-    cityInput.value = customerData.cityTown ? customerData.cityTown : "N/A";
-    postcodeInput.value = customerData.postcode ? customerData.postcode : "N/A";
-    phoneInput.value = customerData.phoneNo ? customerData.phoneNo : "N/A";
-    emailInput.value = customerData.email ? customerData.email : "N/A";
+    address1Input.value = customerData.address1 ? customerData.address1 : "";
+    address2Input.value = customerData.address2 ? customerData.address2 : "";
+    cityInput.value = customerData.cityTown ? customerData.cityTown : "";
+    postcodeInput.value = customerData.postcode ? customerData.postcode : "";
+    phoneInput.value = customerData.phoneNo ? customerData.phoneNo : "";
+    emailInput.value = customerData.email ? customerData.email : "";
   };
 
   return (
