@@ -1,9 +1,6 @@
 package com.qa.banking.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -11,7 +8,8 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class TransactDto {
     private Long accountId;
-    private BigDecimal transferAmount;
+    private BigDecimal transactionAmount;
 }
