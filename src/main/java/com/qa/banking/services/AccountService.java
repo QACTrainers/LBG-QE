@@ -95,7 +95,7 @@ public class AccountService {
     }
 
     public BigDecimal transact(TransactDto transactDto) {
-        this.repo.transact(transactDto.getAccountId(),transactDto.getTransferAmount());
+        this.repo.transact(transactDto.getAccountId(),transactDto.getTransactionAmount());
         return this.repo.findById(transactDto.getAccountId()).get().getBalance();
     }
 }
