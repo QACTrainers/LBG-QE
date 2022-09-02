@@ -1,11 +1,11 @@
 import axios from "axios";
-import { set } from "mongoose";
 import React, { useState } from "react";
 import Error from "./Error";
 
 const TransactionContent = ({ id, balance, setBalance }) => {
   const [transactionType, setTransactionType] = useState("withdraw");
   const [transactionError, setTransactionError] = useState(<></>);
+  console.log(balance);
 
   const changeTransactionInputs = () => {
     setTransactionType(document.querySelector("#transaction-select").value);
@@ -35,7 +35,11 @@ const TransactionContent = ({ id, balance, setBalance }) => {
     !transactionError &&
       axios
         .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: parseInt(amount) })
-        .then((res) => setBalance(res))
+        .then((res) => {
+          console.log("BANANCE:" + res);
+          setBalance(res);
+          setTransactionError(<></>);
+        })
         .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
   };
 
