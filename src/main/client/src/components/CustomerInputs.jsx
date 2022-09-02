@@ -9,7 +9,6 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const [EmailError, setEmailError] = useState(<></>);
   const [CustomerSuccess, setCustomerSuccess] = useState(<></>);
   const [CustomerError, setCustomerError] = useState(<></>);
-  
   const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
 
   useEffect(() => {
@@ -88,7 +87,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       .catch((err) => setCustomerError(<Error message= "account creation failed, ensure inputs are correct or contact system administrator"/>));
     console.log("Create customer");
   };
-  
+
   const validateDoB = () => {
     const getAge = (dateString) => {
       var ageInMilliseconds = new Date() - new Date(dateString);
@@ -152,7 +151,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const checkPhone = () => {
     const input = document.querySelector("#phone-input").value;
     document.querySelector("#phone-input").value = isNaN(input.value) && input.replace(/\D/g, "");
-  }
+  };
 
   const popoulateInputValues = () => {
     let titleSelect = document.querySelector("#title-select");
@@ -192,7 +191,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
     <div className="main-container">
       {!createNew && (
         <div className="input-container">
-          <span>ID:</span>
+          <span>Customer ID:</span>
           <br />
           <label>{customerData.id}</label>
         </div>
@@ -271,7 +270,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       <div className="input-container">
         <span>Phone No:</span>
         <br />
-        <input type="tel" id="phone-input" onBlur={validatePhone} onChange={checkPhone}/>
+        <input type="tel" id="phone-input" onBlur={validatePhone} onChange={checkPhone} />
       </div>
       <div className="input-container">
         <span>Email:</span>

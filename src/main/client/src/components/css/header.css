@@ -1,13 +1,14 @@
 .nav-button {
-  background-color: rgba(89, 106, 123);
+  background-color: rgba(0, 0, 0, 0.25);
   width: 70px;
   height: 70px;
   border-radius: 10px;
   margin-left: 10px;
   border: none;
 }
+
 .nav-button:hover {
-  background-color: rgba(69, 86, 103);
+  background-color: rgba(0, 0, 0, 0.5);
   width: 70px;
   height: 70px;
   border-radius: 10px;
@@ -19,15 +20,12 @@
   width: 99.5%;
   padding: 5px;
   /* height: 80px; */
-  background-color: rgb(119, 136, 153);
+  background-color: #004050;
   justify-content: space-between;
+  align-items: center;
 }
 
 #logged-in-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 175px;
 }
 
@@ -35,6 +33,11 @@
   width: 75px;
 }
 #logged-in-container > h3 {
-  margin: 0;;
+  margin: 0;
   text-align: center;
+}
+
+h3 {
+  color: #00edb5;
+  font-size: 25px;
 }

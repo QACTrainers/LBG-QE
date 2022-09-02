@@ -20,12 +20,15 @@ const MainMenu = () => {
   const [username, setUsername] = useState("");
   const [userIsAdmin, setUserIsAdmin] = useState("");
 
+  // Abcdefg1!
+
   useEffect(() => {
     setLoggedIn(localStorage.getItem("loggedIn"));
     if (loggedIn === "true") {
       setUserId(localStorage.getItem("id"));
       setUsername(localStorage.getItem("username"));
       setUserIsAdmin(localStorage.getItem("admin"));
+      console.log(userId, username);
     }
   }, [loggedIn]);
 
@@ -46,33 +49,46 @@ const MainMenu = () => {
 
   const checkPassword = () => {
     let input = document.querySelector("#password-input").value;
-    return !new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/).test(input)
-      ? (setPasswordError(
-          <Error message="Password must be between 8 and 20 characters, at least one uppercase letter, one lowercase letter, one number and one special character" />
-        ),
-        setValidPassword(false))
+    return input.length < 8
+      ? setPasswordError(<Error message="Password is too short" />)
+      : input.length > 20
+      ? setPasswordError(<Error message="Password is too long" />)
+      : !new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/).test(input)
+      ? (setPasswordError(<Error message="Invalid password format" />), setValidPassword(false))
       : (setPasswordError(<></>), setValidPassword(true));
   };
 
   const attemptLogIn = () => {
+    console.log(validUsername, validPassword);
+    !validUsername && setUsernameError(<Error message="Invalid username" />);
+    !validPassword && setUsernameError(<Error message="Invalid password" />);
     if (validUsername && validPassword) {
       let username = document.querySelector("#username-input").value;
       let password = document.querySelector("#password-input").value;
       axios
         .post("http://localhost:9002/user/login", { username: username, password: password })
         .then((res) => {
-          return res.data.loginAttempts >= 3
-            ? setLoginError(<Error message="This account has had to many incorrect login attempts. Contact your administrator to re-activate your account" />)
-            : (console.log("Success"),
-              setLoginError(<></>),
-              localStorage.setItem("loggedIn", "true"),
-              localStorage.setItem("id", res.data.id),
-              localStorage.setItem("username", res.data.username),
-              localStorage.setItem("admin", res.data.admin),
-              toggleLoginPopup(),
-              window.location.reload(false));
+          setLoginError(<></>);
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("id", res.data.id);
+          localStorage.setItem("username", res.data.username);
+          localStorage.setItem("admin", res.data.admin);
+          toggleLoginPopup();
+          window.location.reload(false);
         })
-        .catch((err) => setLoginError(<Error message="Incorrect username or password" />));
+        .catch((err) =>
+          setLoginError(
+            err.response.status === 404 ? (
+              <Error message="Invalid username" />
+            ) : err.response.status === 401 ? (
+              <Error message="Invalid password" />
+            ) : err.response.status === 423 ? (
+              <Error message="Your account is locked. Contact your administrator" />
+            ) : (
+              <></>
+            )
+          )
+        );
     }
   };
 
@@ -84,9 +100,10 @@ const MainMenu = () => {
     localStorage.removeItem("admin");
     window.location.reload(false);
   };
+
   return (
     <div className="main-container main-menu-container">
-      <h2>Main Menu</h2>
+      {/* <h2>Main Menu</h2> */}
       {loginOpen && (
         <Popup
           content={
