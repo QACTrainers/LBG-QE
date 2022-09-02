@@ -30,7 +30,7 @@ public class Account {
     @Column(nullable=false, length=25)
     private String type;
 
-    @Column(unique=true,length = 25)
+    @Column(length = 25)
     private String number;
 
     @Column(length = 9)
