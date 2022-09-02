@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import "./css/shared.css";
 import "./css/input-pages.css";
 import "./css/account-maintenance.css";
-import Popup from "../components/Popup"
-import MaintenenceContent from "../components/MaintenenceContent";
+import MaintenanceContent from "../components/MaintenanceContent";
 import TransactionContent from "../components/TransactionContent";
 import TransferContent from "../components/TransferContent";
 
@@ -41,9 +40,9 @@ const AccountMaintenance = () => {
           Transfer
         </label>
       </div>
-      {activeContent === "maintenance" && <MaintenenceContent accountData={accountData} customerId={customerId} />}
-      {activeContent === "transaction" && <TransactionContent id={accountData.id} balance={balance} />}
-      {activeContent === "transfer" && <TransferContent id={accountData.id} balance={balance} setBalance={setBalance} />}
+      {activeContent === "maintenance" && <MaintenanceContent accountData={accountData} balance={balance} customerId={customerId} />}
+      {activeContent === "transaction" && <TransactionContent id={accountData.id} balance={balance} setBalance={setBalance} />}
+      {activeContent === "transfer" && <TransferContent id={accountData.id} balance={balance} />}
     </div>
   );
 };

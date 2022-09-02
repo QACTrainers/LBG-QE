@@ -3,7 +3,7 @@ import Error from "./Error";
 import Popup from "../components/Popup";
 import axios from "axios";
 
-const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
+const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) => {
   const [depositError, setDepositError] = useState(true);
   const [customerError, setCustomerError] = useState(true);
   const [extraAccountsError, setExtraAccountsError] = useState(false);
@@ -257,7 +257,7 @@ const AccountInputs = ({ createNew, accountData, existingCustomerId }) => {
         <div className="input-container">
           <span>Account Balance:</span>
           <br />
-          <label>{accountData.balance}</label>
+          <label>{balance}</label>
         </div>
       )}
       {createNew && (

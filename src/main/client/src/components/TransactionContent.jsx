@@ -1,28 +1,43 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Error from "./Error";
 
 const TransactionContent = ({ id, balance, setBalance }) => {
   const [transactionType, setTransactionType] = useState("withdraw");
-  const [transactionError, setTransactionError] = useState(<></>);
-  console.log(balance);
+  const [transactionError, setTransactionError] = useState(true);
+  const [amount, setAmount] = useState(0);
 
   const changeTransactionInputs = () => {
     setTransactionType(document.querySelector("#transaction-select").value);
   };
 
+  useEffect(() => {
+    !transactionError && transactionType === "withdraw"
+      ? axios
+          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseInt(amount) })
+
+          .then((res) => {
+            setBalance(res.data);
+            setTransactionError(false);
+          })
+          .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />))
+      : !transactionError &&
+        axios
+          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: parseInt(amount) })
+          .then((res) => {
+            setBalance(res.data);
+            setTransactionError(false);
+          })
+          .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
+  }, [transactionError]);
+
   const withdrawMoney = () => {
-    const amount = document.querySelector("#withdraw-input").value;
+    setAmount(document.querySelector("#withdraw-input").value);
     setTransactionError(amount > balance ? <Error message="Your funds are too low." /> : (amount * 1000) % 10 !== 0 ? <Error message="Too many decimal points" /> : false);
-    !transactionError &&
-      axios
-        .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseInt(amount) })
-        .then((res) => setBalance(res))
-        .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
   };
 
   const depositMoney = () => {
-    const amount = document.querySelector("#deposit-input").value;
+    setAmount(document.querySelector("#deposit-input").value);
     setTransactionError(
       parseFloat(amount) + balance > 99999.99 ? (
         <Error message="This transaction takes you over your limit." />
@@ -32,15 +47,6 @@ const TransactionContent = ({ id, balance, setBalance }) => {
         false
       )
     );
-    !transactionError &&
-      axios
-        .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: parseInt(amount) })
-        .then((res) => {
-          console.log("BANANCE:" + res);
-          setBalance(res);
-          setTransactionError(<></>);
-        })
-        .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
   };
 
   const checkWithdrawInput = () => {
