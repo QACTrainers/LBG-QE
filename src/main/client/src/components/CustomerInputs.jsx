@@ -7,8 +7,8 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const [PostcodeError, setPostcodeError] = useState(<></>);
   const [PhoneError, setPhoneError] = useState(<></>);
   const [EmailError, setEmailError] = useState(<></>);
-  const [Success, setSuccess] = useState(<></>);
-  const [Error, setError] = useState(<></>);
+  const [CustomerSuccess, setCustomerSuccess] = useState(<></>);
+  const [CustomerError, setCustomerError] = useState(<></>);
   
   const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
 
@@ -32,7 +32,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       "address1": document.getElementById("address-1-input").value,
       "address2": document.getElementById("address-2-input").value,
       "cityTown":document.getElementById("city-input").value,
-      "postcode":document.getElementById("pcode-input").value,
+      "postcode":document.getElementById("postcode-input").value,
       "phoneNo":document.getElementById("phone-input").value,
       "email":document.getElementById("email-input").value,
   }
@@ -40,10 +40,11 @@ const CustomerInputs = ({ createNew, customerId }) => {
       .put("http://localhost:9002/customer/update", customerUpdate)
       .then((res) => {
         console.log(res);
-        setSuccess(<h2>account succesfully updated</h2>)
+        setCustomerSuccess(<h2>account succesfully updated</h2>)
+        setCustomerError("");
         // window.location.reload();
       })
-      .catch((err) => setError(<Error message= "account creation failed, ensure inputs are correct or contact system administrator"/>));
+      .catch((err) => setCustomerError(<Error message= "account update failed, ensure inputs are correct or contact system administrator"/>));
       console.log("updated customer");
   };
 
@@ -52,10 +53,10 @@ const CustomerInputs = ({ createNew, customerId }) => {
       .delete(`http://localhost:9002/customer/delete/${customerData.id}`)
       .then((res) => {
         console.log(res);
-        setSuccess(<h2>customer succesfully deleted</h2>)
+        setCustomerSuccess(<h2>customer succesfully deleted</h2>)
         window.location.href = "/customer-search"
       })
-      .catch((err) => setError(<Error message= "cannot delete customer; acounts still exist under customer name."/>));
+      .catch((err) => setCustomerError(<Error message= "cannot delete customer; acounts still exist under customer name."/>));
     console.log("Delete customer");
   };
 
@@ -72,7 +73,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       "address1": document.getElementById("address-1-input").value,
       "address2": document.getElementById("address-2-input").value,
       "cityTown":document.getElementById("city-input").value,
-      "postcode":document.getElementById("pcode-input").value,
+      "postcode":document.getElementById("postcode-input").value,
       "phoneNo":document.getElementById("phone-input").value,
       "email":document.getElementById("email-input").value,
       "motherMaidenName":document.getElementById("mmn-input").value,
@@ -82,9 +83,9 @@ const CustomerInputs = ({ createNew, customerId }) => {
       .post("http://localhost:9002/customer/create", customer)
       .then((res) => {
         console.log(res);
-        setSuccess(<h2>account succesfully created</h2>)
+        setCustomerSuccess(<h2>account succesfully created</h2>)
       })
-      .catch((err) => setError(<Error message= "account creation failed, ensure inputs are correct or contact system administrator"/>));
+      .catch((err) => setCustomerError(<Error message= "account creation failed, ensure inputs are correct or contact system administrator"/>));
     console.log("Create customer");
   };
   
@@ -312,8 +313,8 @@ const CustomerInputs = ({ createNew, customerId }) => {
       {PostcodeError}
       {PhoneError}
       {EmailError}
-      {Success}
-      {Error}
+      {CustomerError}
+      {CustomerSuccess}
     </div>
   );
 };
