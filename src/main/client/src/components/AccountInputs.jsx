@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Error from "./Error";
 import Popup from "../components/Popup";
 import axios from "axios";
+import { jsPDF } from "jspdf";
 
 const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) => {
   const [depositError, setDepositError] = useState(true);
@@ -106,16 +107,6 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
         .catch(() => window.alert("Internal server error - could not delete"));
   };
 
-  const popoulateInputValues = () => {
-    let branchSelect = document.querySelector("#branch-select");
-    let typeSelect = document.querySelector("#type-select");
-    let accountHoldersInput = document.querySelector("#account-holders-input");
-
-    branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "N/A";
-    typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "N/A";
-    accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
-  };
-
   const checkCustomerInput = () => {
     const input = document.querySelector("#customer-input").value;
     setCustomerError(input.length === 0 ? <Error message="Enter a customer ID" /> : false);
@@ -209,6 +200,42 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     window.location.href = "/customer-search";
   };
 
+  const printDetails = () => {
+    const doc = new jsPDF();
+    console.log(doc.getFontList());
+    doc.setFontSize(30);
+    doc.setFont("Helvetica", "Bold");
+    doc.text(8, 23, `Account #${accountData.id} Details`);
+
+    let y = 20;
+    let lnHeight = 20;
+    doc.setFontSize(10);
+    doc.text(8, (y += lnHeight), `Customers:`);
+    doc.text(8, (y += lnHeight), `Branch:`);
+    doc.text(8, (y += lnHeight), `Account Type:`);
+    doc.text(8, (y += lnHeight), `Balance:`);
+
+    y = 28;
+    doc.setFont("Helvetica", "");
+    doc.setFontSize(20);
+    doc.text(8, (y += lnHeight), `${[...accountData.sharedWithCustomers.map((account) => account.id), existingCustomerId]}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#branch-select").value ? document.querySelector("#branch-select").value : "N/A"}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#type-select").value ? document.querySelector("#type-select").value : "N/A"}`);
+    doc.text(8, (y += lnHeight), `£${balance}`);
+
+    window.open(doc.output("bloburl"), "_blank");
+  };
+
+  const popoulateInputValues = () => {
+    let branchSelect = document.querySelector("#branch-select");
+    let typeSelect = document.querySelector("#type-select");
+    let accountHoldersInput = document.querySelector("#account-holders-input");
+
+    branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "N/A";
+    typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "N/A";
+    accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
+  };
+
   return (
     <div className="main-container">
       {accountCreated || accountUpdated || (accountDeleted && <Popup handleClose={closePopup} content={popupContent} />)}
@@ -283,6 +310,10 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
           <>
             <button id="submit-button" onClick={updateAccount}>
               Submit changes
+            </button>
+            <br />
+            <button id="print-button" onClick={printDetails}>
+              Print details
             </button>
             <br />
             <button id="delete-button" onClick={deleteAccount}>

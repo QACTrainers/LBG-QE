@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import Error from "./Error";
 import axios from "axios";
 import Popup from "../components/Popup";
-import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
+import { jsPDF } from "jspdf";
 
 const CustomerInputs = ({ createNew, customerId }) => {
-
   const [customerDeleted, setCustomerDeleted] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
   const [customerUpdated, setCustomerUpdated] = useState(false);
@@ -17,18 +16,12 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const [surnameError, setSurnameError] = useState(true);
   const [firstNameError, setFirstNameError] = useState(true);
   const [doBError, setDoBError] = useState(false);
-  
-  // const [genderError, setGenderError] = useState(true);
   const [customerTypeError, setCustomerTypeError] = useState(true);
   const [address1Error, setAddress1Error] = useState(true);
-  // const [address2Error, setAddress2Error] = useState(false);
   const [cityTownError, setCityTownError] = useState(true);
   const [postcodeError, setPostcodeError] = useState(true);
   const [phoneError, setPhoneError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  // const [placeOfBirthError, setPlaceOfBirthError] = useState(true);
-  // const [motherMaidenNameError, setMotherMaidenNameError] = useState(true);
-  const [customerSuccess, setCustomerSuccess] = useState(false);
   const [customerError, setCustomerError] = useState(false);
   const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
 
@@ -37,81 +30,98 @@ const CustomerInputs = ({ createNew, customerId }) => {
   }, []);
 
   useEffect(() => {
-    console.log(titleError === false && surnameError === false && firstNameError === false && doBError === false && 
-      customerTypeError === false && address1Error === false && cityTownError === false && postcodeError === false && phoneError === false &&
-      emailError === false);
     if (createNew) {
-      if (titleError === false && surnameError === false && firstNameError === false && doBError === false && 
-        customerTypeError === false && address1Error === false && cityTownError === false && postcodeError === false && phoneError === false &&
-        emailError === false) {
-          const customerType = document.getElementById("cons-radio").checked ? "Consumer" : "Corporate";
-          const customerGender = !document.getElementById("m-radio").checked ? !document.getElementById("f-radio").checked ? "X" : "F" : "M";
+      if (
+        titleError === false &&
+        surnameError === false &&
+        firstNameError === false &&
+        doBError === false &&
+        customerTypeError === false &&
+        address1Error === false &&
+        cityTownError === false &&
+        postcodeError === false &&
+        phoneError === false &&
+        emailError === false
+      ) {
+        const customerType = document.getElementById("cons-radio").checked ? "Consumer" : "Corporate";
+        const customerGender = !document.getElementById("m-radio").checked ? (!document.getElementById("f-radio").checked ? "X" : "F") : "M";
         let customer = {
-          "title": notNullFields.title,
-          "surname": notNullFields.surname,
-          "firstName": notNullFields.firstName,
-          "dateOfBirth": document.getElementById("dob-input").value,
-          "gender": customerGender,
-          "customerType": customerType,
-          "address1": notNullFields.address1,
-          "address2": document.getElementById("address-2-input").value,
-          "cityTown": notNullFields.cityTown,
-          "postcode": notNullFields.postcode,
-          "phoneNo": document.getElementById("phone-input").value,
-          "email": document.getElementById("email-input").value,
-          "motherMaidenName": document.getElementById("mmn-input").value,
-          "placeOfBirth": document.getElementById("pob-input").value
-        }
+          title: notNullFields.title,
+          surname: notNullFields.surname,
+          firstName: notNullFields.firstName,
+          dateOfBirth: document.getElementById("dob-input").value,
+          gender: customerGender,
+          customerType: customerType,
+          address1: notNullFields.address1,
+          address2: document.getElementById("address-2-input").value,
+          cityTown: notNullFields.cityTown,
+          postcode: notNullFields.postcode,
+          phoneNo: document.getElementById("phone-input").value,
+          email: document.getElementById("email-input").value,
+          motherMaidenName: document.getElementById("mmn-input").value,
+          placeOfBirth: document.getElementById("pob-input").value,
+        };
         axios
           .post("http://localhost:9002/customer/create", customer)
           .then((res) => {
-            console.log(res);
             setCustomerCreated(true);
-            setPopUpContent(<><h2>Customer succesfully created</h2></>)
+            setPopUpContent(
+              <>
+                <h2>Customer succesfully created</h2>
+              </>
+            );
           })
-          .catch((err) => setCustomerError(<Error message="account creation failed, ensure inputs are correct or contact system administrator" />));
-        console.log("Create customer");
+          .catch(() => setCustomerError(<Error message="account creation failed, ensure inputs are correct or contact system administrator" />));
       }
     }
     if (!createNew) {
-      if (titleError === false && surnameError === false && firstNameError === false && doBError === false && 
-        customerTypeError === false && address1Error === false && cityTownError === false && postcodeError === false && phoneError === false &&
-        emailError === false) {
-          const customerType = document.getElementById("cons-radio").checked ? "Consumer" : "Corporate";
-          const customerGender = !document.getElementById("m-radio").checked ? !document.getElementById("f-radio").checked ? "X" : "F" : "M";
+      if (
+        titleError === false &&
+        surnameError === false &&
+        firstNameError === false &&
+        doBError === false &&
+        customerTypeError === false &&
+        address1Error === false &&
+        cityTownError === false &&
+        postcodeError === false &&
+        phoneError === false &&
+        emailError === false
+      ) {
+        const customerType = document.getElementById("cons-radio").checked ? "Consumer" : "Corporate";
+        const customerGender = !document.getElementById("m-radio").checked ? (!document.getElementById("f-radio").checked ? "X" : "F") : "M";
         let customerUpdate = {
-          "id": customerData.id,
-          "title": notNullFields.title,
-          "surname": notNullFields.surname,
-          "firstName": notNullFields.firstName,
-          "dateOfBirth": document.getElementById("dob-input").value,
-          "gender": customerGender,
-          "customerType": customerType,
-          "address1": notNullFields.address1,
-          "address2": document.getElementById("address-2-input").value,
-          "cityTown": notNullFields.cityTown,
-          "postcode": notNullFields.postcode,
-          "phoneNo": document.getElementById("phone-input").value,
-          "email": document.getElementById("email-input").value,
-        }
+          id: customerData.id,
+          title: notNullFields.title,
+          surname: notNullFields.surname,
+          firstName: notNullFields.firstName,
+          dateOfBirth: document.getElementById("dob-input").value,
+          gender: customerGender,
+          customerType: customerType,
+          address1: notNullFields.address1,
+          address2: document.getElementById("address-2-input").value,
+          cityTown: notNullFields.cityTown,
+          postcode: notNullFields.postcode,
+          phoneNo: document.getElementById("phone-input").value,
+          email: document.getElementById("email-input").value,
+        };
         axios
           .put("http://localhost:9002/customer/update", customerUpdate)
-          .then((res) => {
-            console.log(res);
+          .then(() => {
             setCustomerUpdated(true);
-            setPopUpContent(<><h2>Customer succesfully updated</h2></>)
+            setPopUpContent(
+              <>
+                <h2>Customer succesfully updated</h2>
+              </>
+            );
             setCustomerError("");
-            // window.location.reload();
           })
-          .catch((err) => setCustomerError(<Error message="account update failed, ensure inputs are correct or contact system administrator" />));
-        console.log("updated customer");
+          .catch(() => setCustomerError(<Error message="account update failed, ensure inputs are correct or contact system administrator" />));
       }
     }
   }, [notNullFields]);
 
   const submitChanges = () => {
     validateUserValues();
-
   };
 
   const deleteCustomer = () => {
@@ -120,19 +130,21 @@ const CustomerInputs = ({ createNew, customerId }) => {
       .then((res) => {
         console.log(res);
         setCustomerDeleted(true);
-        setPopUpContent(<><h2>Customer succesfully deleted</h2></>)
+        setPopUpContent(
+          <>
+            <h2>Customer succesfully deleted</h2>
+          </>
+        );
       })
       .catch((err) => setCustomerError(<Error message="cannot delete customer; acounts still exist under customer name." />));
     console.log("Delete customer");
   };
 
-
   const createCustomer = () => {
-    validateUserValues()
+    validateUserValues();
   };
 
   const validateUserValues = () => {
-
     checkTitle();
     checkSurname();
     checkFirstName();
@@ -150,15 +162,18 @@ const CustomerInputs = ({ createNew, customerId }) => {
       address1: document.getElementById("address-1-input").value,
       cityTown: document.getElementById("city-input").value,
       postcode: document.getElementById("postcode-input").value,
-    })
-  }
+    });
+  };
 
-  const checkTitle = () => setTitleError(document.getElementById("title-select").value === "default" ? <Error message="Title cannot be blank" /> : false)
-  const checkSurname = () => setSurnameError(!document.getElementById("sname-input").value ? <Error message="Surname cannot be blank" /> : false)
-  const checkFirstName = () => setFirstNameError(!document.getElementById("fname-input").value ? <Error message="First Name cannot be blank" /> : false)
-  const checkCustomerType = () => setCustomerTypeError(!document.getElementById("cons-radio").checked && !document.getElementById("corp-radio").checked ? <Error message="Customer Type cannot be blank" /> : false) 
-  const checkAddress1 = () => setAddress1Error(!document.getElementById("address-1-input").value ? <Error message="Address 1 cannot be blank" /> : false)
-  const checkCityTown = () => setCityTownError(!document.getElementById("city-input").value ? <Error message="City/Town cannot be blank" /> : false)
+  const checkTitle = () => setTitleError(document.getElementById("title-select").value === "default" ? <Error message="Title cannot be blank" /> : false);
+  const checkSurname = () => setSurnameError(!document.getElementById("sname-input").value ? <Error message="Surname cannot be blank" /> : false);
+  const checkFirstName = () => setFirstNameError(!document.getElementById("fname-input").value ? <Error message="First Name cannot be blank" /> : false);
+  const checkCustomerType = () =>
+    setCustomerTypeError(
+      !document.getElementById("cons-radio").checked && !document.getElementById("corp-radio").checked ? <Error message="Customer Type cannot be blank" /> : false
+    );
+  const checkAddress1 = () => setAddress1Error(!document.getElementById("address-1-input").value ? <Error message="Address 1 cannot be blank" /> : false);
+  const checkCityTown = () => setCityTownError(!document.getElementById("city-input").value ? <Error message="City/Town cannot be blank" /> : false);
 
   const checkDoB = () => {
     const getAge = (dateString) => {
@@ -197,9 +212,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const checkEmail = () => {
     let input = document.querySelector("#email-input").value;
     setEmailError(
-      !new RegExp(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
-      ).test(input) ? (
+      !new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/).test(input) ? (
         <Error message="Invalid email" />
       ) : (
         false
@@ -223,6 +236,47 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const checkPhoneFormat = () => {
     const input = document.querySelector("#phone-input").value;
     document.querySelector("#phone-input").value = isNaN(input.value) && input.replace(/\D/g, "");
+  };
+
+  const printDetails = () => {
+    const doc = new jsPDF();
+    console.log(doc.getFontList());
+    doc.setFontSize(30);
+    doc.setFont("Helvetica", "Bold");
+    doc.text(8, 23, `Customer #${customerId} Details`);
+    let y = 20;
+    let lnHeight = 20;
+    doc.setFontSize(10);
+    doc.text(8, (y += lnHeight), `Name:`);
+    doc.text(8, (y += lnHeight), `Date of birth:`);
+    doc.text(8, (y += lnHeight), `Sex:`);
+    doc.text(8, (y += lnHeight), `Customer Type:`);
+    doc.text(8, (y += lnHeight), `Address line 1:`);
+    doc.text(8, (y += lnHeight), `Address line 2:`);
+    doc.text(8, (y += lnHeight), `City:`);
+    doc.text(8, (y += lnHeight), `Postcode:`);
+    doc.text(8, (y += lnHeight), `Phone number:`);
+    doc.text(8, (y += lnHeight), `Email address:`);
+
+    y = 28;
+    doc.setFont("Helvetica", "");
+    doc.setFontSize(20);
+    doc.text(
+      8,
+      (y += lnHeight),
+      `${document.querySelector("#title-select").value} ${document.querySelector("#fname-input").value} ${document.querySelector("#sname-input").value}`
+    );
+    doc.text(8, (y += lnHeight), `${document.querySelector("#dob-input").value}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#m-radio").checked ? "Male" : document.querySelector("#f-radio").checked ? "Female" : "Other"}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#cons-radio").checked ? "Consumer" : "Corporate"}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#address-1-input").value}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#address-2-input").value ? document.querySelector("#address-2-input").value : "N/A"}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#city-input").value}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#postcode-input").value}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#phone-input").value ? document.querySelector("#phone-input").value : "N/A"}`);
+    doc.text(8, (y += lnHeight), `${document.querySelector("#email-input").value ? document.querySelector("#email-input").value : "N/A"}`);
+
+    window.open(doc.output("bloburl"), "_blank");
   };
 
   const popoulateInputValues = () => {
@@ -259,19 +313,19 @@ const CustomerInputs = ({ createNew, customerId }) => {
     emailInput.value = customerData.email ? customerData.email : "";
   };
 
-  const closePopUp = () =>{
-    if(customerCreated){
+  const closePopUp = () => {
+    if (customerCreated) {
       setCustomerCreated(false);
-      window.location.href="/create-account"
+      window.location.href = "/create-account";
     }
     setCustomerDeleted(false);
     setCustomerUpdated(false);
-    window.location.href="/customer-search";
-  }
+    window.location.href = "/customer-search";
+  };
 
   return (
     <div className="main-container">
-      {(customerCreated || customerDeleted || customerUpdated) && <Popup handleClose={closePopUp} content={popupContent}/>}
+      {(customerCreated || customerDeleted || customerUpdated) && <Popup handleClose={closePopUp} content={popupContent} />}
       {!createNew && (
         <div className="input-container">
           <span>Customer ID:</span>
@@ -385,6 +439,10 @@ const CustomerInputs = ({ createNew, customerId }) => {
               Submit changes
             </button>
             <br />
+            <button id="print-button" onClick={printDetails}>
+              Print details
+            </button>
+            <br />
             <button id="delete-button" onClick={deleteCustomer}>
               Delete customer
             </button>
@@ -396,7 +454,6 @@ const CustomerInputs = ({ createNew, customerId }) => {
       {phoneError}
       {emailError}
       {customerError}
-      {customerSuccess}
       {titleError}
       {surnameError}
       {firstNameError}
@@ -408,10 +465,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       {/* {placeOfBirthError}
       {motherMaidenNameError} */}
     </div>
-    
   );
-
 };
-
 
 export default CustomerInputs;
