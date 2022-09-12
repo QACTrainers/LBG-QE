@@ -24,7 +24,7 @@ const AccountMaintenance = () => {
     }
   };
 
-  return (
+  return localStorage.getItem("loggedIn") && localStorage.admin ? (
     <div className="content-container">
       <div className="radio-container">
         <input type="radio" name="content-radio" value="maintenance" id="maintenance-tab" className="account-radio" onChange={changeActiveContent} defaultChecked />
@@ -44,6 +44,8 @@ const AccountMaintenance = () => {
       {activeContent === "transaction" && <TransactionContent id={accountData.id} balance={balance} setBalance={setBalance} />}
       {activeContent === "transfer" && <TransferContent id={accountData.id} balance={balance} />}
     </div>
+  ) : (
+    (window.location.href = "/")
   );
 };
 

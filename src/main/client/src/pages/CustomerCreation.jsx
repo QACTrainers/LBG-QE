@@ -4,11 +4,13 @@ import "./css/shared.css";
 import "./css/input-pages.css";
 
 const CustomerCreation = () => {
-  return (
+  return localStorage.getItem("loggedIn") && localStorage.admin ? (
     <div className="content-container">
       <h2>Create a New Customer</h2>
       {<CustomerInputs createNew={true} />}
     </div>
+  ) : (
+    (window.location.href = "/")
   );
 };
 

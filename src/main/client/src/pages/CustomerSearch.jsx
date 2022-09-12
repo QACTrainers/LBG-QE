@@ -177,7 +177,7 @@ const CustomerSearch = () => {
     setSearchButton(<button onClick={submitSearch}>Search</button>);
   };
 
-  return (
+  return localStorage.getItem("loggedIn") ? (
     <div className="main-container">
       <h2>Customer Search</h2>
       <RedButton content="Search all customers" title="WARNING: This is hardware intensive" onClick={searchAll} />
@@ -196,6 +196,8 @@ const CustomerSearch = () => {
       {searchError}
       {table}
     </div>
+  ) : (
+    (window.location.href = "/")
   );
 };
 

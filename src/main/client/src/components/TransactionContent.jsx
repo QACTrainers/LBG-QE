@@ -1,11 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Error from "./Error";
+import Popup from "./Popup";
 
 const TransactionContent = ({ id, balance, setBalance }) => {
   const [transactionType, setTransactionType] = useState("withdraw");
   const [transactionError, setTransactionError] = useState(true);
   const [amount, setAmount] = useState(0);
+  const [popupContent, setPopupContent] = useState(<></>);
+  const [withdrawn, setWithdrawn] = useState(false);
+  const [deposited, setDeposited] = useState(false);
 
   const changeTransactionInputs = () => {
     setTransactionType(document.querySelector("#transaction-select").value);
@@ -19,6 +23,13 @@ const TransactionContent = ({ id, balance, setBalance }) => {
           .then((res) => {
             setBalance(res.data);
             setTransactionError(false);
+            setPopupContent(
+              <>
+                <h2>{`£${amount} successfuly withdrawn`}</h2>
+                <button onClick={closePopup}>Ok</button>
+              </>
+            );
+            setWithdrawn(true);
           })
           .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />))
       : !transactionError &&
@@ -27,6 +38,13 @@ const TransactionContent = ({ id, balance, setBalance }) => {
           .then((res) => {
             setBalance(res.data);
             setTransactionError(false);
+            setPopupContent(
+              <>
+                <h2>{`£${amount} successfully deposited`}</h2>
+                <button onClick={closePopup}>Ok</button>
+              </>
+            );
+            setDeposited(true);
           })
           .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
   }, [transactionError]);
@@ -59,8 +77,15 @@ const TransactionContent = ({ id, balance, setBalance }) => {
     document.querySelector("#deposit-input").value = isNaN(input.value) && input.replace(/[^0-9.]/g, "");
   };
 
+  const closePopup = () => {
+    setWithdrawn(false);
+    setDeposited(false);
+    window.location.href = "/customer-search";
+  };
+
   return (
     <div id="transaction-container">
+      {(withdrawn || deposited) && <Popup handleClose={closePopup} content={popupContent} />}
       <h2>Transactions</h2>
       <select defaultValue="withdraw" id="transaction-select" onChange={changeTransactionInputs}>
         <option value="withdraw">Withdraw</option>

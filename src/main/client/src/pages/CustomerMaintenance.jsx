@@ -6,11 +6,13 @@ import "./css/input-pages.css";
 
 const CustomerMaintenance = () => {
   const { id } = useParams();
-  return (
+  return localStorage.getItem("loggedIn") && localStorage.admin ? (
     <div className="content-container">
       <h2>Update Customer</h2>
       {<CustomerInputs createNew={false} customerId={id} />}
     </div>
+  ) : (
+    (window.location.href = "/")
   );
 };
 

@@ -235,7 +235,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "N/A";
     accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
   };
-
+  
   return (
     <div className="main-container">
       {accountCreated || accountUpdated || (accountDeleted && <Popup handleClose={closePopup} content={popupContent} />)}
