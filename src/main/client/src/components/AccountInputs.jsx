@@ -21,6 +21,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   const [accountCreated, setAccountCreated] = useState(false);
   const [accountUpdated, setAccountUpdated] = useState(false);
   const [accountDeleted, setAccountDeleted] = useState(false);
+  const [accountNotDeleted, setAccountNotDeleted] = useState(false);
   const [popupContent, setPopupContent] = useState(<></>);
 
   useEffect(() => {
@@ -40,7 +41,12 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
           })
           .then(() => {
             setAccountCreated(true);
-            setPopupContent();
+            setPopupContent(
+              <>
+                <h2>Account successfully created</h2>
+                <button onClick={closePopup()}>Ok</button>
+              </>
+            );
           })
           .catch(() => setSubmitError(<Error message="There was an error with your request" />));
       }
@@ -59,7 +65,8 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
             setAccountUpdated(true);
             setPopupContent(
               <>
-                <h2>Account successfuly updated. Close this popup to be redirected</h2>
+                <h2>Account successfuly updated</h2>
+                <button onClick={closePopup}>Ok</button>
               </>
             );
           })
@@ -92,20 +99,29 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     setAccountHolders(document.querySelector("#account-holders-input").value.split(","));
   };
 
-  const deleteAccount = () => {
-    window.confirm(`Are you sure you want to delete account ${accountData.id}?`) &&
-      axios
-        .delete(`http://localhost:9002/account/delete/${accountData.id}`)
-        .then(() => {
-          setAccountUpdated(true);
-          setPopupContent(
-            <>
-              <h2>Account successfuly updated. Close this popup to be redirected</h2>
-            </>
-          );
-        })
-        .catch(() => window.alert("Internal server error - could not delete"));
-  };
+  const deleteAccount = () =>
+    balance === 0
+      ? window.confirm(`Are you sure you want to delete account ${accountData.id}?`) &&
+        axios
+          .delete(`http://localhost:9002/account/delete/${accountData.id}`)
+          .then(() => {
+            setAccountDeleted(true);
+            setPopupContent(
+              <>
+                <h2>Account successfuly deleted</h2>
+                <button onClick={closePopup}>Ok</button>
+              </>
+            );
+          })
+          .catch(() => window.alert("Internal server error - could not delete"))
+      : (setAccountNotDeleted(true),
+        setPopupContent(
+          <>
+            <h2>Account could not be deleted</h2>
+            <h2>Balance must be £0.00</h2>
+            <button onClick={closePopup}>Ok</button>
+          </>
+        ));
 
   const checkCustomerInput = () => {
     const input = document.querySelector("#customer-input").value;
@@ -194,10 +210,13 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   };
 
   const closePopup = () => {
+    const redirect = !accountNotDeleted
+    console.log(accountNotDeleted, redirect)
     setAccountCreated(false);
     setAccountUpdated(false);
     setAccountDeleted(false);
-    window.location.href = "/customer-search";
+    setAccountNotDeleted(false);
+    redirect && (window.location.href = "/customer-search");
   };
 
   const printDetails = () => {
@@ -235,10 +254,10 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "N/A";
     accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
   };
-  
+
   return (
     <div className="main-container">
-      {accountCreated || accountUpdated || (accountDeleted && <Popup handleClose={closePopup} content={popupContent} />)}
+      {(accountCreated || accountUpdated || accountDeleted || accountNotDeleted) && <Popup handleClose={closePopup} content={popupContent} />}
       {!createNew && (
         <div className="input-container">
           <span>Account ID:</span>
@@ -308,15 +327,15 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
           </button>
         ) : (
           <>
-            <button id="submit-button" onClick={updateAccount}>
+            <button id="submit-button" onClick={updateAccount} className="input-page-button">
               Submit changes
             </button>
             <br />
-            <button id="print-button" onClick={printDetails}>
+            <button id="print-button" onClick={printDetails} className="input-page-button">
               Print details
             </button>
             <br />
-            <button id="delete-button" onClick={deleteAccount}>
+            <button id="delete-button" onClick={deleteAccount} className="input-page-button bottom-button">
               Delete account
             </button>
           </>

@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import "./css/shared.css";
-import "./css/input-pages.css";
-import "./css/account-maintenance.css";
 import MaintenanceContent from "../components/MaintenanceContent";
 import TransactionContent from "../components/TransactionContent";
 import TransferContent from "../components/TransferContent";

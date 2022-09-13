@@ -1,38 +1,332 @@
-.App {
-  text-align: center;
+.main-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.content-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+}
+
+.main-menu-container {
+  margin-top: 25px;
+}
+
+.error-message {
+  color: #f00;
+}
+
+/* Buttons and button containers */
+
+button {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.invalid-button {
+  color: #555 !important;
+  background-color: lightgray !important;
+  border-color: darkgray !important;
+}
+
+.invalid-button:hover {
+  background-color: lightgray !important;
+}
+
+#button-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+}
+
+#button-container > a {
+  width: 100%;
+  margin: none;
+  padding: none;
+}
+
+#button-container > button,
+#button-container > a > button {
+  font-family: archivo-black, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  width: 100%;
+  height: 10vh;
+  margin: none;
+  border-radius: 25px;
+  background-color: #004050;
+  color: #00edb5;
+  font-size: 30px;
+  border: none;
+}
+
+#button-container > button:hover,
+#button-container > a > button:hover {
+  background-color: #003040;
+  color: #00cda0;
+}
+
+.input-page-button {
+  width: 120px;
+}
+
+.bottom-button {
+  margin-bottom: 5px;
+}
+
+span :not(.id-span) {
+  font-weight: bold;
+  margin: 0;
+}
+
+.red-button {
+  width: 150px;
+  border-color: darkred;
+  background-color: #f00;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.red-button:hover {
+  border-color: darkred;
+  background-color: darkred;
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Table */
+
+table {
+  height: fit-content;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+#table-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  width: fit-content;
+  height: fit-content !important;
+  max-height: 65vh;
+  overflow: auto;
+  margin-bottom: 5px;
+  border: solid 1px;
+  padding: 0;
+}
+
+.first-cell {
+  border-left: none;
+}
+
+th {
+  border-top: none;
+}
+
+td {
+  text-align: center;
+  border-bottom: none;
+}
+
+th,
+td {
+  margin: 100px;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+/* Inputs and input containers */
+
+.input-container {
+  margin-top: 10px;
+  width: 200px;
+  text-align: left;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: lightgray;
+}
+
+input,
+select :not(#edit-button) {
+  margin: 5px;
+  width: 150px;
+}
+
+input[type="radio"] {
+  width: auto;
+}
+
+input[type="text"] {
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
+  margin: 0;
+  width: 190px;
+}
+
+.first-radio {
+  margin-left: 0;
+}
+
+#search-by {
+  margin-bottom: 5px;
+  width: 150px;
+}
+
+/* Account maintenance tab effect */
+
+.account-radio {
+  display: none;
+}
+
+.account-radio + .radio-label {
+  display: inline-block;
+  border: 1px solid #999;
+  background-color: #eee;
+  padding: 4px 12px;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  top: 15px;
+}
+
+.account-radio:checked + .radio-label {
+  background-color: #fff;
+  border-bottom: none;
+}
+
+.radio-label {
+  user-select: none;
+}
+
+#maintenance-container,
+#transaction-container,
+#transfer-container {
+  width: 302px;
+  border: 1px solid #999;
+  border-radius: 0 0 10px 10px;
+}
+
+/* Header */
+
+h3 {
+  color: #00edb5;
+  font-size: 25px;
+}
+
+#logged-in-container {
+  width: 175px;
+}
+
+#logged-in-container > button {
+  width: 75px;
+}
+
+#logged-in-container > h3 {
+  margin: 0;
+  text-align: center;
+}
+
+.nav-button {
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  margin-left: 10px;
+  border: none;
+}
+
+.nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+#header-container {
+  display: flex;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: #004050;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Popup */
+
+#popup-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+#popup-content > input {
+  margin: 2.5px;
+  width: 150px;
+}
+
+#background-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#content-box {
+  position: relative;
+  top: 25vh;
+  width: 20%;
+  height: 25vh;
+  max-height: 50vh;
+  margin: 0 auto;
+  margin-top: calc(100vh-85vh-20px);
+  background-color: white;
+  border-radius: 4px;
+}
+
+#cancel-icon {
+  cursor: pointer;
+  position: relative;
+  top: 10px;
+  right: calc(-100% + 35px);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  text-align: center;
+  border: 1px solid rgb(255, 0, 0, 0.5);
+  background-color: rgb(255, 0, 0, 0.1);
+  font-size: 17.5px;
+}
+
+#cancel-icon:hover {
+  background-color: rgb(255, 0, 0, 0.2);
+}
+
+/* Transfer content */
+
+#transfer-content {
+  margin-top: 50px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#transfer-x {
+    font-size: 100px;
 }

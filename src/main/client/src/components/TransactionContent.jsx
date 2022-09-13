@@ -18,8 +18,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
   useEffect(() => {
     !transactionError && transactionType === "withdraw"
       ? axios
-          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseInt(amount) })
-
+          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseFloat(amount) })
           .then((res) => {
             setBalance(res.data);
             setTransactionError(false);
@@ -35,7 +34,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
           .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />))
       : !transactionError &&
         axios
-          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: parseInt(amount) })
+          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: parseFloat(amount) })
           .then((res) => {
             setBalance(res.data);
             setTransactionError(false);
@@ -122,14 +121,14 @@ const TransactionContent = ({ id, balance, setBalance }) => {
         )}
         {transactionType === "withdraw" && (
           <div className="button-container">
-            <button id="withdraw-button" onClick={withdrawMoney}>
+            <button id="withdraw-button" onClick={withdrawMoney} className="input-page-button bottom-button">
               Withdraw
             </button>
           </div>
         )}
         {transactionType === "deposit" && (
           <div className="button-container">
-            <button id="deposit-button" onClick={depositMoney}>
+            <button id="deposit-button" onClick={depositMoney} className="input-page-button bottom-button">
               Deposit
             </button>
           </div>

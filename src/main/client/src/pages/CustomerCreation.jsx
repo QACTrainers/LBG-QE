@@ -1,7 +1,5 @@
 import React from "react";
 import CustomerInputs from "../components/CustomerInputs";
-import "./css/shared.css";
-import "./css/input-pages.css";
 
 const CustomerCreation = () => {
   return localStorage.getItem("loggedIn") && localStorage.admin ? (

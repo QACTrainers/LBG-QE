@@ -120,7 +120,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
     }
   }, [notNullFields]);
 
-  const submitChanges = () => {
+  const updateCustomer = () => {
     validateUserValues();
   };
 
@@ -446,7 +446,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
           </button>
         ) : (
           <>
-            <button id="submit-button" onClick={submitChanges}>
+            <button id="submit-button" onClick={updateCustomer}>
               Submit changes
             </button>
             <br />

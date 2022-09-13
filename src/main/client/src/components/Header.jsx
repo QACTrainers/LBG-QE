@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import logo from "./img/logo.png";
 import homeIcon from "./img/home-icon.png";
 import backIcon from "./img/back-icon.png";
-import "./css/header.css";
 
 const Header = () => {
   const navigate = useNavigate();

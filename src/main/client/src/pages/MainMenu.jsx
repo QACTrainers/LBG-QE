@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import Popup from "../components/Popup";
 import Error from "../components/Error";
 import InvalidButton from "../components/InvalidButton";
-import "./css/main-menu.css";
-import "./css/shared.css";
 import axios from "axios";
 
 const MainMenu = () => {

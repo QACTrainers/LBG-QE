@@ -3,8 +3,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Error from "../components/Error";
 import RedButton from "../components/RedButton";
-import "./css/shared.css";
-import "./css/customer-search.css";
 const axios = require("axios");
 
 const CustomerSearch = () => {
@@ -103,10 +101,11 @@ const CustomerSearch = () => {
   };
 
   const searchAll = () => {
-    axios.get("http://localhost:9002/customer/findAll").then((res) => {
-      populateTable(res.data);
-      setSearchError(<></>);
-    });
+    window.confirm("Are you sure you want to search all customers? This could cause hardware issues.") &&
+      axios.get("http://localhost:9002/customer/findAll").then((res) => {
+        populateTable(res.data);
+        setSearchError(<></>);
+      });
   };
 
   const submitSearch = () => {
@@ -130,7 +129,7 @@ const CustomerSearch = () => {
         .catch((err) => {
           console.log(err.response.status);
           setSearchError(
-            err.status === 404 ? (
+            err.response.status === 404 ? (
               <Error message="404 - Customer not found" />
             ) : err.response.status === 500 ? (
               <Error message="500 - Bad request" />
@@ -174,7 +173,11 @@ const CustomerSearch = () => {
         setInputBox(<></>);
         break;
     }
-    setSearchButton(<button onClick={submitSearch}>Search</button>);
+    setSearchButton(
+      <button onClick={submitSearch} className="bottom-button">
+        Search
+      </button>
+    );
   };
 
   return localStorage.getItem("loggedIn") ? (

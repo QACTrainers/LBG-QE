@@ -1,8 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import CustomerInputs from "../components/CustomerInputs";
-import "./css/shared.css";
-import "./css/input-pages.css";
 
 const CustomerMaintenance = () => {
   const { id } = useParams();
