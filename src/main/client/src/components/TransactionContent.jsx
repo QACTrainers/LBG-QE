@@ -26,6 +26,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
             setPopupContent(
               <>
                 <h2>{`£${amount} successfuly withdrawn`}</h2>
+                <h2>{`New balance: ${res.data}`}</h2>
                 <button onClick={closePopup}>Ok</button>
               </>
             );
@@ -41,25 +42,28 @@ const TransactionContent = ({ id, balance, setBalance }) => {
             setPopupContent(
               <>
                 <h2>{`£${amount} successfully deposited`}</h2>
+                <h2>{`New balance: ${res.data}`}</h2>
                 <button onClick={closePopup}>Ok</button>
               </>
             );
             setDeposited(true);
           })
           .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />));
-  }, [transactionError]);
+  }, [amount]);
 
   const withdrawMoney = () => {
-    setAmount(document.querySelector("#withdraw-input").value);
-    setTransactionError(amount > balance ? <Error message="Your funds are too low." /> : (amount * 1000) % 10 !== 0 ? <Error message="Too many decimal points" /> : false);
+    const input = document.querySelector("#withdraw-input").value;
+    setAmount(input);
+    setTransactionError(input > balance ? <Error message="Your funds are too low." /> : (input * 1000) % 10 !== 0 ? <Error message="Too many decimal points" /> : false);
   };
 
   const depositMoney = () => {
-    setAmount(document.querySelector("#deposit-input").value);
+    const input = document.querySelector("#deposit-input").value;
+    setAmount(input);
     setTransactionError(
-      parseFloat(amount) + balance > 99999.99 ? (
+      parseFloat(input) + balance > 99999.99 ? (
         <Error message="This transaction takes you over your limit." />
-      ) : (amount * 1000) % 10 !== 0 ? (
+      ) : (input * 1000) % 10 !== 0 ? (
         <Error message="Too many decimal points" />
       ) : (
         false

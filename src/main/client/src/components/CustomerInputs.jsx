@@ -347,21 +347,25 @@ const CustomerInputs = ({ createNew, customerId }) => {
           <option value="sir">Sir</option>
         </select>
       </div>
+      {titleError}
       <div className="input-container">
         <span>Surname:</span>
         <br />
         <input type="text" id="sname-input" onBlur={checkSurname} />
       </div>
+      {surnameError}
       <div className="input-container">
-        <span>Forename:</span>
+        <span>First name:</span>
         <br />
         <input type="text" id="fname-input" onBlur={checkFirstName} />
       </div>
+      {firstNameError}
       <div className="input-container">
         <span>DoB:</span>
         <br />
         <input type="text" onBlur={checkDoB} id="dob-input" />
       </div>
+      {doBError}
       <div className="input-container">
         <span>Sex:</span>
         <br />
@@ -384,11 +388,13 @@ const CustomerInputs = ({ createNew, customerId }) => {
           <label htmlFor="c-type">Corporate</label>
         </div>
       </div>
+      {customerTypeError}
       <div className="input-container">
         <span>Address 1:</span>
         <br />
         <input type="text" id="address-1-input" onBlur={checkAddress1} />
       </div>
+      {address1Error}
       <div className="input-container">
         <span>Address 2:</span>
         <br />
@@ -399,21 +405,25 @@ const CustomerInputs = ({ createNew, customerId }) => {
         <br />
         <input type="text" id="city-input" onBlur={checkCityTown} />
       </div>
+      {cityTownError}
       <div className="input-container">
         <span>Postcode:</span>
         <br />
         <input type="text" id="postcode-input" onBlur={checkPostcode} />
       </div>
+      {postcodeError}
       <div className="input-container">
         <span>Phone No:</span>
         <br />
         <input type="tel" id="phone-input" onBlur={checkPhone} onChange={checkPhoneFormat} />
       </div>
+      {phoneError}
       <div className="input-container">
         <span>Email:</span>
         <br />
         <input type="email" id="email-input" onBlur={checkEmail} />
       </div>
+      {emailError}
       {createNew && (
         <div>
           <div className="input-container">
@@ -428,6 +438,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
           </div>
         </div>
       )}
+      {customerError}
       <div className="button-container">
         {createNew ? (
           <button id="create-button" onClick={createCustomer}>
@@ -449,21 +460,6 @@ const CustomerInputs = ({ createNew, customerId }) => {
           </>
         )}
       </div>
-      {doBError}
-      {postcodeError}
-      {phoneError}
-      {emailError}
-      {customerError}
-      {titleError}
-      {surnameError}
-      {firstNameError}
-      {/* {genderError} */}
-      {customerTypeError}
-      {address1Error}
-      {/* {address2Error} */}
-      {cityTownError}
-      {/* {placeOfBirthError}
-      {motherMaidenNameError} */}
     </div>
   );
 };

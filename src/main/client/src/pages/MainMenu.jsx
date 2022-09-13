@@ -20,8 +20,6 @@ const MainMenu = () => {
   const [username, setUsername] = useState("");
   const [userIsAdmin, setUserIsAdmin] = useState("");
 
-  // Abcdefg1!
-
   useEffect(() => {
     setLoggedIn(localStorage.getItem("loggedIn"));
     if (loggedIn === "true") {
@@ -124,18 +122,21 @@ const MainMenu = () => {
       )}
       <div id="button-container">
         {loggedIn === "true" ? <button onClick={logOut}>Log Out</button> : <button onClick={toggleLoginPopup}>Log In</button>}
-
-        {loggedIn === "true" && userIsAdmin === "true" ? (
+        {loggedIn === "true" ? (
           <>
             <Link to="/customer-search">
               <button>Customer Search</button>
             </Link>
-            <Link to="/create-customer">
-              <button>Create New Customer</button>
-            </Link>
-            <Link to="/create-account">
-              <button>Open New Account</button>
-            </Link>
+            {userIsAdmin === "true" && (
+              <>
+                <Link to="/create-customer">
+                  <button>Create New Customer</button>
+                </Link>
+                <Link to="/create-account">
+                  <button>Open New Account</button>
+                </Link>
+              </>
+            )}
           </>
         ) : (
           <>
