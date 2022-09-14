@@ -212,7 +212,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const checkEmail = () => {
     let input = document.querySelector("#email-input").value;
     setEmailError(
-      !new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/).test(input) ? (
+      !new RegExp(/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/).test(input) ? (
         <Error message="Invalid email" />
       ) : (
         false
