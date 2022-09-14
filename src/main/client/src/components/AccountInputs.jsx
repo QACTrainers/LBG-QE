@@ -250,9 +250,9 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     let typeSelect = document.querySelector("#type-select");
     let accountHoldersInput = document.querySelector("#account-holders-input");
 
-    branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "N/A";
-    typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "N/A";
-    accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "N/A";
+    branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "";
+    typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "";
+    accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "";
   };
 
   return (
@@ -322,7 +322,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
       {extraAccountsError}
       <div className="button-container">
         {createNew ? (
-          <button id="create-button" onClick={createAccount}>
+          <button id="create-button" className="bottom-button" onClick={createAccount}>
             Create new account
           </button>
         ) : (
@@ -335,7 +335,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
               Print details
             </button>
             <br />
-            <button id="delete-button" onClick={deleteAccount} className="input-page-button bottom-button">
+            <button id="delete-button" className="bottom-button input-page-button" onClick={deleteAccount}>
               Delete account
             </button>
           </>

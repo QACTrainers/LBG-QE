@@ -180,7 +180,7 @@ const CustomerSearch = () => {
     );
   };
 
-  return localStorage.getItem("loggedIn") ? (
+  return localStorage.getItem("loggedIn") === "true" ? (
     <div className="main-container">
       <h2>Customer Search</h2>
       <RedButton content="Search all customers" title="WARNING: This is hardware intensive" onClick={searchAll} />

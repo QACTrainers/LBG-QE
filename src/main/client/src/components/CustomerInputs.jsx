@@ -136,7 +136,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
           </>
         );
       })
-      .catch((err) => setCustomerError(<Error message="cannot delete customer; acounts still exist under customer name." />));
+      .catch((err) => setCustomerError(<Error message="Could not delete. Customer has open accounts" />));
     console.log("Delete customer");
   };
 
@@ -441,20 +441,20 @@ const CustomerInputs = ({ createNew, customerId }) => {
       {customerError}
       <div className="button-container">
         {createNew ? (
-          <button id="create-button" onClick={createCustomer}>
+          <button id="create-button" className="bottom-button" onClick={createCustomer}>
             Create new customer
           </button>
         ) : (
           <>
-            <button id="submit-button" onClick={updateCustomer}>
+            <button id="submit-button" className="input-page-button" onClick={updateCustomer}>
               Submit changes
             </button>
             <br />
-            <button id="print-button" onClick={printDetails}>
+            <button id="print-button" className="input-page-button" onClick={printDetails}>
               Print details
             </button>
             <br />
-            <button id="delete-button" onClick={deleteCustomer}>
+            <button id="delete-button" className="bottom-button input-page-button" onClick={deleteCustomer}>
               Delete customer
             </button>
           </>

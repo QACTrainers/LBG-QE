@@ -21,7 +21,7 @@ const AccountMaintenance = () => {
     }
   };
 
-  return localStorage.getItem("loggedIn") && localStorage.admin ? (
+  return localStorage.getItem("loggedIn") === "true" && localStorage.admin === "true" ? (
     <div className="content-container">
       <div className="radio-container">
         <input type="radio" name="content-radio" value="maintenance" id="maintenance-tab" className="account-radio" onChange={changeActiveContent} defaultChecked />
