@@ -18,7 +18,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
   useEffect(() => {
     transactionType === "withdraw"
       ? axios
-          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseFloat(amount) })
+          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseInt(amount) })
           .then((res) => {
             setBalance(res.data);
             setTransactionError(false);
