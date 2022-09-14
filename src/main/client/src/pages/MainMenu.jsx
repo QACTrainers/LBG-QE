@@ -119,7 +119,7 @@ const MainMenu = () => {
         />
       )}
       <div id="button-container">
-        {loggedIn === "true" ? <button onClick={logOut}>Log Out</button> : <button onClick={toggleLoginPopup}>Log In</button>}
+        {loggedIn === "true" ? <button>Log Out</button> : <button onClick={toggleLoginPopup}>Log In</button>}
         {loggedIn === "true" ? (
           <>
             <Link to="/customer-search">
