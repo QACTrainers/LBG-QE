@@ -88,7 +88,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
 
   return (
     <div id="transaction-container">
-      {(withdrawn || deposited) && <Popup handleClose={} content={popupContent} />}
+      {(withdrawn || deposited) && <Popup handleClose={() => {}} content={popupContent} />}
       <h2>Transactions</h2>
       <select defaultValue="withdraw" id="transaction-select" onChange={changeTransactionInputs}>
         <option value="withdraw">Withdraw</option>
