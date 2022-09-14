@@ -5,7 +5,7 @@ const CustomerCreation = () => {
   return localStorage.getItem("loggedIn") === "true" && localStorage.admin === "true" ? (
     <div className="content-container">
       <h2>Create a New Customer</h2>
-      {<CustomerInputs createNew={true} />}
+      {<CustomerInputs createNew={false} />}
     </div>
   ) : (
     (window.location.href = "/")
