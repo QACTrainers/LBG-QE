@@ -68,7 +68,7 @@ const MainMenu = () => {
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("id", res.data.id);
           localStorage.setItem("username", res.data.username);
-          localStorage.setItem("admin", res.data.admin);
+          localStorage.setItem("admin", true);
           toggleLoginPopup();
           window.location.reload(false);
         })
