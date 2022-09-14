@@ -183,17 +183,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
 
     const input = document.querySelector("#dob-input").value;
 
-    setDoBError(
-      !new RegExp(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).test(input) ? (
-        <Error message="Invalid Date of Birth format (YYYY/MM/DD)" />
-      ) : getAge(input) < 18 ? (
-        <Error message="Customer is too young" />
-      ) : getAge(input) > 65 ? (
-        <Error message="Customer is too old" />
-      ) : (
-        false
-      )
-    );
+    setDoBError(!new RegExp(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).test(input) ? <Error message="Invalid Date of Birth format (YYYY/MM/DD)" /> : false);
   };
 
   const checkPostcode = () => {
