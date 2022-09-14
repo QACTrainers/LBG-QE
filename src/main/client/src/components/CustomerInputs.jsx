@@ -44,7 +44,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
         emailError === false
       ) {
         const customerType = document.getElementById("cons-radio").checked ? "Consumer" : "Corporate";
-        const customerGender = !document.getElementById("m-radio").checked ? (!document.getElementById("f-radio").checked ? "X" : "F") : "M";
+        const customerGender = !document.getElementById("m-radio").checked ? (!document.getElementById("f-radio").checked ? "F" : "M") : "X";
         let customer = {
           title: notNullFields.title,
           surname: notNullFields.surname,
