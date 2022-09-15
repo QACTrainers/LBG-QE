@@ -34,7 +34,10 @@ public class CustomerController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<CustomerDto>> findAll() {
+    public ResponseEntity<List<CustomerDto>> findAll() throws Exception {
+        if (true){
+            throw new Exception();
+        }
         return new ResponseEntity<List<CustomerDto>>(this.customerService.findAll(), HttpStatus.OK);
     }
 
