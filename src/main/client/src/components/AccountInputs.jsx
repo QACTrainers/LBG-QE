@@ -28,13 +28,14 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   let navigate = useNavigate();
 
   useEffect(() => {
-    !createNew && popoulateInputValues();
+    !createNew && sessionStorage.getItem("from-search") === "false" && navigate("/customer-search")
+    !createNew &&  popoulateInputValues();
   }, []);
 
   useEffect(() => {
     if (createNew) {
       if (depositError === false && customerError === false && extraAccountsError === false && branchError === false && typeError === false) {
-        const allHolders = accountHolders[0] === "" ? [...customerId] : Array.from(new Set([...accountHolders, customerId]));
+        const allHolders = accountHolders[0] === "" ? [customerId] : Array.from(new Set([...accountHolders, customerId]));
         axios
           .post(`${process.env.REACT_APP_API_ROOT_URL}/account/create`, {
             customerIds: allHolders,
@@ -56,7 +57,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     }
     if (!createNew) {
       if (extraAccountsError === false && branchError === false && typeError === false) {
-        const allHolders = accountHolders[0] === "" ? [...existingCustomerId] : Array.from(new Set([...accountHolders, existingCustomerId]));
+        const allHolders = accountHolders[0] === "" ? [existingCustomerId] : Array.from(new Set([...accountHolders, existingCustomerId]));
         axios
           .put(`${process.env.REACT_APP_API_ROOT_URL}/account/update`, {
             id: accountData.id,
@@ -271,7 +272,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
         </div>
       )}
       <div className="input-container">
-        <span>Customer ID:</span>
+        <span>Main Customer ID:</span>
         <br />
         {createNew ? <input type="text" id="customer-input" onChange={formatCustomerInput} onBlur={checkCustomerInput} /> : <label>{existingCustomerId}</label>}
       </div>

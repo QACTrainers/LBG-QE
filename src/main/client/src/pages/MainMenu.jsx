@@ -18,6 +18,10 @@ const MainMenu = () => {
   const [username, setUsername] = useState("");
   const [userIsAdmin, setUserIsAdmin] = useState("");
 
+  useEffect (()=>
+    sessionStorage.setItem("from-search", "false"), []
+  )
+
   useEffect(() => {
     setLoggedIn(localStorage.getItem("loggedIn"));
     if (loggedIn === "true") {
@@ -109,7 +113,7 @@ const MainMenu = () => {
               {usernameError}
               <input type="password" id="password-input" placeholder="Password..." onBlur={checkPassword} />
               {passwordError}
-              <button id="login-button" onClick={attemptLogIn}>
+              <button id="login-button" className="bottom-button" onClick={attemptLogIn}>
                 Log in
               </button>
               {loginError}

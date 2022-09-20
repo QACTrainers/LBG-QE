@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Error from "./Error";
 import axios from "axios";
 import Popup from "../components/Popup";
@@ -25,10 +25,12 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const [emailError, setEmailError] = useState(false);
   const [customerError, setCustomerError] = useState(false);
   const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
-
   let navigate = useNavigate();
 
+
+
   useEffect(() => {
+    // sessionStorage.getItem("from-search") !== "true" && navigate("/customer-search")
     !createNew && popoulateInputValues();
   }, []);
 

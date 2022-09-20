@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import Error from "../components/Error";
 import RedButton from "../components/RedButton";
 import { useNavigate } from "react-router-dom";
-  
+import { useEffect } from "react";
+
 const axios = require("axios");
 
 export const CustomerSearch = () => {
@@ -14,6 +15,10 @@ export const CustomerSearch = () => {
   const [searchButton, setSearchButton] = useState(<></>);
 
   let navigate = useNavigate();
+
+  useEffect(()=>
+    sessionStorage.setItem("from-search", "true"), []
+  )
 
   const storeCustomerData = (customer) => {
     sessionStorage.setItem(`customer-${customer.id}`, JSON.stringify(customer));
