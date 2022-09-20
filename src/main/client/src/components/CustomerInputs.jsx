@@ -3,6 +3,7 @@ import Error from "./Error";
 import axios from "axios";
 import Popup from "../components/Popup";
 import { jsPDF } from "jspdf";
+import { useNavigate } from "react-router-dom";
 
 const CustomerInputs = ({ createNew, customerId }) => {
   const [customerDeleted, setCustomerDeleted] = useState(false);
@@ -24,6 +25,8 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const [emailError, setEmailError] = useState(false);
   const [customerError, setCustomerError] = useState(false);
   const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     !createNew && popoulateInputValues();
@@ -62,7 +65,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
           placeOfBirth: document.getElementById("pob-input").value,
         };
         axios
-          .post("http://localhost:9002/customer/create", customer)
+          .post(`${process.env.REACT_APP_API_ROOT_URL}/customer/create`, customer)
           .then((res) => {
             setCustomerCreated(true);
             setPopUpContent(
@@ -105,7 +108,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
           email: document.getElementById("email-input").value,
         };
         axios
-          .put("http://localhost:9002/customer/update", customerUpdate)
+          .put(`${process.env.REACT_APP_API_ROOT_URL}/customer/update`, customerUpdate)
           .then(() => {
             setCustomerUpdated(true);
             setPopUpContent(
@@ -126,7 +129,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
 
   const deleteCustomer = () => {
     axios
-      .delete(`http://localhost:9002/customer/delete/${customerData.id}`)
+      .delete(`${process.env.REACT_APP_API_ROOT_URL}/customer/delete/${customerData.id}`)
       .then((res) => {
         console.log(res);
         setCustomerDeleted(true);
@@ -316,11 +319,13 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const closePopUp = () => {
     if (customerCreated) {
       setCustomerCreated(false);
-      window.location.href = "/create-account";
+      // window.location.href = "/create-account";
+      navigate("/create-account");
     }
     setCustomerDeleted(false);
     setCustomerUpdated(false);
-    window.location.href = "/customer-search";
+    // window.location.href = "/customer-search";
+    navigate("/customer-search");
   };
 
   return (

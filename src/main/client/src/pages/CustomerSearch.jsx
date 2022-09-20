@@ -3,13 +3,17 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Error from "../components/Error";
 import RedButton from "../components/RedButton";
+import { useNavigate } from "react-router-dom";
+  
 const axios = require("axios");
 
-const CustomerSearch = () => {
+export const CustomerSearch = () => {
   const [inputBox, setInputBox] = useState(<></>);
   const [table, setTable] = useState(<></>);
   const [searchError, setSearchError] = useState(<></>);
   const [searchButton, setSearchButton] = useState(<></>);
+
+  let navigate = useNavigate();
 
   const storeCustomerData = (customer) => {
     sessionStorage.setItem(`customer-${customer.id}`, JSON.stringify(customer));
@@ -102,7 +106,7 @@ const CustomerSearch = () => {
 
   const searchAll = () => {
     window.confirm("Are you sure you want to search all customers? This could cause hardware issues.") &&
-      axios.get("http://localhost:9002/customer/findAll").then((res) => {
+      axios.get(`${process.env.REACT_APP_API_ROOT_URL}/customer/findAll`).then((res) => {
         populateTable(res.data);
         setSearchError(<></>);
       });
@@ -115,7 +119,7 @@ const CustomerSearch = () => {
       const searchParams = inputBox.getAttribute("id").split("-")[0];
       console.log(inputBox.getAttribute("id"));
       axios
-        .post("http://localhost:9002/customer/filter", {
+        .post(`${process.env.REACT_APP_API_ROOT_URL}/customer/filter`, {
           account_nr: searchParams === "account" ? inputValue : "",
           customer_nr: searchParams === "customer" ? inputValue : "",
           surname: searchParams === "surname" ? inputValue : "",
@@ -200,7 +204,8 @@ const CustomerSearch = () => {
       {table}
     </div>
   ) : (
-    (window.location.href = "/")
+    // (window.location.href = "/")
+    navigate("/")
   );
 };
 

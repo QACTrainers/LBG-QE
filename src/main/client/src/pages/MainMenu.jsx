@@ -62,7 +62,7 @@ const MainMenu = () => {
       let username = document.querySelector("#username-input").value;
       let password = document.querySelector("#password-input").value;
       axios
-        .post("http://localhost:9002/user/login", { username: username, password: password })
+        .post(`${process.env.REACT_APP_API_ROOT_URL}/user/login`, { username: username, password: password })
         .then((res) => {
           setLoginError(<></>);
           localStorage.setItem("loggedIn", "true");

@@ -7,7 +7,6 @@ import com.qa.banking.repos.AccountRepository;
 import com.qa.banking.repos.BranchRepository;
 import com.qa.banking.repos.CustomerAccountsRepository;
 import com.qa.banking.repos.CustomerRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class AccountService {
 
-    private ModelMapper mapper;
     public AccountRepository repo;
     public BranchRepository branchRepository;
     public CustomerRepository customerRepository;
@@ -26,9 +24,8 @@ public class AccountService {
     public CustomerAccountsRepository customerAccountsRepository;
 
     @Autowired
-    public AccountService(AccountRepository repo, ModelMapper mapper,BranchRepository branchRepository, CustomerAccountsRepository customerAccountsRepository,CustomerRepository customerRepository) {
+    public AccountService(AccountRepository repo, BranchRepository branchRepository, CustomerAccountsRepository customerAccountsRepository,CustomerRepository customerRepository) {
         this.repo = repo;
-        this.mapper = mapper;
         this.branchRepository = branchRepository;
         this.customerAccountsRepository = customerAccountsRepository;
         this.customerRepository = customerRepository;
@@ -49,14 +46,12 @@ public class AccountService {
 
         customerAccountsRepository.deleteAll(updatedAccount.getCustomerAccounts());
 
-        List<CustomerAccount> customerAccounts = this.customerAccountsRepository.saveAll(account.getCustomerIds().stream()
+        this.customerAccountsRepository.saveAll(account.getCustomerIds().stream()
                 .map(x-> new CustomerAccount(
                         this.customerRepository.findById(x).get(),
                         updatedAccount
                 )).collect(Collectors.toList()));
     }
-
-    private List<Long> customerIds;
 
     public Void deleteAccount(Long id) { this.repo.deleteById(id);
     return null;}

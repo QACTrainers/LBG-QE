@@ -3,8 +3,11 @@ import { useParams } from "react-router-dom";
 import MaintenanceContent from "../components/MaintenanceContent";
 import TransactionContent from "../components/TransactionContent";
 import TransferContent from "../components/TransferContent";
+import { useNavigate } from "react-router-dom";
 
 const AccountMaintenance = () => {
+  let navigate = useNavigate();
+
   const [activeContent, setActiveContent] = useState("maintenance");
   const { id } = useParams();
 
@@ -42,7 +45,7 @@ const AccountMaintenance = () => {
       {activeContent === "transfer" && <TransferContent id={accountData.id} balance={balance} />}
     </div>
   ) : (
-    (window.location.href = "/")
+    navigate("/")
   );
 };
 

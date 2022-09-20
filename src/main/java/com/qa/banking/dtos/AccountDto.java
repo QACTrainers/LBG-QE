@@ -1,11 +1,7 @@
 package com.qa.banking.dtos;
 
-import com.qa.banking.entities.Branch;
 import lombok.*;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.List;
 
 @Setter

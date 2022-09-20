@@ -36,7 +36,7 @@ public class AccountController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return new ResponseEntity(this.accountService.deleteAccount(id),HttpStatus.OK);
+        return new ResponseEntity<>(this.accountService.deleteAccount(id),HttpStatus.OK);
     }
 
     @PostMapping("/create")

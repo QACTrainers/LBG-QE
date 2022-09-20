@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Error from "./Error";
 import Popup from "./Popup";
+import { useNavigate } from "react-router-dom";
 
 const TransactionContent = ({ id, balance, setBalance }) => {
   const [transactionType, setTransactionType] = useState("withdraw");
@@ -11,6 +12,8 @@ const TransactionContent = ({ id, balance, setBalance }) => {
   const [withdrawn, setWithdrawn] = useState(false);
   const [deposited, setDeposited] = useState(false);
 
+  let navigate = useNavigate();
+
   const changeTransactionInputs = () => {
     setTransactionType(document.querySelector("#transaction-select").value);
   };
@@ -18,7 +21,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
   useEffect(() => {
     !transactionError && transactionType === "withdraw"
       ? axios
-          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: -parseFloat(amount) })
+          .post(`${process.env.REACT_APP_API_ROOT_URL}/account/transact`, { accountId: id, transactionAmount: -parseFloat(amount) })
           .then((res) => {
             setBalance(res.data);
             setTransactionError(false);
@@ -34,7 +37,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
           .catch(() => setTransactionError(<Error message="There was an issue processing this transaction" />))
       : !transactionError &&
         axios
-          .post("http://localhost:9002/account/transact", { accountId: id, transactionAmount: parseFloat(amount) })
+          .post(`${process.env.REACT_APP_API_ROOT_URL}/account/transact`, { accountId: id, transactionAmount: parseFloat(amount) })
           .then((res) => {
             setBalance(res.data);
             setTransactionError(false);
@@ -83,7 +86,8 @@ const TransactionContent = ({ id, balance, setBalance }) => {
   const closePopup = () => {
     setWithdrawn(false);
     setDeposited(false);
-    window.location.href = "/customer-search";
+    // window.location.href = "/customer-search";
+    navigate("/customer-search");
   };
 
   return (
