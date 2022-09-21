@@ -75,21 +75,24 @@ export const CustomerSearch = () => {
                   <td>{customer.phoneNo ? customer.phoneNo : "❌"}</td>
                   <td>{customer.email ? customer.email : "❌"}</td>
                   <td>
-                    {customer.accounts.length > 0 ? (
+                    {customer.accounts.length > 0 && (
                       <>
                         {customer.accounts.map((account) => (
                           <div key={customer.id + "-" + account.id}>
                             <Link to={`/account-maintenance/${account.id}`}>
-                              <button value="edit" id="edit-account-button">
+                              <button value="edit" className="table-button" id="edit-account-button" title={account.type}>
                                 {`Manage account ${account.id}`}
                               </button>
                             </Link>
                           </div>
                         ))}
                       </>
-                    ) : (
-                      "❌"
                     )}
+                    <Link to={`/create-account/${customer.id}`}>
+                      <button value="create" className="table-button" id="create-account-button">
+                        + Add account
+                      </button>
+                    </Link>
                   </td>
                   <td>
                     <Link to={`/customer-maintenance/${customer.id}`}>

@@ -28,8 +28,9 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   let navigate = useNavigate();
 
   useEffect(() => {
-    !createNew && sessionStorage.getItem("from-search") === "false" && navigate("/customer-search")
+    (!createNew && !existingCustomerId) && sessionStorage.getItem("from-search") === "false" && navigate("/customer-search")
     !createNew &&  popoulateInputValues();
+    existingCustomerId && populateCustomerId();
   }, []);
 
   useEffect(() => {
@@ -178,6 +179,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
 
   const checkAccountHoldersInput = () => {
     const input = document.querySelector("#account-holders-input").value.split(",");
+    console.log(input);
     if (input.length > 0) {
       for (const extraCustomerId of input) {
         axios
@@ -214,8 +216,8 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   };
 
   const closePopup = () => {
-    const redirect = !accountNotDeleted
-    console.log(accountNotDeleted, redirect)
+    const redirect = !accountNotDeleted;
+    console.log(accountNotDeleted, redirect);
     setAccountCreated(false);
     setAccountUpdated(false);
     setAccountDeleted(false);
@@ -251,7 +253,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     window.open(doc.output("bloburl"), "_blank");
   };
 
-  const popoulateInputValues = () => {
+  const populateInputValues = () => {
     let branchSelect = document.querySelector("#branch-select");
     let typeSelect = document.querySelector("#type-select");
     let accountHoldersInput = document.querySelector("#account-holders-input");
@@ -259,6 +261,11 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     branchSelect.value = accountData.branch ? accountData.branch.toLowerCase() : "";
     typeSelect.value = accountData.type ? accountData.type.split(" - ")[0] : "";
     accountHoldersInput.value = accountData.sharedWithCustomers.length > 0 ? accountData.sharedWithCustomers.map((account) => account.id) : "";
+  };
+
+  const populateCustomerId = () => {
+    document.querySelector("#customer-input").value = existingCustomerId;
+    console.log(existingCustomerId);
   };
 
   return (

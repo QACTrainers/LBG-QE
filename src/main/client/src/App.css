@@ -104,6 +104,10 @@ span :not(.id-span) {
   color: white;
 }
 
+.table-button {
+  width: 130px;
+}
+
 /* Table */
 
 table {

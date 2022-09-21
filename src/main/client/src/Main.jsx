@@ -16,7 +16,8 @@ const Main = () => {
         <Route exact path="/customer-maintenance/:id" element={<CustomerMaintenance />} />
         <Route exact path="/create-customer" element={<CustomerCreation />} />
         <Route exact path="/account-maintenance/:id" element={<AccountMaintenance />} />
-        <Route exact path="/create-account" element={<AccountCreation />} />
+        <Route exact path="/create-account/:id" element={<AccountCreation />} />
+        <Route exact path="/create-account/" element={<AccountCreation />} />
       </Routes>
     </div>
   );

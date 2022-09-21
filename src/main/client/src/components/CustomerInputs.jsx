@@ -29,10 +29,13 @@ const CustomerInputs = ({ createNew, customerId }) => {
 
 
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     // sessionStorage.getItem("from-search") !== "true" && navigate("/customer-search")
     !createNew && popoulateInputValues();
   }, []);
+
 
   useEffect(() => {
     if (createNew) {
@@ -73,6 +76,8 @@ const CustomerInputs = ({ createNew, customerId }) => {
             setPopUpContent(
               <>
                 <h2>Customer succesfully created</h2>
+                <button onClick={()=>navigate(`/create-account/${res.data.id}`)}>Create new account</button>
+                <button onClick={closePopUp}>Ok</button>
               </>
             );
           })
@@ -116,6 +121,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
             setPopUpContent(
               <>
                 <h2>Customer succesfully updated</h2>
+                <button onclick={closePopUp}>Ok</button>
               </>
             );
             setCustomerError("");
@@ -138,6 +144,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
         setPopUpContent(
           <>
             <h2>Customer succesfully deleted</h2>
+            <button onclick={closePopUp}>Ok</button>
           </>
         );
       })
@@ -190,7 +197,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
 
     setDoBError(
       !new RegExp(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).test(input) ? (
-        <Error message="Invalid Date of Birth format (YYYY/MM/DD)" />
+        <Error message="Invalid Date of Birth format (YYYY-MM-DD)" />
       ) : getAge(input) < 18 ? (
         <Error message="Customer is too young" />
       ) : getAge(input) > 65 ? (
@@ -341,40 +348,40 @@ const CustomerInputs = ({ createNew, customerId }) => {
         </div>
       )}
       <div className="input-container">
-        <span>Title:</span>
+        <span>Title*:</span>
         <br />
         <select defaultValue={"default"} id="title-select" onBlur={checkTitle}>
           <option value="default" disabled />
-          <option value="mr">Mr</option>
-          <option value="mrs">Mrs</option>
-          <option value="ms">Ms</option>
-          <option value="dr">Dr</option>
-          <option value="lady">Lady</option>
-          <option value="prof">Prof</option>
-          <option value="sir">Sir</option>
+          <option value="Mr">Mr</option>
+          <option value="Mrs">Mrs</option>
+          <option value="Ms">Ms</option>
+          <option value="Dr">Dr</option>
+          <option value="Lady">Lady</option>
+          <option value="Prof">Prof</option>
+          <option value="Sir">Sir</option>
         </select>
       </div>
       {titleError}
       <div className="input-container">
-        <span>Surname:</span>
+        <span>Surname*:</span>
         <br />
         <input type="text" id="sname-input" onBlur={checkSurname} />
       </div>
       {surnameError}
       <div className="input-container">
-        <span>First name:</span>
+        <span>First name*:</span>
         <br />
         <input type="text" id="fname-input" onBlur={checkFirstName} />
       </div>
       {firstNameError}
       <div className="input-container">
-        <span>DoB:</span>
+        <span>DoB*:</span>
         <br />
         <input type="text" onBlur={checkDoB} id="dob-input" />
       </div>
       {doBError}
       <div className="input-container">
-        <span>Sex:</span>
+        <span>Sex*:</span>
         <br />
         <div>
           <input type="radio" name="gender" value="m" id="m-radio" className="first-radio" />
@@ -386,7 +393,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
         </div>
       </div>
       <div className="input-container">
-        <span>Type:</span>
+        <span>Type*:</span>
         <br />
         <div>
           <input type="radio" name="c-type" value="cons" id="cons-radio" className="first-radio" onBlur={checkCustomerType} />
@@ -397,7 +404,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       </div>
       {customerTypeError}
       <div className="input-container">
-        <span>Address 1:</span>
+        <span>Address 1*:</span>
         <br />
         <input type="text" id="address-1-input" onBlur={checkAddress1} />
       </div>
@@ -408,25 +415,25 @@ const CustomerInputs = ({ createNew, customerId }) => {
         <input type="text" id="address-2-input" />
       </div>
       <div className="input-container">
-        <span>City:</span>
+        <span>City*:</span>
         <br />
         <input type="text" id="city-input" onBlur={checkCityTown} />
       </div>
       {cityTownError}
       <div className="input-container">
-        <span>Postcode:</span>
+        <span>Postcode*:</span>
         <br />
         <input type="text" id="postcode-input" onBlur={checkPostcode} />
       </div>
       {postcodeError}
       <div className="input-container">
-        <span>Phone No:</span>
+        <span>Phone No*:</span>
         <br />
         <input type="tel" id="phone-input" onBlur={checkPhone} onChange={checkPhoneFormat} />
       </div>
       {phoneError}
       <div className="input-container">
-        <span>Email:</span>
+        <span>Email*:</span>
         <br />
         <input type="email" id="email-input" onBlur={checkEmail} />
       </div>
@@ -434,12 +441,12 @@ const CustomerInputs = ({ createNew, customerId }) => {
       {createNew && (
         <div>
           <div className="input-container">
-            <span>Mother's Maiden Name:</span>
+            <span>Mother's Maiden Name*:</span>
             <br />
             <input type="text" id="mmn-input" />
           </div>
           <div className="input-container">
-            <span>Place of Birth:</span>
+            <span>Place of Birth*:</span>
             <br />
             <input type="text" id="pob-input" />
           </div>
