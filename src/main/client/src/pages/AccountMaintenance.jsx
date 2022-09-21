@@ -16,7 +16,6 @@ const AccountMaintenance = () => {
   useEffect(() => {
     setCount(1);
     count===1 && navigate(0);
-    console.log(count);
   }, [location]);
 
 

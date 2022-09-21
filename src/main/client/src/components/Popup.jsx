@@ -4,7 +4,7 @@ const Popup = (props) => {
   return (
     <div id="background-box">
       <div id="content-box">
-        <div id="cancel-icon" onClick={props.handleClose}>
+        <div id="cancel-icon" onClick={props.handleClose} title="Cancel">
           <span id="cross" role="img" aria-label="close">
             ❌
           </span>

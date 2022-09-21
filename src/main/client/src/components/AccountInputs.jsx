@@ -5,7 +5,7 @@ import axios from "axios";
 import { jsPDF } from "jspdf";
 import { useNavigate } from "react-router-dom";
 
-const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) => {
+const AccountInputs = ({ createNew, accountData, balance, existingCustomerId, defaultCustomerId }) => {
   const [depositError, setDepositError] = useState(true);
   const [customerError, setCustomerError] = useState(true);
   const [extraAccountsError, setExtraAccountsError] = useState(false);
@@ -28,9 +28,9 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   let navigate = useNavigate();
 
   useEffect(() => {
-    (!createNew && !existingCustomerId) && sessionStorage.getItem("from-search") === "false" && navigate("/customer-search")
-    !createNew &&  popoulateInputValues();
-    existingCustomerId && populateCustomerId();
+    !createNew && sessionStorage.getItem("from-search") === "false" && navigate("/customer-search");
+    !createNew && populateInputValues();
+    defaultCustomerId && populateCustomerId();
   }, []);
 
   useEffect(() => {
@@ -179,7 +179,6 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
 
   const checkAccountHoldersInput = () => {
     const input = document.querySelector("#account-holders-input").value.split(",");
-    console.log(input);
     if (input.length > 0) {
       for (const extraCustomerId of input) {
         axios
@@ -217,19 +216,17 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
 
   const closePopup = () => {
     const redirect = !accountNotDeleted;
-    console.log(accountNotDeleted, redirect);
     setAccountCreated(false);
     setAccountUpdated(false);
     setAccountDeleted(false);
     setAccountNotDeleted(false);
-    
+
     // redirect && (window.location.href = "/customer-search");
     redirect && navigate("/customer-search");
   };
 
   const printDetails = () => {
     const doc = new jsPDF();
-    console.log(doc.getFontList());
     doc.setFontSize(30);
     doc.setFont("Helvetica", "Bold");
     doc.text(8, 23, `Account #${accountData.id} Details`);
@@ -264,8 +261,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   };
 
   const populateCustomerId = () => {
-    document.querySelector("#customer-input").value = existingCustomerId;
-    console.log(existingCustomerId);
+    document.querySelector("#customer-input").value = defaultCustomerId;
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Error from "./Error";
 import axios from "axios";
 import Popup from "../components/Popup";
@@ -25,17 +25,13 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const [emailError, setEmailError] = useState(false);
   const [customerError, setCustomerError] = useState(false);
   const customerData = JSON.parse(sessionStorage.getItem(`customer-${customerId}`));
+
   let navigate = useNavigate();
-
-
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     // sessionStorage.getItem("from-search") !== "true" && navigate("/customer-search")
     !createNew && popoulateInputValues();
   }, []);
-
 
   useEffect(() => {
     if (createNew) {
@@ -76,7 +72,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
             setPopUpContent(
               <>
                 <h2>Customer succesfully created</h2>
-                <button onClick={()=>navigate(`/create-account/${res.data.id}`)}>Create new account</button>
+                <button onClick={() => navigate(`/create-account/${res.data.id}`)}>Create new account</button>
                 <button onClick={closePopUp}>Ok</button>
               </>
             );
