@@ -25,17 +25,20 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
   const [accountNotDeleted, setAccountNotDeleted] = useState(false);
   const [popupContent, setPopupContent] = useState(<></>);
 
+  let navigate = useNavigate();
+
   useEffect(() => {
-    !createNew && populateInputValues();
+    (!createNew && !existingCustomerId) && sessionStorage.getItem("from-search") === "false" && navigate("/customer-search")
+    !createNew &&  popoulateInputValues();
     existingCustomerId && populateCustomerId();
   }, []);
 
   useEffect(() => {
     if (createNew) {
       if (depositError === false && customerError === false && extraAccountsError === false && branchError === false && typeError === false) {
-        const allHolders = accountHolders[0] === "" ? [...customerId] : Array.from(new Set([...accountHolders, customerId]));
+        const allHolders = accountHolders[0] === "" ? [customerId] : Array.from(new Set([...accountHolders, customerId]));
         axios
-          .post("http://localhost:9002/account/create", {
+          .post(`${process.env.REACT_APP_API_ROOT_URL}/account/create`, {
             customerIds: allHolders,
             branch: branch,
             type: type,
@@ -57,7 +60,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
       if (extraAccountsError === false && branchError === false && typeError === false) {
         const allHolders = accountHolders[0] === "" ? [existingCustomerId] : Array.from(new Set([...accountHolders, existingCustomerId]));
         axios
-          .put("http://localhost:9002/account/update", {
+          .put(`${process.env.REACT_APP_API_ROOT_URL}/account/update`, {
             id: accountData.id,
             branch: branch,
             customerIds: allHolders,
@@ -105,7 +108,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     balance === 0
       ? window.confirm(`Are you sure you want to delete account ${accountData.id}?`) &&
         axios
-          .delete(`http://localhost:9002/account/delete/${accountData.id}`)
+          .delete(`${process.env.REACT_APP_API_ROOT_URL}/account/delete/${accountData.id}`)
           .then(() => {
             setAccountDeleted(true);
             setPopupContent(
@@ -130,7 +133,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     setCustomerError(input.length === 0 ? <Error message="Enter a customer ID" /> : false);
     !customerError &&
       axios
-        .post("http://localhost:9002/customer/filter", {
+        .post(`${process.env.REACT_APP_API_ROOT_URL}/customer/filter`, {
           account_nr: "",
           customer_nr: input,
           surname: "",
@@ -180,7 +183,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     if (input.length > 0) {
       for (const extraCustomerId of input) {
         axios
-          .post("http://localhost:9002/customer/filter", {
+          .post(`${process.env.REACT_APP_API_ROOT_URL}/customer/filter`, {
             account_nr: "",
             customer_nr: extraCustomerId,
             surname: "",
@@ -219,7 +222,9 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
     setAccountUpdated(false);
     setAccountDeleted(false);
     setAccountNotDeleted(false);
-    redirect && (window.location.href = "/customer-search");
+    
+    // redirect && (window.location.href = "/customer-search");
+    redirect && navigate("/customer-search");
   };
 
   const printDetails = () => {
@@ -274,7 +279,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId }) 
         </div>
       )}
       <div className="input-container">
-        <span>Customer ID:</span>
+        <span>Main Customer ID:</span>
         <br />
         {createNew ? <input type="text" id="customer-input" onChange={formatCustomerInput} onBlur={checkCustomerInput} /> : <label>{existingCustomerId}</label>}
       </div>

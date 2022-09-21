@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MaintenanceContent from "../components/MaintenanceContent";
 import TransactionContent from "../components/TransactionContent";
 import TransferContent from "../components/TransferContent";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AccountMaintenance = () => {
+  let navigate = useNavigate();
+  const [count, setCount] = useState(0);
+  const location = useLocation();
+
   const [activeContent, setActiveContent] = useState("maintenance");
   const { id } = useParams();
+
+  useEffect(() => {
+    setCount(1);
+    count===1 && navigate(0);
+    console.log(count);
+  }, [location]);
+
 
   const account = JSON.parse(sessionStorage.getItem(`account-${id}`));
   const accountData = account.accountData;
@@ -42,7 +54,7 @@ const AccountMaintenance = () => {
       {activeContent === "transfer" && <TransferContent id={accountData.id} balance={balance} />}
     </div>
   ) : (
-    (window.location.href = "/")
+    navigate("/")
   );
 };
 

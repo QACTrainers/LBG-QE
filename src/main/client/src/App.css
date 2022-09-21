@@ -22,6 +22,7 @@ h2 {
 }
 
 .error-message {
+  margin: 5px;
   color: #f00;
 }
 
@@ -296,7 +297,8 @@ h3 {
   position: relative;
   top: 25vh;
   width: 20%;
-  height: 25vh;
+  min-height: 25vh;
+  height: fit-content;
   max-height: 50vh;
   margin: 0 auto;
   margin-top: calc(100vh-85vh-20px);

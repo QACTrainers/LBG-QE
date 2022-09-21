@@ -18,6 +18,10 @@ const MainMenu = () => {
   const [username, setUsername] = useState("");
   const [userIsAdmin, setUserIsAdmin] = useState("");
 
+  useEffect (()=>
+    sessionStorage.setItem("from-search", "false"), []
+  )
+
   useEffect(() => {
     setLoggedIn(localStorage.getItem("loggedIn"));
     if (loggedIn === "true") {
@@ -62,7 +66,7 @@ const MainMenu = () => {
       let username = document.querySelector("#username-input").value;
       let password = document.querySelector("#password-input").value;
       axios
-        .post("http://localhost:9002/user/login", { username: username, password: password })
+        .post(`${process.env.REACT_APP_API_ROOT_URL}/user/login`, { username: username, password: password })
         .then((res) => {
           setLoginError(<></>);
           localStorage.setItem("loggedIn", "true");
@@ -109,7 +113,7 @@ const MainMenu = () => {
               {usernameError}
               <input type="password" id="password-input" placeholder="Password..." onBlur={checkPassword} />
               {passwordError}
-              <button id="login-button" onClick={attemptLogIn}>
+              <button id="login-button" className="bottom-button" onClick={attemptLogIn}>
                 Log in
               </button>
               {loginError}

@@ -1,11 +1,6 @@
 package com.qa.banking.dtos;
 
-import com.qa.banking.entities.Account;
-import com.qa.banking.entities.CustomerAccount;
 import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
 import java.sql.Date;
 import java.util.List;
 

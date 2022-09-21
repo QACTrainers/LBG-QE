@@ -1,9 +1,6 @@
 package com.qa.banking.dtos;
 
-import com.qa.banking.entities.Branch;
-import com.qa.banking.entities.CustomerAccount;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.util.List;
 
