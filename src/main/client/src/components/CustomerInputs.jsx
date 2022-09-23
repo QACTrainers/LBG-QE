@@ -117,7 +117,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
             setPopUpContent(
               <>
                 <h2>Customer succesfully updated</h2>
-                <button onclick={closePopUp}>Ok</button>
+                <button onClick={closePopUp}>Ok</button>
               </>
             );
             setCustomerError("");
@@ -140,7 +140,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
         setPopUpContent(
           <>
             <h2>Customer succesfully deleted</h2>
-            <button onclick={closePopUp}>Ok</button>
+            <button onClick={closePopUp}>Ok</button>
           </>
         );
       })
@@ -324,12 +324,10 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const closePopUp = () => {
     if (customerCreated) {
       setCustomerCreated(false);
-      // window.location.href = "/create-account";
       navigate("/create-account");
     }
     setCustomerDeleted(false);
     setCustomerUpdated(false);
-    // window.location.href = "/customer-search";
     navigate("/customer-search");
   };
 
