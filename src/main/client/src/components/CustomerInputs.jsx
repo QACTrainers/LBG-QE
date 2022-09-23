@@ -30,7 +30,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
 
   useEffect(() => {
     // sessionStorage.getItem("from-search") !== "true" && navigate("/customer-search")
-    !createNew && popoulateInputValues();
+    !createNew && populateInputValues();
   }, []);
 
   useEffect(() => {
@@ -287,7 +287,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
     window.open(doc.output("bloburl"), "_blank");
   };
 
-  const popoulateInputValues = () => {
+  const populateInputValues = () => {
     let titleSelect = document.querySelector("#title-select");
     let snameInput = document.querySelector("#sname-input");
     let fnameInput = document.querySelector("#fname-input");
@@ -304,7 +304,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
     let phoneInput = document.querySelector("#phone-input");
     let emailInput = document.querySelector("#email-input");
 
-    titleSelect.value = customerData.title ? customerData.title.toLowerCase() : "";
+    titleSelect.value = customerData.title ? customerData.title : "";
     snameInput.value = customerData.surname ? customerData.surname : "";
     fnameInput.value = customerData.firstName ? customerData.firstName : "";
     dobInput.value = customerData.dateOfBirth ? customerData.dateOfBirth : "";
@@ -346,7 +346,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
       <div className="input-container">
         <span>Title*:</span>
         <br />
-        <select defaultValue={"default"} id="title-select" onBlur={checkTitle}>
+        <select defaultValue="default" id="title-select" onBlur={checkTitle}>
           <option value="default" disabled />
           <option value="Mr">Mr</option>
           <option value="Mrs">Mrs</option>

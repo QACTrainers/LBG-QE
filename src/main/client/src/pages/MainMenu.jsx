@@ -18,9 +18,7 @@ const MainMenu = () => {
   const [username, setUsername] = useState("");
   const [userIsAdmin, setUserIsAdmin] = useState("");
 
-  useEffect (()=>
-    sessionStorage.setItem("from-search", "false"), []
-  )
+  useEffect(() => sessionStorage.setItem("from-search", "false"), []);
 
   useEffect(() => {
     setLoggedIn(localStorage.getItem("loggedIn"));
@@ -101,6 +99,13 @@ const MainMenu = () => {
     window.location.reload(false);
   };
 
+  const restoreData = () => {
+    window.confirm("Are you sure you want to reset all data on the site. This will affect all new, deleted and updated customers and accounts?")
+  }
+  const restoreLoginAttempts = () => {
+    window.confirm("Are you sure you want to reset all the login attempts for all users?")
+  }
+
   return (
     <div className="main-container main-menu-container">
       {/* <h2>Main Menu</h2> */}
@@ -129,7 +134,7 @@ const MainMenu = () => {
             <Link to="/customer-search">
               <button>Customer Search</button>
             </Link>
-            {userIsAdmin === "true" && (
+            {userIsAdmin === "true" ? (
               <>
                 <Link to="/create-customer">
                   <button>Create New Customer</button>
@@ -138,15 +143,24 @@ const MainMenu = () => {
                   <button>Open New Account</button>
                 </Link>
               </>
+            ) : (
+              <>
+                <InvalidButton content="Create New Cusotmer" err="Log in as an admin to access this function" />
+                <InvalidButton content="Create New Account" err="Log in as an admin to access this function" />
+              </>
             )}
           </>
         ) : (
           <>
-            <InvalidButton content="Customer Search" err="Log in as an admin to access this function" />
+            <InvalidButton content="Customer Search" err="Log in to access this function" />
             <InvalidButton content="Create New Customer" err="Log in as an admin to access this function" />
             <InvalidButton content="Open New Account" err="Log in as an admin to access this function" />
           </>
         )}
+      </div>
+      <div id="testing-buttons">
+        <button onClick={restoreLoginAttempts}>Restore Login Attempts</button>
+        <button onClick={restoreData}>Restore all data</button>
       </div>
     </div>
   );
