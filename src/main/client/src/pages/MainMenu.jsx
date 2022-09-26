@@ -57,7 +57,6 @@ const MainMenu = () => {
   };
 
   const attemptLogIn = () => {
-    console.log(validUsername, validPassword);
     !validUsername && setUsernameError(<Error message="Invalid username" />);
     !validPassword && setUsernameError(<Error message="Invalid password" />);
     if (validUsername && validPassword) {
@@ -100,10 +99,17 @@ const MainMenu = () => {
   };
 
   const restoreData = () => {
-    window.confirm("Are you sure you want to reset all data on the site. This will affect all new, deleted and updated customers and accounts?")
-  }
-  const restoreLoginAttempts = () => {
-    window.confirm("Are you sure you want to reset all the login attempts for all users?")
+    window.confirm("Are you sure you want to reset all data on the site. This will affect all new, deleted and updated customers and accounts?");
+  };
+
+  function restoreLoginAttempts() {
+    window.confirm("Are you sure you want to reset all the login attempts for all users?") &&
+      axios.post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`, { username: `administrator` }).then(
+        axios
+          .post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`, { username: `notadministrator` })
+          .then(() => window.alert(`Login attempts successfuly restored`))
+          .catch(() => window.alert("Internal server error - contact your administrator"))
+      );
   }
 
   return (

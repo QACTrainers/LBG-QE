@@ -212,7 +212,6 @@ export const CustomerSearch = () => {
       {table}
     </div>
   ) : (
-    // (window.location.href = "/")
     navigate("/")
   );
 };

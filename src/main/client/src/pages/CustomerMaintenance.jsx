@@ -23,7 +23,6 @@ const CustomerMaintenance = () => {
       {<CustomerInputs createNew={false} customerId={id} />}
     </div>
   ) : (
-    // (window.location.href = "/")
     navigate("/")
   );
 };

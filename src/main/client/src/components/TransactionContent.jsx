@@ -86,7 +86,6 @@ const TransactionContent = ({ id, balance, setBalance }) => {
   const closePopup = () => {
     setWithdrawn(false);
     setDeposited(false);
-    // window.location.href = "/customer-search";
     navigate("/customer-search");
   };
 

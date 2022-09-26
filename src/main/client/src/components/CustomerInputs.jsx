@@ -29,7 +29,6 @@ const CustomerInputs = ({ createNew, customerId }) => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    // sessionStorage.getItem("from-search") !== "true" && navigate("/customer-search")
     !createNew && populateInputValues();
   }, []);
 
@@ -117,7 +116,8 @@ const CustomerInputs = ({ createNew, customerId }) => {
             setPopUpContent(
               <>
                 <h2>Customer succesfully updated</h2>
-                <button onClick={closePopUp}>Ok</button>
+                <button onClick={closePopupRemainOnPage}>Review Changes</button>
+                <button onClick={closePopUp}>Customer search</button>
               </>
             );
             setCustomerError("");
@@ -132,20 +132,20 @@ const CustomerInputs = ({ createNew, customerId }) => {
   };
 
   const deleteCustomer = () => {
-    axios
-      .delete(`${process.env.REACT_APP_API_ROOT_URL}/customer/delete/${customerData.id}`)
-      .then((res) => {
-        console.log(res);
-        setCustomerDeleted(true);
-        setPopUpContent(
-          <>
-            <h2>Customer succesfully deleted</h2>
-            <button onClick={closePopUp}>Ok</button>
-          </>
-        );
-      })
-      .catch((err) => setCustomerError(<Error message="Could not delete. Customer has open accounts" />));
-    console.log("Delete customer");
+    window.confirm(`Are you sure you want to delete the customer with id ${customerData.id}`) &&
+      axios
+        .delete(`${process.env.REACT_APP_API_ROOT_URL}/customer/delete/${customerData.id}`)
+        .then((res) => {
+          console.log(res);
+          setCustomerDeleted(true);
+          setPopUpContent(
+            <>
+              <h2>Customer succesfully deleted</h2>
+              <button onClick={closePopUp}>Ok</button>
+            </>
+          );
+        })
+        .catch(() => setCustomerError(<Error message="Could not delete. Customer has open accounts" />));
   };
 
   const createCustomer = () => {
@@ -330,6 +330,12 @@ const CustomerInputs = ({ createNew, customerId }) => {
     setCustomerUpdated(false);
     navigate("/customer-search");
   };
+
+  const closePopupRemainOnPage = () => {
+    setCustomerDeleted(false);
+    setCustomerUpdated(false);
+    navigate(0);
+  }
 
   return (
     <div className="main-container">

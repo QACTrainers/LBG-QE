@@ -1,4 +1,3 @@
-// import logo from "./logo.svg"
 import React from "react";
 import { HashRouter as Router} from "react-router-dom";
 import Header from "./components/Header";

@@ -15,7 +15,6 @@ const CustomerCreation = () => {
       {<CustomerInputs createNew={true} />}
     </div>
   ) : (
-    // (window.location.href = "/")
     navigate("/")
   );
 };

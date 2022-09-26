@@ -66,12 +66,13 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId, de
             customerIds: allHolders,
             type: type,
           })
-          .then(() => {
+          .then(() => { 
             setAccountUpdated(true);
             setPopupContent(
               <>
                 <h2>Account successfuly updated</h2>
-                <button onClick={closePopup}>Ok</button>
+                <button onClick={closePopupRemainOnPage}>Review Changes</button>
+                <button onClick={closePopup}>Customer search</button>
               </>
             );
           })
@@ -221,9 +222,16 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId, de
     setAccountDeleted(false);
     setAccountNotDeleted(false);
 
-    // redirect && (window.location.href = "/customer-search");
     redirect && navigate("/customer-search");
   };
+
+  const closePopupRemainOnPage = () => {
+    setAccountCreated(false);
+    setAccountUpdated(false);
+    setAccountDeleted(false);
+    setAccountNotDeleted(false);
+    navigate(0);
+  }
 
   const printDetails = () => {
     const doc = new jsPDF();

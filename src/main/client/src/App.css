@@ -309,6 +309,7 @@ h3 {
   margin-top: calc(100vh-85vh-20px);
   background-color: white;
   border-radius: 4px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
 }
 
 #cancel-icon {
