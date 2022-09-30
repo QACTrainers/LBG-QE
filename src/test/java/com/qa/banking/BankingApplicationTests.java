@@ -25,7 +25,7 @@ class BankingApplicationTests {
 
 	@Test
 	@Transactional
-	public void findAllFuturesTest(){
+	public void testCustomerMapping(){
 		List<CustomerDto> customerDtos = this.customerService.findAll();
 		assertEquals(2,customerDtos.get(0).getAccounts().size());
 	}
