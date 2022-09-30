@@ -1,5 +1,14 @@
 insert into user(is_admin, login_attempts, password, username)
-values(1,0,"Abcdefg1!","administrator");
+values(1,0,'Password1!','administrator1'),
+(1,0,'Password1!','administrator2'),
+(1,0,'Password1!','administrator3'),
+(1,0,'Password1!','administrator4'),
+(1,0,'Password1!','administrator5'),
+(0,0,'Password1!','user1'),
+(0,0,'Password1!','user2'),
+(0,0,'Password1!','user3'),
+(0,0,'Password1!','user4'),
+(0,0,'Password1!','user5');
 
 insert into customer(id,title,surname,first_name,date_of_birth,gender,customer_type,address1,address2,city_town,postcode,phone_no,email)
 values(1,'Mr','Cross','Christopher','1983-3-1','M','Consumer','Apartment 203','17 High Street','London','E98 1SN',07846536257,'crossc@qabank.com'),
