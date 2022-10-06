@@ -49,7 +49,7 @@ const AccountInputs = ({ createNew, accountData, balance, existingCustomerId, de
             setPopupContent(
               <>
                 <h2>Account successfully created</h2>
-                <button onClick={closePopup()}>Ok</button>
+                <button onClick={closePopup}>Ok</button>
               </>
             );
           })
