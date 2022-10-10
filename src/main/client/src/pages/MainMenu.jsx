@@ -134,18 +134,26 @@ const MainMenu = () => {
         />
       )}
       <div id="button-container">
-        {loggedIn === "true" ? <button onClick={logOut}>Log Out</button> : <button onClick={toggleLoginPopup}>Log In</button>}
+        {loggedIn === "true" ? (
+          <button onClick={logOut} id="log-out-button">
+            Log Out
+          </button>
+        ) : (
+          <button onClick={toggleLoginPopup} id="login-buttom">
+            Log In
+          </button>
+        )}
         {loggedIn === "true" ? (
           <>
-            <Link to="/customer-search">
+            <Link to="/customer-search" id="customer-search-button">
               <button>Customer Search</button>
             </Link>
             {userIsAdmin === "true" ? (
               <>
-                <Link to="/create-customer">
+                <Link to="/create-customer" id="create-customer-button">
                   <button>Create New Customer</button>
                 </Link>
-                <Link to="/create-account">
+                <Link to="/create-account" id="create-account-button">
                   <button>Open New Account</button>
                 </Link>
               </>
