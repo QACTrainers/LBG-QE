@@ -19,7 +19,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
   };
 
   useEffect(() => {
-    !transactionError && transactionType === "withdraw"
+    transactionType === "withdraw"
       ? axios
           .post(`${process.env.REACT_APP_API_ROOT_URL}/account/transact`, { accountId: id, transactionAmount: -parseFloat(amount) })
           .then((res) => {
@@ -29,7 +29,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
               <>
                 <h2>{`£${amount} successfuly withdrawn`}</h2>
                 <h2>{`New balance: ${res.data}`}</h2>
-                <button onClick={closePopup}>Ok</button>
+                <button>Ok</button>
               </>
             );
             setWithdrawn(true);
@@ -45,7 +45,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
               <>
                 <h2>{`£${amount} successfully deposited`}</h2>
                 <h2>{`New balance: ${res.data}`}</h2>
-                <button onClick={closePopup}>Ok</button>
+                <button>Ok</button>
               </>
             );
             setDeposited(true);
@@ -91,7 +91,7 @@ const TransactionContent = ({ id, balance, setBalance }) => {
 
   return (
     <div id="transaction-container">
-      {(withdrawn || deposited) && <Popup handleClose={closePopup} content={popupContent} />}
+      {(withdrawn || deposited) && <Popup handleClose={() => {}} content={popupContent} />}
       <h2>Transactions</h2>
       <select defaultValue="withdraw" id="transaction-select" onChange={changeTransactionInputs}>
         <option value="withdraw">Withdraw</option>

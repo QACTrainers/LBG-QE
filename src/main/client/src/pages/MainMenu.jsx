@@ -69,7 +69,7 @@ const MainMenu = () => {
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("id", res.data.id);
           localStorage.setItem("username", res.data.username);
-          localStorage.setItem("admin", res.data.admin);
+          localStorage.setItem("admin", true);
           toggleLoginPopup();
           window.location.reload(false);
         })
@@ -134,15 +134,7 @@ const MainMenu = () => {
         />
       )}
       <div id="button-container">
-        {loggedIn === "true" ? (
-          <button onClick={logOut} id="log-out-button">
-            Log Out
-          </button>
-        ) : (
-          <button onClick={toggleLoginPopup} id="login-buttom">
-            Log In
-          </button>
-        )}
+        {loggedIn === "true" ? <button>Log Out</button> : <button onClick={toggleLoginPopup}>Log In</button>}
         {loggedIn === "true" ? (
           <>
             <Link to="/customer-search" id="customer-search-button">

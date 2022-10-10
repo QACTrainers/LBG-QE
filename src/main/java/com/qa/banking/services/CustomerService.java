@@ -31,8 +31,8 @@ public class CustomerService {
                         return false;
                     }else if ((!customerFiltersDto.getCustomer_nr().isEmpty() && Long.valueOf(customerFiltersDto.getCustomer_nr()) != x.getId())) {
                         return false;
-                    }else if(!customerFiltersDto.getSurname().isEmpty() && !customerFiltersDto.getSurname().toLowerCase().equals(x.getSurname().toLowerCase())){
-                        return false;
+//                    }else if(!customerFiltersDto.getSurname().isEmpty() && !customerFiltersDto.getSurname().toLowerCase().equals(x.getSurname().toLowerCase())){
+//                        return false;
                     }else if(!customerFiltersDto.getEmail().isEmpty() && !customerFiltersDto.getEmail().toLowerCase().equals(x.getEmail().toLowerCase())){
                         return false;
                     }else if(!customerFiltersDto.getPostcode().isEmpty() && !customerFiltersDto.getPostcode().toLowerCase().equals(x.getPostcode().toLowerCase())){
@@ -57,7 +57,7 @@ public class CustomerService {
                 customer.getSurname(),
                 customer.getFirstName(),
                 customer.getDateOfBirth(),
-                customer.getGender(),
+                "M",
                 customer.getCustomerType(),
                 customer.getAddress1(),
                 customer.getAddress2(),
