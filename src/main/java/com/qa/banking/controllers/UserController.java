@@ -24,16 +24,23 @@ public class UserController {
     // refresh
     @PostMapping("/login")
     public ResponseEntity<LoginInfoDto> login(@RequestBody UserInfo userInfo) {
-        try{
-            return new ResponseEntity<>(this.userService.login(userInfo.getUsername(),userInfo.getPassword()), HttpStatus.OK);
-        }catch(IncorrectPasswordException incorrectPasswordException) {
+        try {
+            return new ResponseEntity<>(this.userService.login(userInfo.getUsername(), userInfo.getPassword()),
+                    HttpStatus.OK);
+        } catch (IncorrectPasswordException incorrectPasswordException) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }catch(LockedAccountException lockedAccountException){
+        } catch (LockedAccountException lockedAccountException) {
             return new ResponseEntity<>(HttpStatus.LOCKED);
-        }catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/reset")
+    public ResponseEntity<Boolean> reset() {
+        return new ResponseEntity<>(this.userService.resetLoginAttempts(), HttpStatus.OK);
+    }
+
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return new ResponseEntity<String>("hello", HttpStatus.OK);

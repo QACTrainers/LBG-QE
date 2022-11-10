@@ -41,4 +41,9 @@ public class UserService {
         }
     }
 
+    public boolean resetLoginAttempts() {
+        this.repo.resetAllAttempts();
+        return true;
+    }
+
 }

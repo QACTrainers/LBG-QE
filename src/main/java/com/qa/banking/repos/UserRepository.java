@@ -28,5 +28,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "update user set login_attempts = 0 where username = ?1", nativeQuery = true)
     void resetLoginAttempts(String username);
 
-}
+    @Modifying
+    @Transactional
+    @Query(value = "update user set login_attempts = 0", nativeQuery = true)
+    void resetAllAttempts();
 
+}

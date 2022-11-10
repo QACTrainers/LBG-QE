@@ -104,12 +104,10 @@ const MainMenu = () => {
 
   function restoreLoginAttempts() {
     window.confirm("Are you sure you want to reset all the login attempts for all users?") &&
-      axios.post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`, { username: `administrator` }).then(
-        axios
-          .post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`, { username: `notadministrator` })
-          .then(() => window.alert(`Login attempts successfuly restored`))
-          .catch(() => window.alert("Internal server error - contact your administrator"))
-      );
+      axios
+        .post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`)
+        .then(() => window.alert(`Login attempts successfuly restored`))
+        .catch(() => window.alert("Internal server error - contact your administrator"));
   }
 
   return (
@@ -174,7 +172,6 @@ const MainMenu = () => {
       </div>
       <div id="testing-buttons">
         <button onClick={restoreLoginAttempts}>Restore Login Attempts</button>
-        <button onClick={restoreData}>Restore all data</button>
       </div>
     </div>
   );
