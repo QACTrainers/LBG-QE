@@ -1,14 +1,14 @@
 version: "3.8"
 services:
   backend:
-    build: ./ 
+    build: ./backend 
     image: qa-bank-backend-image
     container_name: qa-bank-backend-container
     ports:
       - "5000:5000"
 
   frontend:
-    build: ./src/main/client/ 
+    build: ./frontend
     image: qa-bank-frontendend-image
     container_name: qa-bank-frontend-container
     ports:
