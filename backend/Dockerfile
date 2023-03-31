@@ -1,5 +1,5 @@
 # First stage: complete build environment
-FROM maven:3.5.0-jdk-8-alpine AS builder
+FROM maven:3.9.0 AS builder
 
 WORKDIR /build
 # Add pom.xml and source code
