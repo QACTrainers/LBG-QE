@@ -30,6 +30,5 @@ spec:
       containers:
       - name: frontend
         image: eu.gcr.io/quality-engineering-382310/qa-bank-frontendend-image:latest
-        imagePullPolicy: Always
         ports:
           - containerPort: 3000
