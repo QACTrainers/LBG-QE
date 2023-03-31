@@ -30,6 +30,5 @@ spec:
       containers:
       - name: backend
         image: eu.gcr.io/quality-engineering-382310/qa-bank-backend-image:latest
-        imagePullPolicy: Always
         ports:
           - containerPort: 5000
