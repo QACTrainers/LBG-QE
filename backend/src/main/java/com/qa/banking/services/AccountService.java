@@ -42,7 +42,7 @@ public class AccountService {
         updatedAccount.setBranch(branchRepository.findByName(account.getBranch()).get());
         updatedAccount.setType(account.getType());
         updatedAccount.setMinDeposit(BigDecimal.valueOf(10));
-        updatedAccount.setNumber(account.getNumber());
+        updatedAccount.setNumber("error");
 
         customerAccountsRepository.deleteAll(updatedAccount.getCustomerAccounts());
 

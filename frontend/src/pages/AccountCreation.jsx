@@ -4,7 +4,7 @@ import AccountInputs from "../components/AccountInputs";
 
 const AccountCreation = () => {
   let navigate = useNavigate();
-  const { id } = useParams(); // ? useParams() : false; // DO NOT USE REACT HOOKS CONDITIONALLY
+  const { id } = false;
 
   useEffect(() => sessionStorage.setItem("from-search", "false"), []);
   return localStorage.getItem("loggedIn") === "true" && localStorage.admin === "true" ? (

@@ -47,7 +47,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
         emailError === false
       ) {
         const customerType = document.getElementById("cons-radio").checked ? "Consumer" : "Corporate";
-        const customerGender = !document.getElementById("m-radio").checked ? (!document.getElementById("f-radio").checked ? "X" : "F") : "M";
+        const customerGender = !document.getElementById("m-radio").checked ? (!document.getElementById("f-radio").checked ? "F" : "M") : "X";
         let customer = {
           title: notNullFields.title,
           surname: notNullFields.surname,
@@ -191,17 +191,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
 
     const input = document.querySelector("#dob-input").value;
 
-    setDoBError(
-      !new RegExp(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).test(input) ? (
-        <Error message="Invalid Date of Birth format (YYYY-MM-DD)" />
-      ) : getAge(input) < 18 ? (
-        <Error message="Customer is too young" />
-      ) : getAge(input) > 65 ? (
-        <Error message="Customer is too old" />
-      ) : (
-        false
-      )
-    );
+    setDoBError(!new RegExp(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).test(input) ? <Error message="Invalid Date of Birth format (YYYY/MM/DD)" /> : false);
   };
 
   const checkPostcode = () => {
@@ -220,7 +210,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
   const checkEmail = () => {
     let input = document.querySelector("#email-input").value;
     setEmailError(
-      !new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/).test(input) ? (
+      !new RegExp(/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/).test(input) ? (
         <Error message="Invalid email" />
       ) : (
         false
@@ -232,7 +222,7 @@ const CustomerInputs = ({ createNew, customerId }) => {
     const input = document.querySelector("#phone-input").value;
     setPhoneError(
       !new RegExp(
-        /^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?(\d{4}|\d{3}))?$/
+        /^(((\+44\s?\d{4})\s?\d{3}\s?\d{3})|((\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2})\s?\d{4}\s?\d{4}))(\s?(\d{4}|\d{3}))?$/
       ).test(input) ? (
         <Error message="Invalid phone number" />
       ) : (

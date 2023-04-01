@@ -69,7 +69,7 @@ const MainMenu = () => {
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("id", res.data.id);
           localStorage.setItem("username", res.data.username);
-          localStorage.setItem("admin", res.data.admin);
+          localStorage.setItem("admin", true);
           toggleLoginPopup();
           window.location.reload(false);
         })
@@ -104,10 +104,12 @@ const MainMenu = () => {
 
   function restoreLoginAttempts() {
     window.confirm("Are you sure you want to reset all the login attempts for all users?") &&
-      axios
-        .post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`)
-        .then(() => window.alert(`Login attempts successfuly restored`))
-        .catch(() => window.alert("Internal server error - contact your administrator"));
+      axios.post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`, { username: `administrator` }).then(
+        axios
+          .post(`${process.env.REACT_APP_API_ROOT_URL}/user/reset`, { username: `notadministrator` })
+          .then(() => window.alert(`Login attempts successfuly restored`))
+          .catch(() => window.alert("Internal server error - contact your administrator"))
+      );
   }
 
   return (
@@ -132,15 +134,7 @@ const MainMenu = () => {
         />
       )}
       <div id="button-container">
-        {loggedIn === "true" ? (
-          <button onClick={logOut} id="log-out-button">
-            Log Out
-          </button>
-        ) : (
-          <button onClick={toggleLoginPopup} id="login-buttom">
-            Log In
-          </button>
-        )}
+        {loggedIn === "true" ? <button>Log Out</button> : <button onClick={toggleLoginPopup}>Log In</button>}
         {loggedIn === "true" ? (
           <>
             <Link to="/customer-search" id="customer-search-button">
@@ -172,6 +166,7 @@ const MainMenu = () => {
       </div>
       <div id="testing-buttons">
         <button onClick={restoreLoginAttempts}>Restore Login Attempts</button>
+        <button onClick={restoreData}>Restore all data</button>
       </div>
     </div>
   );

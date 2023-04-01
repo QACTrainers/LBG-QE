@@ -36,14 +36,9 @@ public class UserService {
             if(this.repo.incrementLoginAttempts(username)==1){
                 throw new IncorrectPasswordException("incorrect password");
             } else {
-                throw new Exception();
+                throw new IncorrectPasswordException("incorrect password");
             }
         }
-    }
-
-    public boolean resetLoginAttempts() {
-        this.repo.resetAllAttempts();
-        return true;
     }
 
 }
